@@ -7,6 +7,7 @@ end
 
 function _draw()
 	draw_map()
+	draw_cells()
 end
 
 function _update60()
@@ -37,14 +38,20 @@ function draw_map()
 	end)	
 end
 
-function draw_circle(x,y,flag)
-	
+function draw_circle(x,y,flag)	
 	local colfill=12
 	local col=10
 	
 	circfill(x,y,circ_radius,colfill)
 	circ(x,y,circ_radius,col)
 end
+
+function draw_cells()
+	foreach(cells, function(c)
+		rect(c.sx,c.sy,c.sx+8,c.sy+8)
+	end)
+end
+
 -->8
 --debug stuff
 xcam=0
@@ -67,12 +74,37 @@ end
 --4: shop
 --5: lucky
 --6: unlucky
-celstart={}
-celstart.x=71
-celstart.y=7
+cells={}
 
 function init_map()
+	local c=make_cell(71,7)
+	c.n1=make_cell(71,6)
+	c=c.n1
+	c.n1=make_cell(71,5)
+end
 
+local add_neighbour=function(n1x,n1y,n2x,n2y)
+	c.n1=make_cell(n1x,n1y)
+	c=c.n1
+end
+
+function make_cell(mapx,mapy)
+	local c={}
+	c.mapx=mapx
+	c.mapy=mapy
+	local mapxoffset=0
+	local mapyoffset=0
+	if(c.mapx>31)then
+		mapxoffset=-40
+		maxyoffset=32
+	end
+	c.sx=(c.mapx+mapxoffset)*8
+	c.sy=(c.mapy+maxyoffset)*8
+	--next cells
+	c.n1=nil
+	c.n2=nil
+	add(cells,c)
+	return c
 end
 
 __gfx__
