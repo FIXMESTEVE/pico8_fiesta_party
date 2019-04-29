@@ -48,7 +48,7 @@ end
 
 function draw_cells()
 	foreach(cells, function(c)
-		rect(c.sx,c.sy,c.sx+8,c.sy+8)
+		rect(c.sx,c.sy,c.sx+8,c.sy+8,7)
 	end)
 end
 
@@ -78,14 +78,28 @@ cells={}
 
 function init_map()
 	local c=make_cell(71,7)
-	c.n1=make_cell(71,6)
-	c=c.n1
-	c.n1=make_cell(71,5)
+	local cs=add_neighbours(c,71,6)
+	cs=add_neighbours(cs[1],71,5)
+	cs=add_neighbours(cs[1],71,4)
+	cs=add_neighbours(cs[1],71,3)
+	cs=add_neighbours(cs[1],71,2)
+	cs=add_neighbours(cs[1],71,1)
+	cs=add_neighbours(cs[1],71,0)
+	cs=add_neighbours(cs[1],31,31)
+	--c.n1=make_cell(71,6)
+	--c=c.n1
+	--c.n1=make_cell(71,5)
 end
 
-local add_neighbour=function(n1x,n1y,n2x,n2y)
+function add_neighbours(c,n1x,n1y,n2x,n2y)
+	newcells={}
 	c.n1=make_cell(n1x,n1y)
-	c=c.n1
+	add(newcells,c.n1)
+	if(n2x!=nil)then
+		c.n2=make_cell(n2x,n2y)
+		add(newcells,c.n2)
+	end
+	return newcells
 end
 
 function make_cell(mapx,mapy)
@@ -96,10 +110,10 @@ function make_cell(mapx,mapy)
 	local mapyoffset=0
 	if(c.mapx>31)then
 		mapxoffset=-40
-		maxyoffset=32
+		mapyoffset=32
 	end
 	c.sx=(c.mapx+mapxoffset)*8
-	c.sy=(c.mapy+maxyoffset)*8
+	c.sy=(c.mapy+mapyoffset)*8
 	--next cells
 	c.n1=nil
 	c.n2=nil
