@@ -50,6 +50,9 @@ function draw_cells()
 	foreach(cells, function(c)
 		rect(c.sx,c.sy,c.sx+8,c.sy+8,7)
 	end)
+	--todo: add one or two dots
+	--to indicate which way the
+	--next cells are
 end
 
 -->8
@@ -79,16 +82,14 @@ cells={}
 function init_map()
 	local c=make_cell(71,7)
 	local cs=add_neighbours(c,71,6)
-	cs=add_neighbours(cs[1],71,5)
-	cs=add_neighbours(cs[1],71,4)
-	cs=add_neighbours(cs[1],71,3)
-	cs=add_neighbours(cs[1],71,2)
-	cs=add_neighbours(cs[1],71,1)
-	cs=add_neighbours(cs[1],71,0)
-	cs=add_neighbours(cs[1],31,31)
-	--c.n1=make_cell(71,6)
-	--c=c.n1
-	--c.n1=make_cell(71,5)
+	for i=5,0,-1 do
+		cs=add_neighbours(cs[1],71,i)
+	end
+	for i=31,26,-1 do
+		cs=add_neighbours(cs[1],31,i)
+	end
+	--now add two neighbours
+	
 end
 
 function add_neighbours(c,n1x,n1y,n2x,n2y)
