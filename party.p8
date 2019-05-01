@@ -2,7 +2,7 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 function _init()
-	init_map()
+	init_map_raw()
 end
 
 function _draw()
@@ -35,7 +35,7 @@ function draw_map()
 	foreach(map_parts, function(p)
 		map(p.xbegin,p.ybegin,0,ysbegin,p.xend,p.yend)
 		ysbegin+=p.yend*8
-	end)	
+	end)
 end
 
 function draw_circle(x,y,flag)	
@@ -47,12 +47,33 @@ function draw_circle(x,y,flag)
 end
 
 function draw_cells()
+	--fixmesteve: use the list
 	foreach(cells, function(c)
 		rect(c.sx,c.sy,c.sx+8,c.sy+8,7)
+		
+		local show_neighbours=function(n)
+			--left
+			if(n.sx<c.sx)circ(c.sx+2,c.sy+4,1,7)
+			--right
+			if(n.sx>c.sx)circ(c.sx+8-2,c.sy+4,1,7)
+			--up
+			if(n.sy<c.sy)circ(c.sx+4,c.sy+2,1,7)
+			--down
+			if(n.sy>c.sy)circ(c.sx+4,c.sy+8-2,1,7)
+		end
+		if(c.n1!=nil)then
+			show_neighbours(c.n1)
+		end
+		if(c.n2!=nil)then
+			show_neighbours(c.n2)
+		end		
 	end)
 	--todo: add one or two dots
 	--to indicate which way the
 	--next cells are
+	--this todo is done but 
+	--do it for second neighbour
+	--too
 end
 
 -->8
@@ -69,32 +90,66 @@ function update_camera()
 end
 -->8
 --init
---road flags
---0: blue
---1: red
---2: hazard
---3: item
---4: shop
---5: lucky
---6: unlucky
+--todo: road flags
 cells={}
+function cells.get_cell(mapx,mapy)
+	for i=1,#cells do
+		local c=cells[i]
+		if(c.mapx==mapx and c.mapy==mapy)then
+			printh("cell found","@clip")
+			printh(c.sx,"@clip")
+			return c
+		end
+	end
+end
+startcell=nil
+function init_map_mapdata()
+	--fixmesteve: make paths from
+	--the map data instead of hard
+	--coding it
+	
+	--maybe not,duplicating sprites
+	--just to flag out the paths
+	--would waste sprite data room
 
-function init_map()
-	local c=make_cell(71,7)
-	local cs=add_neighbours(c,71,6)
+	--hard coding it feels
+	--terrible though
+end
+
+function init_map_raw()
+	--the sort of code that fucks your brain right here
+	startcell=make_cell(71,7)
+	local path_cell=add_neighbours(startcell,71,6)
 	for i=5,0,-1 do
-		cs=add_neighbours(cs[1],71,i)
+		path_cell=add_neighbours(path_cell[1],71,i)
 	end
 	for i=31,26,-1 do
-		cs=add_neighbours(cs[1],31,i)
+		path_cell=add_neighbours(path_cell[1],31,i)
 	end
 	--now add two neighbours
-	
+	path_cell=add_neighbours(path_cell[1],31,25,30,26)
+	local path_cell_alternative=add_neighbours(path_cell[2],29,26)
+	for i=28,21,-1 do
+		path_cell_alternative=add_neighbours(path_cell_alternative[1],i,26)
+	end
+	for i=26,31 do
+		path_cell_alternative=add_neighbours(path_cell_alternative[1],21,i)
+	end
+	for i=0,5 do
+		path_cell_alternative=add_neighbours(path_cell_alternative[1],61,i)
+	end
+	for i=61,70 do
+		path_cell_alternative=add_neighbours(path_cell_alternative[1],i,5)
+	end
+	--printh(path_cell_alternative[1].mapx,"@clip")70 --wtf
+	path_cell_alternative[1].n1=cells.get_cell(71,5)
+	--printh(path_cell_alternative[1].n1.mapx,"@clip")
 end
+
 
 function add_neighbours(c,n1x,n1y,n2x,n2y)
 	newcells={}
-	c.n1=make_cell(n1x,n1y)
+	c.n1=make_cell(n1x,n1y,c)
 	add(newcells,c.n1)
 	if(n2x!=nil)then
 		c.n2=make_cell(n2x,n2y)
@@ -103,7 +158,7 @@ function add_neighbours(c,n1x,n1y,n2x,n2y)
 	return newcells
 end
 
-function make_cell(mapx,mapy)
+function make_cell(mapx,mapy,parent)
 	local c={}
 	c.mapx=mapx
 	c.mapy=mapy
@@ -118,6 +173,8 @@ function make_cell(mapx,mapy)
 	--next cells
 	c.n1=nil
 	c.n2=nil
+	c.p=nil
+	if(parent!=nil)c.p=parent
 	add(cells,c)
 	return c
 end
