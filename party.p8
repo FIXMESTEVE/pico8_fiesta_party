@@ -48,7 +48,10 @@ end
 
 function draw_cells()
 	--fixmesteve: use the list
+	local col=12
 	foreach(cells, function(c)
+		col+=1
+		if(col>15)col=12
 		rect(c.sx,c.sy,c.sx+8,c.sy+8,7)
 		
 		local show_neighbours=function(n)
@@ -93,11 +96,13 @@ end
 --todo: road flags
 cells={}
 function cells.get_cell(mapx,mapy)
+	printh("Looking for cell MAPX :"..mapx.." MAPY: "..mapy)
 	for i=1,#cells do
 		local c=cells[i]
 		if(c.mapx==mapx and c.mapy==mapy)then
-			printh("cell found","@clip")
-			printh(c.sx,"@clip")
+			printh(" ");
+			printh("cell found ")
+			printh("X: "..c.sx.." Y: "..c.sy.." MAPX: "..c.mapx.." MAPY: "..c.mapy)
 			return c
 		end
 	end
@@ -141,9 +146,47 @@ function init_map_raw()
 	for i=61,70 do
 		path_cell_alternative=add_neighbours(path_cell_alternative[1],i,5)
 	end
-	--printh(path_cell_alternative[1].mapx,"@clip")70 --wtf
 	path_cell_alternative[1].n1=cells.get_cell(71,5)
-	--printh(path_cell_alternative[1].n1.mapx,"@clip")
+
+	for i=25,19,-1 do
+		path_cell=add_neighbours(path_cell[1],31,i)
+	end
+	path_cell=add_neighbours(path_cell[1],31,18,30,19)
+	path_cell_alternative=add_neighbours(path_cell[2],29,19)
+	for i=29,22,-1 do
+		path_cell_alternative=add_neighbours(path_cell_alternative[1],i,19);
+	end
+	for i=19,7,-1 do
+		path_cell_alternative=add_neighbours(path_cell_alternative[1],22,i)
+	end
+	for i=18,6,-1 do
+		path_cell=add_neighbours(path_cell[1],31,i)
+	end
+	for i=30,13,-1 do
+		path_cell=add_neighbours(path_cell[1],i,6)
+	end
+	path_cell_alternative[1].n1=cells.get_cell(22,6)
+	
+	path_cell=add_neighbours(path_cell[1],12,6,13,7)
+	path_cell_alternative=add_neighbours(path_cell[2],13,8)
+	for i=9,21,1 do
+		path_cell_alternative=add_neighbours(path_cell_alternative[1],13,i);
+	end
+	for i=13,8,-1 do
+		path_cell_alternative=add_neighbours(path_cell_alternative[1],i,21);
+	end
+	--todo alternative path top left
+	for i=11,7,-1 do
+		path_cell=add_neighbours(path_cell[1],i,6)
+	end
+	for i=7,37,1 do
+		path_cell=add_neighbours(path_cell[1],7,i)
+	end
+	path_cell_alternative[1].n1=cells.get_cell(7,21)
+	for i=8,20,1 do
+		path_cell=add_neighbours(path_cell[1],i,37)
+	end
+	path_cell[1].n1=cells.get_cell(61,5)
 end
 
 
@@ -217,7 +260,7 @@ b3cccc3bb3cccc3bbbbbbbbb993399333995993bbbb3333333333bbbbbbe7ebbbcaccaccaccacbbb
 3c7cccc33cccc7c3bbbbbbbb999999999999993bbb399999999993bbbbe777ebb2caccaccaccacbbc00000c080000008b000770000000000bbbb0bbbbbbb0bbb
 ccccc7cccc7cccccbbbbbbbb9999959999999993b39999999999993bbe77777eb24caccaccaccacbcccccc0088888880b000770000000000bbb0bbb3bbbbb0bb
 ccccccccccccccccbbbbbbbb9959999999999593b39999999999993bbeee7eeeb24bcaccaccaccacc00000c088888000b000770000000000bbb0bbbbbb3b30bb
-cccccc7cc7ccccccbbbbbbbb999999999599993bb39999999999993bbbbe7ebbb49bbcbcbcbc2cbcc000000c80000800b00bbbbb00000000bb00bbbbbbb3bb0b
+cccccc7cc7ccccccbbbbbbbb999999999599993bb39999999999993bbbbe7ebbb49bbcbcbcbc2cbcc000000c80000800b00bbbbb00000000bbb0bbbbbbb3bb0b
 bc7ccccbbcccc7cbbbbbbbbb339933999999993b3999999999999993bbbeeebbb49bbbbbbbbb24bbc00000cc80000080b000770b00000000bb0bb3bb3bbbbb0b
 bbccccbbbbccccbbbbbbbbbbbb33bb33399999933999993333999993bbbbbbbbb24bbbbbbbbb24bbccccccc0800000800bbb77b000000000bb0bbb33bbbbbb0b
 bbbbbbbbbbbbbbbbbbbbbbbb3999993bb3999993399999333399999304400440b24bbbbbbbbb29bb00000000888777880bbbbbbb00000000bb0b3bbbbbbbbb0b
