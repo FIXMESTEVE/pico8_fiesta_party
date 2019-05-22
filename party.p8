@@ -1,13 +1,15 @@
 pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
+debug=true
 function _init()
 	init_map_raw()
 end
 
 function _draw()
 	draw_map()
-	draw_cells()
+	draw_special_cells()
+	if(debug)draw_cells_debug()
 end
 
 function _update60()
@@ -36,18 +38,33 @@ function draw_map()
 		map(p.xbegin,p.ybegin,0,ysbegin,p.xend,p.yend)
 		ysbegin+=p.yend*8
 	end)
+
 end
 
-function draw_circle(x,y,flag)	
-	local colfill=12
-	local col=10
+function draw_special_cell_circle(c)
+	local colfill=1
+	local col=1
+	local circ_radius=7
+	if(c.flag==32)then
+		colfill=12
+		col=10
+	end
 	
-	circfill(x,y,circ_radius,colfill)
-	circ(x,y,circ_radius,col)
+	circfill(c.sx+4,c.sy+4,circ_radius,colfill)
+	circ(c.sx+4,c.sy+4,circ_radius,col)
 end
 
-function draw_cells()
-	--fixmesteve: use the list
+function draw_special_cells()
+	for i=1,#cells do
+		local c=cells[i]
+		if(c.flag>0)then
+			draw_special_cell_circle(c)
+		end
+	end
+end
+
+function draw_cells_debug()
+	--fixmesteve: use the list, maybe
 	local col=12
 	foreach(cells, function(c)
 		col+=1
@@ -71,12 +88,6 @@ function draw_cells()
 			show_neighbours(c.n2)
 		end		
 	end)
-	--todo: add one or two dots
-	--to indicate which way the
-	--next cells are
-	--this todo is done but 
-	--do it for second neighbour
-	--too
 end
 
 -->8
@@ -179,12 +190,15 @@ function init_map_raw()
 	for i=11,7,-1 do
 		path_cell=add_neighbours(path_cell[1],i,6)
 	end
-	for i=7,37,1 do
+	for i=7,31,1 do
 		path_cell=add_neighbours(path_cell[1],7,i)
 	end
+	for i=0,5,1 do
+		path_cell=add_neighbours(path_cell[1],47,i)
+	end
 	path_cell_alternative[1].n1=cells.get_cell(7,21)
-	for i=8,20,1 do
-		path_cell=add_neighbours(path_cell[1],i,37)
+	for i=47,60,1 do
+		path_cell=add_neighbours(path_cell[1],i,5)
 	end
 	path_cell[1].n1=cells.get_cell(61,5)
 end
@@ -203,6 +217,7 @@ end
 
 function make_cell(mapx,mapy,parent)
 	local c={}
+	c.flag=fget(mget(mapx,mapy))
 	c.mapx=mapx
 	c.mapy=mapy
 	local mapxoffset=0
