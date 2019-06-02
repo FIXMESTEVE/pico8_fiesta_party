@@ -4,7 +4,6 @@ __lua__
 debug=false
 function _init()
 	init_map_raw()
-	init_players()
 end
 
 function _draw()
@@ -123,6 +122,7 @@ function update_camera()
 end
 -->8
 --init
+--todo: road flags
 cells={}
 function cells.get_cell(mapx,mapy)
 	printh("Looking for cell MAPX :"..mapx.." MAPY: "..mapy)
@@ -221,6 +221,7 @@ function init_map_raw()
 	path_cell[1].n1=cells.get_cell(61,5)
 end
 
+
 function add_neighbours(c,n1x,n1y,n2x,n2y)
 	newcells={}
 	c.n1=make_cell(n1x,n1y,c)
@@ -256,22 +257,6 @@ function make_cell(mapx,mapy,parent)
 	if(parent!=nil)c.p=parent
 	add(cells,c)
 	return c
-end
-
-function init_players()
-	local p1={}
-	p1.coins=0
-	p1.emblems=0
-	p1.sprite=0
-	local p2=p1
-	local p3=p1
-	local p4=p1
-	local players={}
-	add(players, p1)
-	add(players, p2)
-	add(players, p3)
-	add(players, p4)
-	return players
 end
 
 __gfx__
