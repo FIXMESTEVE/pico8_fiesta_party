@@ -23,6 +23,8 @@ function draw_title()
 	local w=4
 	local h=1
 	local logo_s=196
+	local logo_x=78
+	local logo_y=34
 	local part1_s=192
 	local part1_x=64-(w*8/2)
 	local part1_y=64-(h*8/2)-20
@@ -35,7 +37,11 @@ function draw_title()
 	spr(part1_s,part1_x,part1_y,w,h)
  spr(part2_s,part2_x,part2_y,w,h)
  spr(part3_s,part3_x,part3_y,w,h)
-	spr(196,78,34)
+	spr(logo_s,logo_x,logo_y)
+
+	print("press ❎ to play", 30,100)
+
+	if(btn(5))globalstate="game"
 end
 
 function draw_game()
