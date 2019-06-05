@@ -70,8 +70,8 @@ function update_game()
 end
 
 function update_state_begin()
-	local camx_target=60
-	local camy_target=60
+	local camx_target=170
+	local camy_target=270
 	if(xcam<camx_target)then
 		xcam+=1
 	end
