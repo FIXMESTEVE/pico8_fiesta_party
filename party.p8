@@ -3,7 +3,9 @@ version 18
 __lua__
 debug=false
 globalstate="title"
-boardstate="none"
+boardstate="begin"
+xcam=0
+ycam=0
 function _init()
 	init_map_raw()
 end
@@ -35,13 +37,12 @@ function draw_title()
 	local part3_x=64-(w*8/2)
 	local part3_y=64-(h*8/2)
 	spr(part1_s,part1_x,part1_y,w,h)
- spr(part2_s,part2_x,part2_y,w,h)
- spr(part3_s,part3_x,part3_y,w,h)
+ 	spr(part2_s,part2_x,part2_y,w,h)
+ 	spr(part3_s,part3_x,part3_y,w,h)
 	spr(logo_s,logo_x,logo_y)
 
 	print("press ❎ to play", 30,100)
 
-	if(btn(5))globalstate="game"
 end
 
 function draw_game()
@@ -61,11 +62,23 @@ function _update60()
 end
 
 function update_title()
-
+	if(btn(5))globalstate="game"
 end
 
 function update_game()
-	update_camera()
+	if(boardstate=="begin")update_state_begin()
+end
+
+function update_state_begin()
+	local camx_target=60
+	local camy_target=60
+	if(xcam<camx_target)then
+		xcam+=1
+	end
+	if(ycam<camy_target)then
+		ycam+=1
+	end
+	camera(xcam,ycam)
 end
 
 -->8
@@ -161,8 +174,7 @@ end
 
 -->8
 --debug stuff
-xcam=0
-ycam=0
+
 	
 function update_camera()
 	if(btn(0))xcam-=1
@@ -176,13 +188,13 @@ end
 --todo: road flags
 cells={}
 function cells.get_cell(mapx,mapy)
-	printh("Looking for cell MAPX :"..mapx.." MAPY: "..mapy)
+	--printh("Looking for cell MAPX :"..mapx.." MAPY: "..mapy)
 	for i=1,#cells do
 		local c=cells[i]
 		if(c.mapx==mapx and c.mapy==mapy)then
-			printh(" ");
-			printh("cell found ")
-			printh("X: "..c.sx.." Y: "..c.sy.." MAPX: "..c.mapx.." MAPY: "..c.mapy)
+			--printh(" ");
+			--printh("cell found ")
+			--printh("X: "..c.sx.." Y: "..c.sy.." MAPX: "..c.mapx.." MAPY: "..c.mapy)
 			return c
 		end
 	end
