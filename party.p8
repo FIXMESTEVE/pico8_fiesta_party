@@ -6,6 +6,14 @@ globalstate="title"
 boardstate="begin"
 xcam=0
 ycam=0
+textbox_x1=-1
+textbox_y1=-1
+textbox_x2=-1
+textbox_y2=-1
+textbox_x1_max=10
+textbox_y1_max=80
+textbox_x2_max=100
+textbox_y2_max=10
 function _init()
 	init_map_raw()
 end
@@ -70,15 +78,42 @@ function update_game()
 end
 
 function update_state_begin()
+	if(not camera_cutscene_move(170,270,true)) return
+	npc_discussion()
+end
+
+function camera_cutscene_move(camx_target,camy_target,smoothly)
 	local camx_target=170
 	local camy_target=270
-	if(xcam<camx_target)then
-		xcam+=1
-	end
-	if(ycam<camy_target)then
-		ycam+=1
+	if(smoothly)then
+		if(xcam<camx_target)then
+			xcam+=1
+		else
+			xcam=camx_target
+		end
+		if(ycam<camy_target)then
+			ycam+=1
+		else
+			ycam=camy_target
+		end
+	else
+		xcam=camx_target
+		ycam=camy_target
 	end
 	camera(xcam,ycam)
+	if(xcam==camx_target and ycam==camy_target)return true
+	return false
+end
+
+function npc_discussion()
+	if(show_textbox())then
+
+	end
+end
+
+function show_textbox()
+	--todo
+	return true
 end
 
 -->8
