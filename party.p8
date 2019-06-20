@@ -14,6 +14,23 @@ textbox_x1_max=10
 textbox_y1_max=80
 textbox_x2_max=100
 textbox_y2_max=10
+
+discussion={}
+discussion.active=false
+discussion.strings="welcome to pico-8 fiesta party!"
+discussion.update=function()
+	--todo
+end
+discussion.draw=function()
+	local x0=5
+	local y0=128-35
+	local x1=128-5
+	local y1=128-5
+	rectfill(x0+xcam,y0+ycam,x1+xcam,y1+ycam,1)
+	
+	--todo: draw text
+end
+
 function _init()
 	init_map_raw()
 end
@@ -26,6 +43,8 @@ function _draw()
 	if(globalstate=="game")then
 		draw_game()
 	end
+
+	if(discussion.active)discussion.draw()
 end
 
 function draw_title()
@@ -67,6 +86,8 @@ function _update60()
 	if(globalstate=="game")then
 		update_game()
 	end
+
+	if(discussion.active)discussion.update()
 end
 
 function update_title()
@@ -78,8 +99,8 @@ function update_game()
 end
 
 function update_state_begin()
-	if(not camera_cutscene_move(170,270,true)) return
-	npc_discussion()
+	if(not camera_cutscene_move(170,270,true))return
+	discussion.active=true
 end
 
 function camera_cutscene_move(camx_target,camy_target,smoothly)
@@ -103,17 +124,6 @@ function camera_cutscene_move(camx_target,camy_target,smoothly)
 	camera(xcam,ycam)
 	if(xcam==camx_target and ycam==camy_target)return true
 	return false
-end
-
-function npc_discussion()
-	if(show_textbox())then
-
-	end
-end
-
-function show_textbox()
-	--todo
-	return true
 end
 
 -->8
