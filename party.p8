@@ -15,23 +15,95 @@ textbox_y1_max=80
 textbox_x2_max=100
 textbox_y2_max=10
 
+times={}
+times.last=time()
+times.past=0
+times.blinknextbtn=0
+
 discussion={}
+discussion.displaynextbtn=true
 discussion.active=false
-discussion.strings="welcome to pico-8 fiesta party!"
+discussion.topic="intro"
+discussion.index=1
+discussion.strings={
+	intro={
+		{
+			text="welcome to pico-8 fiesta party!",
+			type="next"
+		},
+		{
+			text="do you know the rules of this game?",
+			type="next"
+		}
+	}
+}
 discussion.update=function()
-	--todo
+	if(discussion.strings[discussion.topic][discussion.index].type=="next")then
+		times.blinknextbtn+=times.past
+		if(times.blinknextbtn>0.5)then
+			if(discussion.displaynextbtn)then
+				discussion.displaynextbtn=false
+			else
+				discussion.displaynextbtn=true
+			end
+			times.blinknextbtn=0
+		end
+		if(btnp(5))discussion.index+=1
+	end
 end
 discussion.draw=function()
 	local x0=5
 	local y0=128-35
 	local x1=128-5
 	local y1=128-5
+	local nextbtnx=x1-25+xcam
+	local nextbtny=y1-5+ycam
+	local nextbtntxt="❎next"
 	rectfill(x0+xcam,y0+ycam,x1+xcam,y1+ycam,1)
 	
 	--todo: draw text
+	printinbox(discussion.strings[discussion.topic][discussion.index].text,x0+xcam,y0+ycam,x1+xcam,y1+ycam,1)	
+	if(discussion.displaynextbtn)then
+		print(nextbtntxt,nextbtnx,nextbtny,15)
+	end
+end
+
+--print
+function printinbox(str,box_x0,box_y0,box_x1,box_y1,col)
+	local linewidth=box_x1-box_x0
+	local word=""
+	local words={}
+	for i=1,#str do
+		if(sub(str,i,i)!=" " and i!=#str)then
+			word=word..sub(str,i,i)
+		else
+			if(i==#str)word=word..sub(str,i,i)
+			add(words,word)
+			word=""
+		end
+	end
+	
+	local x=box_x0
+	local y=box_y0
+	local yoffset=4
+	for i=1,#words do
+		if(4*#words[i]+1+x-xcam>linewidth)then
+			yoffset+=7
+			x=box_x0
+			y=box_y0
+		end
+		
+		for letter=1,#words[i] do
+			x+=4
+			print(sub(words[i],letter,letter),x,y+yoffset,10)
+		end
+		x+=4
+		print(" ",x,y+yoffset,10)
+	end
 end
 
 function _init()
+	palt(0, false)
 	init_map_raw()
 end
 
@@ -79,6 +151,9 @@ function draw_game()
 end
 
 function _update60()
+	times.past=time()-times.last
+	times.last=time()
+
 	if(globalstate=="title")then
 		update_title()	
 	end
@@ -91,7 +166,7 @@ function _update60()
 end
 
 function update_title()
-	if(btn(5))globalstate="game"
+	if(btnp(5))globalstate="game"
 end
 
 function update_game()
@@ -101,6 +176,7 @@ end
 function update_state_begin()
 	if(not camera_cutscene_move(170,270,true))return
 	discussion.active=true
+	discussion.topic="intro"
 end
 
 function camera_cutscene_move(camx_target,camy_target,smoothly)
@@ -143,7 +219,7 @@ add(map_parts,part1)
 add(map_parts,part2)
 
 function draw_map()
-	cls(0)
+	cls(11)
 	local ysbegin=0
 	foreach(map_parts, function(p)
 		map(p.xbegin,p.ybegin,0,ysbegin,p.xend,p.yend)
