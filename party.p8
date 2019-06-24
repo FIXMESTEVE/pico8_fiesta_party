@@ -35,7 +35,8 @@ discussion.strings={
 			text="do you know the rules of this game?",
 			type="yesno",
 			yesfunc=function()discussion.changetopic("rules")end,
-			nofunc=function()discussion.changetopic("intro2")end
+			nofunc=function()discussion.changetopic("intro2")end,
+			current=2
 		},
 	}
 }
@@ -46,7 +47,8 @@ discussion.changetopic=function(topic)
 	end
 end
 discussion.update=function()
-	if(discussion.strings[discussion.topic][discussion.index].type=="next")then
+	local type=discussion.strings[discussion.topic][discussion.index].type
+	if(type=="next")then
 		times.blinknextbtn+=times.past
 		if(times.blinknextbtn>0.5)then
 			if(discussion.displaynextbtn)then
@@ -57,6 +59,11 @@ discussion.update=function()
 			times.blinknextbtn=0
 		end
 		if(btnp(5))discussion.index+=1
+	elseif(type=="yesno")then
+		discussion.displaynextbtn=false
+		if(btnp(1))discussion.strings[discussion.topic][discussion.index].current=2
+		if(btnp(0))discussion.strings[discussion.topic][discussion.index].current=1
+		--todo: confirm and routes
 	else
 		discussion.displaynextbtn=false
 	end
@@ -69,12 +76,28 @@ discussion.draw=function()
 	local nextbtnx=x1-25+xcam
 	local nextbtny=y1-5+ycam
 	local nextbtntxt="❎next"
+	local yesx=x1-110+xcam
+	local yesy=y1-5+ycam
+	local nox=x1-45+xcam
+	local noy=y1-5+ycam
+	local type=discussion.strings[discussion.topic][discussion.index].type
 	rectfill(x0+xcam,y0+ycam,x1+xcam,y1+ycam,1)
 	
 	--todo: draw text
-	printinbox(discussion.strings[discussion.topic][discussion.index].text,x0+xcam,y0+ycam,x1+xcam,y1+ycam,1)	
-	if(discussion.displaynextbtn)then
-		print(nextbtntxt,nextbtnx,nextbtny,15)
+	printinbox(discussion.strings[discussion.topic][discussion.index].text,x0+xcam,y0+ycam,x1+xcam,y1+ycam,10)	
+	if(type=="next")then
+		print(nextbtntxt,nextbtnx,nextbtny,14)
+	elseif(type=="yesno")then
+		local current=discussion.strings[discussion.topic][discussion.index].current
+		if(current==1)then
+			print("\143",yesx-7,yesy,14)
+			print("yes, please!",yesx,yesy,14)
+			print("no, thanks.",nox,noy,10)
+		else
+			print("\143",nox-7,noy,14)
+			print("yes, please!",yesx,yesy,10)
+			print("no, thanks.",nox,noy,14)
+		end
 	end
 end
 
@@ -108,7 +131,7 @@ function printinbox(str,box_x0,box_y0,box_x1,box_y1,col)
 			print(sub(words[i],letter,letter),x,y+yoffset,10)
 		end
 		x+=4
-		print(" ",x,y+yoffset,10)
+		print(" ",x,y+yoffset,col)
 	end
 end
 
