@@ -33,10 +33,18 @@ discussion.strings={
 		},
 		{
 			text="do you know the rules of this game?",
-			type="next"
-		}
+			type="yesno",
+			yesfunc=function()discussion.changetopic("rules")end,
+			nofunc=function()discussion.changetopic("intro2")end
+		},
 	}
 }
+discussion.changetopic=function(topic)
+	if(discussion.topic!=topic)then
+		discussion.topic=topic
+		discussion.index=1
+	end
+end
 discussion.update=function()
 	if(discussion.strings[discussion.topic][discussion.index].type=="next")then
 		times.blinknextbtn+=times.past
@@ -49,6 +57,8 @@ discussion.update=function()
 			times.blinknextbtn=0
 		end
 		if(btnp(5))discussion.index+=1
+	else
+		discussion.displaynextbtn=false
 	end
 end
 discussion.draw=function()
@@ -176,7 +186,7 @@ end
 function update_state_begin()
 	if(not camera_cutscene_move(170,270,true))return
 	discussion.active=true
-	discussion.topic="intro"
+	discussion.changetopic("intro")
 end
 
 function camera_cutscene_move(camx_target,camy_target,smoothly)
