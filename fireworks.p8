@@ -3,29 +3,39 @@ version 18
 __lua__
 function _init()
     points={}
+    radius=0
+    originx=64
+    originy=64
     for i=0,360,10 do
         local p={}
-        p.i=i
-        p.key0=128/2+20
-        p.key1=128/2
-        p.key0transformed=cos(i/360)*p.key0-sin(i/360)*p.key1
-        p.key1transformed=sin(i/360)*p.key0+cos(i/360)*p.key1
+        p.angle=i
+        p.x=originx + radius * cos(p.angle/360)
+        p.y=originy + radius * sin(p.angle/360)
         add(points,p)
     end
 end
 
 function _update60()
-
+    radius+=1
+    for i=1,#points do
+        points[i].x=originx + radius * cos(points[i].angle/360)
+        points[i].y=originy + radius * sin(points[i].angle/360)
+        if(radius>10)then
+            del(points,points[i])
+            i-=1
+        end
+    end
+    -- angle += 5
+    -- if (angle > 360) angle = 0
+    -- x=originx + radius * cos(angle/360)
+    -- y=originy + radius * sin(angle/360)
 end
 
 function _draw()
     cls()
     for i=1,#points do
-        pset(points[i].key0transformed,points[i].key1transformed,10)        
+        pset(points[i].x, points[i].y,10)
     end
-    print(#points,100,100,10)
-    print(points[11].key1transformed,10,100,10)
-    
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
