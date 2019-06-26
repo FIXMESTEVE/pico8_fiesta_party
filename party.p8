@@ -37,7 +37,19 @@ discussion.strings={
 			yesfunc=function()discussion.changetopic("rules")end,
 			nofunc=function()discussion.changetopic("intro2")end,
 			current=2
-		},
+		}
+	},
+	intro2={
+		{
+			text="let's go!",
+			type="next"	
+		}
+	},
+	rules={
+		{
+			text="blue cases give 3 coins. avoid red cases!",
+			type="next"
+		}
 	}
 }
 discussion.changetopic=function(topic)
@@ -86,7 +98,7 @@ discussion.draw=function()
 	--todo: draw text
 	printinbox(discussion.strings[discussion.topic][discussion.index].text,x0+xcam,y0+ycam,x1+xcam,y1+ycam,10)	
 	if(type=="next")then
-		print(nextbtntxt,nextbtnx,nextbtny,14)
+		if(discussion.displaynextbtn)print(nextbtntxt,nextbtnx,nextbtny,14)
 	elseif(type=="yesno")then
 		local current=discussion.strings[discussion.topic][discussion.index].current
 		if(current==1)then
@@ -97,6 +109,14 @@ discussion.draw=function()
 			print("\143",nox-7,noy,14)
 			print("yes, please!",yesx,yesy,10)
 			print("no, thanks.",nox,noy,14)
+		end
+
+		if(btnp(5))then
+			if(current==1)then
+				--todo
+			else
+				--todo
+			end
 		end
 	end
 end
