@@ -2,15 +2,40 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 function _init()
-
+    points={}
+    radius=0
+    originx=64
+    originy=64
+    for i=0,360,10 do
+        local p={}
+        p.angle=i
+        p.x=originx + radius * cos(p.angle/360)
+        p.y=originy + radius * sin(p.angle/360)
+        add(points,p)
+    end
 end
 
 function _update60()
-
+    radius+=1
+    for i=1,#points do
+        points[i].x=originx + radius * cos(points[i].angle/360)
+        points[i].y=originy + radius * sin(points[i].angle/360)
+        if(radius>10)then
+            del(points,points[i])
+            i-=1
+        end
+    end
+    -- angle += 5
+    -- if (angle > 360) angle = 0
+    -- x=originx + radius * cos(angle/360)
+    -- y=originy + radius * sin(angle/360)
 end
 
 function _draw()
-
+    cls()
+    for i=1,#points do
+        pset(points[i].x, points[i].y,10)
+    end
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
