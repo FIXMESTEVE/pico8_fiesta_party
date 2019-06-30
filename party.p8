@@ -4,6 +4,7 @@ __lua__
 debug=false
 globalstate="title"
 boardstate="begin"
+gamestate="decide_order"
 xcam=0
 ycam=0
 textbox_x1=-1
@@ -14,6 +15,21 @@ textbox_x1_max=10
 textbox_y1_max=80
 textbox_x2_max=100
 textbox_y2_max=10
+
+players={}
+p1,p2,p3,p4={}
+p1.number=1
+p1.x=player_start_x
+p1.y=player_start_y
+p2.number=2
+p2.x=player_start_x
+p2.y=player_start_y
+p3.number=3
+p3.x=player_start_x
+p3.y=player_start_y
+p4.number=4
+p4.x=player_start_x
+p4.y=player_start_y
 
 times={}
 times.last=time()
@@ -46,7 +62,7 @@ discussion.strings={
 			type="next",
 			nextfunc=function()
 				discussion.active=false
-				boardstate="decideorder"
+				gamestate="decide_order"
 			end
 		}
 	},
@@ -210,7 +226,17 @@ end
 function draw_game()
 	draw_map()
 	draw_special_cells()
+	draw_players()
+	draw_hud()
 	if(debug)draw_cells_debug()
+end
+
+function draw_players()
+
+end
+
+function draw_hud()
+
 end
 
 function _update60()
@@ -235,6 +261,10 @@ end
 function update_game()
 	if(boardstate=="begin")update_state_begin()
 	if(boardstate=="decide_order")update_decide_order()
+end
+
+function update_decide_order()
+
 end
 
 function update_state_begin()
