@@ -29,7 +29,8 @@ discussion.strings={
 	intro={
 		{
 			text="welcome to pico-8 fiesta party!",
-			type="next"
+			type="next",
+			nextfunc=function()index+=1 end
 		},
 		{
 			text="do you know the rules of this game?",
@@ -41,8 +42,12 @@ discussion.strings={
 	},
 	intro2={
 		{
-			text="let's go!",
-			type="next"	
+			text="it's time to decide the order of players! highest number starts first!",
+			type="next",
+			nextfunc=function()
+				discussion.active=false
+				boardstate="decideorder"
+			end
 		}
 	},
 	rules={
@@ -54,8 +59,8 @@ discussion.strings={
 }
 discussion.changetopic=function(topic)
 	if(discussion.topic!=topic)then
-		discussion.topic=topic
 		discussion.index=1
+		discussion.topic=topic
 	end
 end
 discussion.update=function()
@@ -75,7 +80,12 @@ discussion.update=function()
 		discussion.displaynextbtn=false
 		if(btnp(1))discussion.strings[discussion.topic][discussion.index].current=2
 		if(btnp(0))discussion.strings[discussion.topic][discussion.index].current=1
+		local c=discussion.strings[discussion.topic][discussion.index].current
 		--todo: confirm and routes
+		if(btnp(5))then
+			if(c==1)discussion.strings[discussion.topic][discussion.index].yesfunc()
+			if(c==2)discussion.strings[discussion.topic][discussion.index].nofunc()
+		end
 	else
 		discussion.displaynextbtn=false
 	end
@@ -224,12 +234,14 @@ end
 
 function update_game()
 	if(boardstate=="begin")update_state_begin()
+	if(boardstate=="decide_order")update_decide_order()
 end
 
 function update_state_begin()
 	if(not camera_cutscene_move(170,270,true))return
 	discussion.active=true
 	discussion.changetopic("intro")
+	boardstate="tutorial"
 end
 
 function camera_cutscene_move(camx_target,camy_target,smoothly)
