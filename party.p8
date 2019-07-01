@@ -17,19 +17,34 @@ textbox_x2_max=100
 textbox_y2_max=10
 
 players={}
-p1,p2,p3,p4={}
+p1={}
+p2={}
+p3={}
+p4={}
 p1.number=1
 p1.x=player_start_x
 p1.y=player_start_y
+p1.char=1
+p1.coins=0
+p1.emblems=0
 p2.number=2
 p2.x=player_start_x
 p2.y=player_start_y
+p2.char=2
+p2.coins=0
+p2.emblems=0
 p3.number=3
 p3.x=player_start_x
 p3.y=player_start_y
+p3.char=3
+p3.coins=0
+p3.emblems=0
 p4.number=4
 p4.x=player_start_x
 p4.y=player_start_y
+p4.char=4
+p4.coins=0
+p4.emblems=0
 
 times={}
 times.last=time()
@@ -195,7 +210,7 @@ function _draw()
 		draw_game()
 	end
 
-	if(discussion.active)discussion.draw()
+	--if(discussion.active)discussion.draw()
 end
 
 function draw_title()
@@ -236,7 +251,9 @@ function draw_players()
 end
 
 function draw_hud()
-
+	rectfill(0+xcam,0+ycam,32+xcam,16+ycam,6)
+	rect(0+xcam,0+ycam,32+xcam,16+ycam,10)
+	
 end
 
 function _update60()
@@ -251,7 +268,7 @@ function _update60()
 		update_game()
 	end
 
-	if(discussion.active)discussion.update()
+	--if(discussion.active)discussion.update()
 end
 
 function update_title()
