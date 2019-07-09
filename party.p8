@@ -210,7 +210,7 @@ function _draw()
 		draw_game()
 	end
 
-	--if(discussion.active)discussion.draw()
+	if(discussion.active)discussion.draw()
 end
 
 function draw_title()
@@ -268,7 +268,7 @@ function _update60()
 		update_game()
 	end
 
-	--if(discussion.active)discussion.update()
+	if(discussion.active)discussion.update()
 end
 
 function update_title()
