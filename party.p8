@@ -251,9 +251,36 @@ function draw_players()
 end
 
 function draw_hud()
-	rectfill(0+xcam,0+ycam,32+xcam,16+ycam,6)
-	rect(0+xcam,0+ycam,32+xcam,16+ycam,10)
-	
+	-- for i=1,4 do
+	-- 	local offset=0
+
+	-- 	rectfill(0+xcam,0+ycam,32+xcam,16+ycam,6)
+	-- 	rect(0+xcam,0+ycam,32+xcam,16+ycam,10)
+	-- end
+
+	for i=1,4 do
+		local w=32
+		local h=16
+		local xoffset=0
+		local yoffset=0
+		if(i==2)then
+			xoffset=128-w
+		elseif(i==3)then
+			yoffset=128-h
+		elseif(i==4)then
+			xoffset=128-w
+			yoffset=128-h
+		end
+
+		
+		local x1=xoffset
+		local y1=yoffset
+		local x2=x1+w
+		local y2=y1+h
+
+		rectfill(x1+xcam,y1+ycam,x2+xcam,y2+ycam,6)
+		rect(x1+xcam,y1+ycam,x2+xcam,y2+ycam,10)
+	end
 end
 
 function _update60()
