@@ -24,27 +24,31 @@ p4={}
 p1.number=1
 p1.x=player_start_x
 p1.y=player_start_y
-p1.char=1
+p1.char=128
 p1.coins=0
 p1.emblems=0
 p2.number=2
 p2.x=player_start_x
 p2.y=player_start_y
-p2.char=2
+p2.char=144
 p2.coins=0
 p2.emblems=0
 p3.number=3
 p3.x=player_start_x
 p3.y=player_start_y
-p3.char=3
-p3.coins=0
-p3.emblems=0
+p3.char=160
+p3.coins=999
+p3.emblems=999
 p4.number=4
 p4.x=player_start_x
 p4.y=player_start_y
-p4.char=4
+p4.char=176
 p4.coins=0
 p4.emblems=0
+add(players,p1)
+add(players,p2)
+add(players,p3)
+add(players,p4)
 
 times={}
 times.last=time()
@@ -264,12 +268,12 @@ function draw_hud()
 		local xoffset=0
 		local yoffset=0
 		if(i==2)then
-			xoffset=128-w
+			xoffset=128-1-w
 		elseif(i==3)then
-			yoffset=128-h
+			yoffset=128-1-h
 		elseif(i==4)then
-			xoffset=128-w
-			yoffset=128-h
+			xoffset=128-1-w
+			yoffset=128-1-h
 		end
 
 		
@@ -277,9 +281,37 @@ function draw_hud()
 		local y1=yoffset
 		local x2=x1+w
 		local y2=y1+h
+		local coinstxtx=x2-12+xcam
+		local coinstxty=y1+2+ycam
+		local emblemstxtx=x2-12+xcam
+		local emblemstxty=y2-6+ycam
+		local coinsprx=coinstxtx-8+3
+		local coinspry=coinstxty+1
+		local emblemsprx=emblemstxtx-8+2
+		local emblemspry=emblemstxty-1
+		local coinpadding=0
+		local emblempadding=0
+		local charx=x1+3+xcam
+		local chary=y1+3+ycam
 
-		rectfill(x1+xcam,y1+ycam,x2+xcam,y2+ycam,6)
-		rect(x1+xcam,y1+ycam,x2+xcam,y2+ycam,10)
+		if(players[i].coins < 10)coinpadding+=4
+		if(players[i].coins < 100)coinpadding+=4
+		if(players[i].emblems < 10)emblempadding+=4
+		if(players[i].emblems < 100)emblempadding+=4
+		
+		rectfill(x1+xcam,y1+ycam,x2+xcam,y2+ycam,1)
+		
+		--TODO:should we keep this?
+		--rect(x1+xcam,y1+ycam,x2+xcam,y2+ycam,10)
+		--circfill(charx+4,chary+4,8,1)
+		print(players[i].coins,coinstxtx+1+coinpadding,coinstxty+1,1)
+		print(players[i].coins,coinstxtx+coinpadding,coinstxty,7)
+		print(players[i].emblems,emblemstxtx+1+emblempadding,emblemstxty+1,1)
+		print(players[i].emblems,emblemstxtx+emblempadding,emblemstxty,7)
+
+		spr(1,coinsprx,coinspry)
+		spr(3,emblemsprx,emblemspry)
+		spr(players[i].char,charx,chary)
 	end
 end
 
@@ -313,7 +345,7 @@ end
 
 function update_state_begin()
 	if(not camera_cutscene_move(170,270,true))return
-	discussion.active=true
+	--discussion.active=true
 	discussion.changetopic("intro")
 	boardstate="tutorial"
 end
@@ -583,12 +615,12 @@ function make_cell(mapx,mapy,parent)
 end
 
 __gfx__
-0000000000a90000000aa900000000000000000000000000000000004444444433b333b333b333b39aaaaaaa0000000000000000000000000000000000000000
-000000000a9a900000aaaa900000000000000000000000000000000044444444333333333333333349a449a40000000000000000000000000000000000000000
-007007000a9a90000aaa9aa9000000000000000000000000000000004424444422222222222222229aaaaaaa0000000000000000000000000000000000000000
-0007700000a900000aa99aa900000000000000000000000000000000444444444444444449a449a449a449a40033330000000000000000000000000000000000
-00077000000000000aa99aa90000000000000000000000000000000044444444444444449aaaaaaa9aaaaaaa0333333000000000000000000000000000000000
-00700700000000000aaa9aa900000000000000000000000000000000444442444444424449a449a449a449a4333a333300000000000000000000000000000000
+000000000a900000000aa900000000000000000000000000000000004444444433b333b333b333b39aaaaaaa0000000000000000000000000000000000000000
+00000000a9a9000000aaaa900008000000000000000000000000000044444444333333333333333349a449a40000000000000000000000000000000000000000
+00700700a9a900000aaa9aa90097f0000000000000000000000000004424444422222222222222229aaaaaaa0000000000000000000000000000000000000000
+000770000a9000000aa99aa90a777e00000000000000000000000000444444444444444449a449a449a449a40033330000000000000000000000000000000000
+00077000000000000aa99aa900b7d00000000000000000000000000044444444444444449aaaaaaa9aaaaaaa0333333000000000000000000000000000000000
+00700700000000000aaa9aa9000c0000000000000000000000000000444442444444424449a449a449a449a4333a333300000000000000000000000000000000
 000000000000000000aaaa900000000000000000000000000000000044444444444444449aaaaaaa9aaaaaaa33a7a33300000000000000000000000000000000
 0000000000000000000aa90000000000000000000000000000000000444444444444444449a449a449a449a4333a333300000000000000000000000000000000
 66666666ffff0ffffff00fffff0000ffffff0fffff0000fffff000ff1010122244440404333333333333333333333333bbbbbbbb000000000000000000000000
