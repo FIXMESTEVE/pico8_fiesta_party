@@ -1,44 +1,71 @@
 pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
-function _init()
 
+times={}
+    times.last=time()
+    times.past=0
+    times.dicenumberclk=0
+
+dice={}
+    dice.number=flr(rnd(6)) + 1
+    dice.update=function()
+        times.dicenumberclk+=times.past
+        if(times.dicenumberclk>0.05)then
+            local n=flr(rnd(6)) + 1
+            if(dice.number!=n)dice.number=n
+            times.dicenumberclk=0
+        end
+    end
+    dice.draw=function()
+        palt(0, false)
+        palt(15,true)
+        local dice_base_sprx=0
+        local dice_base_spry=1
+        local dice_base_sprw=8
+        local dice_base_sprh=8
+        local dice_base_scrx=64-32
+        local dice_base_scry=64-32
+        local dice_base_scrw=32
+        local dice_base_scrh=32
+    
+        local dice_number_sprx=dice.number
+        local dice_number_spry=1
+        local dice_number_sprw=8
+        local dice_number_sprh=8
+        local dice_number_scrw=24
+        local dice_number_scrh=24
+        local dice_number_scrx=64-32+dice_number_scrw/8
+        local dice_number_scry=64-32+dice_number_scrh/8
+    
+        sspr(dice_base_sprx*8,dice_base_spry*8,dice_base_sprw,dice_base_sprh,dice_base_scrx,dice_base_scry,dice_base_scrw,dice_base_scrh)
+        sspr(dice_number_sprx*8,dice_number_spry*8,dice_number_sprw,dice_number_sprh,dice_number_scrx,dice_number_scry,dice_number_scrw,dice_number_scrh)
+        palt(15,false)
+        palt(0, true)
+    end
+
+function _init()
+    
 end
 
 function _draw()
     cls()
-    draw_dice()
+    dice.draw()
+end
+
+function update_dice()
+    
 end
 
 function draw_dice()
-    palt(0, false)
-    palt(15,true)
-    local dice_base_sprx=0
-    local dice_base_spry=1
-    local dice_base_sprw=8
-    local dice_base_sprh=8
-    local dice_base_scrx=64-32
-    local dice_base_scry=64-32
-    local dice_base_scrw=32
-    local dice_base_scrh=32
-
-    local dice_number_sprx=flr(rnd(6)) + 1
-    local dice_number_spry=1
-    local dice_number_sprw=8
-    local dice_number_sprh=8
-    local dice_number_scrx=64-32
-    local dice_number_scry=64-32
-    local dice_number_scrw=24
-    local dice_number_scrh=24
-
-    sspr(dice_base_sprx*8,dice_base_spry*8,dice_base_sprw,dice_base_sprh,dice_base_scrx,dice_base_scry,dice_base_scrw,dice_base_scrh)
-    sspr(dice_number_sprx*8,dice_number_spry*8,dice_number_sprw,dice_number_sprh,dice_number_scrx,dice_number_scry,dice_number_scrw,dice_number_scrh)
-    palt(15,false)
-    palt(0, true)
+    
 end
 
 function _update60()
-
+    times.past=time()-times.last
+    times.last=time()
+    
+    dice.update()
 end
 __gfx__
 0000000000a90000000aa90000000000000000000000000000000000444444440000000000000000000000000000000000000000000000000000000000000000
