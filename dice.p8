@@ -1,6 +1,42 @@
 pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
+particles={}
+particles.make_particle = function(max_radius, x, y, angle_percent)
+    local p={}
+    p.max_radius=max_radius
+    p.radius=0
+    p.originx=x
+    p.originy=y
+    p.size=3
+    p.x=x
+    p.y=y
+    p.color=7
+    p.speed=rnd(2)+1
+    p.angle_percent=angle_percent
+    p.update=function()
+        p.radius+=p.speed
+        p.size=rnd(2)+1
+        if(p.color==7)then
+            p.color=10
+        else
+            p.color=7
+        end
+        p.x=p.originx + p.radius * cos(p.angle_percent)
+        p.y=p.originy + p.radius * sin(p.angle_percent)
+    end
+    p.draw=function()
+        circfill(p.x,p.y,p.size,p.color)
+    end
+    add(particles,p)
+end
+particles.clean = function()
+    foreach(particles, function(obj)
+        if(obj.radius > obj.max_radius)then
+            del(particles,obj)
+        end
+    end)
+end
 
 times={}
     times.last=time()
@@ -29,15 +65,15 @@ dice={}
         local dice_base_sprh=8
         local dice_base_scrx=64-32
         local dice_base_scry=64-32
-        local dice_base_scrw=32
-        local dice_base_scrh=32
+        local dice_base_scrw=20
+        local dice_base_scrh=20
     
         local dice_number_sprx=dice.number
         local dice_number_spry=1
         local dice_number_sprw=8
         local dice_number_sprh=8
-        local dice_number_scrw=24
-        local dice_number_scrh=24
+        local dice_number_scrw=16
+        local dice_number_scrh=16
         local dice_number_scrx=64-32+dice_number_scrw/8
         local dice_number_scry=64-32+dice_number_scrh/8
     
@@ -47,6 +83,12 @@ dice={}
         palt(0, true)
     end
 
+function gen_particles()
+    for i=1, 30 do
+        particles.make_particle(rnd(48),64,64,rnd(99)/100)
+    end
+end
+
 function _init()
     
 end
@@ -54,14 +96,10 @@ end
 function _draw()
     cls()
     dice.draw()
-end
-
-function update_dice()
-    
-end
-
-function draw_dice()
-    
+    for i=1,#particles do
+        particles[i].draw()
+    end
+    particles.clean()
 end
 
 function _update60()
@@ -69,6 +107,10 @@ function _update60()
     times.last=time()
     
     dice.update()
+    for i=1,#particles do
+        particles[i].update()
+    end
+    if(btnp(4))gen_particles()
 end
 __gfx__
 0000000000a90000000aa90000000000000000000000000000000000444444440000000000000000000000000000000000000000000000000000000000000000
