@@ -44,16 +44,21 @@ times={}
     times.dicenumberclk=0
 
 dice={}
+    dice.state=0
+    dice.x=64-20/2
+    dice.y=64-20/2
     dice.number=flr(rnd(6)) + 1
     dice.update=function()
-        times.dicenumberclk+=times.past
-        if(times.dicenumberclk>0.05)then
-            local n=flr(rnd(6)) + 1
-            while(dice.number==n)do
-                n=flr(rnd(6)) + 1
+        if(dice.state==0)then
+            times.dicenumberclk+=times.past
+            if(times.dicenumberclk>0.05)then
+                local n=flr(rnd(6)) + 1
+                while(dice.number==n)do
+                    n=flr(rnd(6)) + 1
+                end
+                dice.number=n
+                times.dicenumberclk=0
             end
-            dice.number=n
-            times.dicenumberclk=0
         end
     end
     dice.draw=function()
@@ -63,8 +68,8 @@ dice={}
         local dice_base_spry=1
         local dice_base_sprw=8
         local dice_base_sprh=8
-        local dice_base_scrx=64-32
-        local dice_base_scry=64-32
+        local dice_base_scrx=dice.x
+        local dice_base_scry=dice.y
         local dice_base_scrw=20
         local dice_base_scrh=20
     
@@ -74,17 +79,27 @@ dice={}
         local dice_number_sprh=8
         local dice_number_scrw=16
         local dice_number_scrh=16
-        local dice_number_scrx=64-32+dice_number_scrw/8
-        local dice_number_scry=64-32+dice_number_scrh/8
-    
-        sspr(dice_base_sprx*8,dice_base_spry*8,dice_base_sprw,dice_base_sprh,dice_base_scrx,dice_base_scry,dice_base_scrw,dice_base_scrh)
-        sspr(dice_number_sprx*8,dice_number_spry*8,dice_number_sprw,dice_number_sprh,dice_number_scrx,dice_number_scry,dice_number_scrw,dice_number_scrh)
+        local dice_number_scrx=dice.x+dice_number_scrw/8
+        local dice_number_scry=dice.y+dice_number_scrh/8
+        
+        if(dice.state==0)then
+            sspr(dice_base_sprx*8,dice_base_spry*8,dice_base_sprw,dice_base_sprh,dice_base_scrx,dice_base_scry,dice_base_scrw,dice_base_scrh)
+            sspr(dice_number_sprx*8,dice_number_spry*8,dice_number_sprw,dice_number_sprh,dice_number_scrx,dice_number_scry,dice_number_scrw,dice_number_scrh)
+        elseif(dice.state==1)then
+            gen_particles()
+            dice.state=2
+        elseif(dice.state==2)then
+            pal(7,10)
+            pal(0,13)
+            sspr(dice_number_sprx*8,dice_number_spry*8,dice_number_sprw,dice_number_sprh,dice_number_scrx,dice_number_scry,dice_number_scrw,dice_number_scrh)
+        end
         palt(15,false)
         palt(0, true)
+        pal()
     end
 
 function gen_particles()
-    for i=1, 30 do
+    for i=1, 100 do
         particles.make_particle(rnd(48),64,64,rnd(99)/100)
     end
 end
@@ -94,7 +109,7 @@ function _init()
 end
 
 function _draw()
-    cls()
+    cls(5)
     dice.draw()
     for i=1,#particles do
         particles[i].draw()
@@ -110,7 +125,9 @@ function _update60()
     for i=1,#particles do
         particles[i].update()
     end
-    if(btnp(4))gen_particles()
+    if(btnp(4))then
+        dice.state=1
+    end
 end
 __gfx__
 0000000000a90000000aa90000000000000000000000000000000000444444440000000000000000000000000000000000000000000000000000000000000000
@@ -123,7 +140,7 @@ __gfx__
 0000000000000000000aa90000000000000000000000000000000000444444440000000000000000000000000000000000000000000000000000000000000000
 66666666ffff0ffffff00fffff0000ffffff0fffff0000fffff000ff101012220000000000000000000000000000000000000000000000000000000000000000
 66777766fff070ffff0770fff077770ffff070fff077770fff07770f111012220000000000000000000000000000000000000000000000000000000000000000
-67777776ff0770fff070070fff00070fff0770fff07000fff070000f010011240000000000000000000000000000000000000000000000000000000000000000
+67777776ff0770fff070070fff00070fff0770fff07000fff07000ff010011240000000000000000000000000000000000000000000000000000000000000000
 67777776fff070ffff0070fff077770ff07070ffff0770fff077770f011112220000000000000000000000000000000000000000000000000000000000000000
 67777776fff070ffff0700ffff00070f0777770fff00070ff070070f000012220000000000000000000000000000000000000000000000000000000000000000
 67777776fff070fff077770ff077770ff00070fff07770fff077770f000011240000000000000000000000000000000000000000000000000000000000000000
