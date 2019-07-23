@@ -13,7 +13,10 @@ dice={}
         times.dicenumberclk+=times.past
         if(times.dicenumberclk>0.05)then
             local n=flr(rnd(6)) + 1
-            if(dice.number!=n)dice.number=n
+            while(dice.number==n)do
+                n=flr(rnd(6)) + 1
+            end
+            dice.number=n
             times.dicenumberclk=0
         end
     end
