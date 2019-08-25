@@ -48,6 +48,9 @@ dice={}
     dice.x=64-20/2
     dice.y=64-20/2
     dice.number=flr(rnd(6)) + 1
+    dice.stop=function()
+        if(dice.state==0)dice.state=1
+    end
     dice.update=function()
         if(dice.state==0)then
             times.dicenumberclk+=times.past
@@ -126,7 +129,7 @@ function _update60()
         particles[i].update()
     end
     if(btnp(4))then
-        dice.state=1
+        dice.stop()
     end
 end
 __gfx__
