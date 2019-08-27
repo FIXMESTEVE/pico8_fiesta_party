@@ -4,7 +4,6 @@ __lua__
 debug=false
 globalstate="title"
 boardstate="begin"
-gamestate="decide_order"
 xcam=0
 ycam=0
 textbox_x1=-1
@@ -28,6 +27,7 @@ p1.x=player_start_x
 p1.y=player_start_y
 p1.char=128
 p1.coins=0
+p1.dice={}
 p1.emblems=0
 p2.number=2
 p2.x=player_start_x+16
@@ -35,22 +35,28 @@ p2.y=player_start_y
 p2.char=144
 p2.coins=0
 p2.emblems=0
+p2.dice={}
 p3.number=3
 p3.x=player_start_x+32
 p3.y=player_start_y
 p3.char=160
-p3.coins=999
-p3.emblems=999
+p3.coins=0
+p3.emblems=0
+p3.dice={}
 p4.number=4
 p4.x=player_start_x+48
 p4.y=player_start_y
 p4.char=176
 p4.coins=0
 p4.emblems=0
+p4.dice={}
 add(players,p1)
 add(players,p2)
 add(players,p3)
 add(players,p4)
+function make_dice(p)
+
+end
 
 times={}
 times.last=time()
@@ -70,7 +76,7 @@ discussion.strings={
 			nextfunc=function()discussion.index+=1 end
 		},
 		{
-			text="do you know the rules of this game?",
+			text="do you want to know the rules of this game?",
 			type="yesno",
 			yesfunc=function()discussion.changetopic("rules")end,
 			nofunc=function()discussion.changetopic("intro2")end,
@@ -83,7 +89,10 @@ discussion.strings={
 			type="next",
 			nextfunc=function()
 				discussion.active=false
-				gamestate="decide_order"
+				for i=1,#players do
+					make_dice(players[i])
+				end
+				boardstate="decide_order"
 			end
 		}
 	},
@@ -380,7 +389,7 @@ function update_game()
 end
 
 function update_decide_order()
-
+	
 end
 
 function update_state_begin()
