@@ -27,5 +27,5 @@ scn_title._draw=function()
 end
 
 scn_title._update=function()
-    if(btnp(5))scn_mgr:change_scn(scn_board)
+    if(btnp(5))tra_mgr:execute()
 end

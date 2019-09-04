@@ -3,13 +3,18 @@ version 18
 __lua__
 --modules
 #include modules/scene_manager.lua
+#include modules/transition_manager.lua
 
 --scenes
 #include scenes/scn_title.lua
 #include scenes/scn_board.lua
 
+--transitions
+#include transitions/tra_bubbles.lua
+
 function _init()
   scn_mgr=scene_manager:new(scn_title)
+  tra_mgr=transition_manager:new(scn_title,scn_board,tra_bubbles)
   scn_mgr:change_scn(scn_title)
 end
 function _draw()
