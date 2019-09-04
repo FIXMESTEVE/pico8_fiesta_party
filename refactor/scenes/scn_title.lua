@@ -23,9 +23,10 @@ scn_title._draw=function()
  	spr(part3_s,part3_x,part3_y,w,h)
 	spr(logo_s,logo_x,logo_y)
 
-	print("press ❎ to play", 30,100)
+	print("press ❎ to play",30,100,10)
+
+	if(btnp(5))tra_mgr:execute()
 end
 
 scn_title._update=function()
-    if(btnp(5))tra_mgr:execute()
 end

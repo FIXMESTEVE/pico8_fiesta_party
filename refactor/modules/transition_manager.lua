@@ -13,8 +13,8 @@ end
 
 function transition_manager:execute()
     self.next_scn._init()
-    _draw=self.transition._draw
     _update60=self.transition._update
+    _draw=self.transition._draw
 end
 
 function transition_manager:finish()
