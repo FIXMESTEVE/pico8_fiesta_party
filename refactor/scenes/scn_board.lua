@@ -1,10 +1,10 @@
 scn_board={}
 scn_board._init=function()
     debug=false
-    globalstate="title"
     boardstate="begin"
-    xcam=0
-    ycam=0
+    xcam=160
+    ycam=240
+    camera(xcam, ycam)
     textbox_x1=-1
     textbox_y1=-1
     textbox_x2=-1
@@ -99,7 +99,9 @@ scn_board._draw=function()
 	draw_hud()
 	if(debug)draw_cells_debug()
 end
+
 scn_board._update=function()
+    camera(xcam, ycam)
 end
 
 function draw_map()

@@ -12,7 +12,6 @@ function transition_manager:new(current_scn,next_scn,transition)
 end
 
 function transition_manager:execute()
-    self.next_scn._init()
     _update60=self.transition._update
     _draw=self.transition._draw
 end

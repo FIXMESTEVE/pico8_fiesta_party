@@ -1,3 +1,7 @@
+--original version made by emu
+--https://www.lexaloffle.com/bbs/?tid=3588
+xcam=0
+ycam=0
 tra_bubbles={}
 
 --timer
@@ -19,6 +23,7 @@ function tra_bubbles._draw()
   --and changes it when the
   --screen is covered with white
   if(tra_bubbles.t>2.60)then
+    tra_mgr.next_scn._init()
     tra_mgr.next_scn._draw()
   else
     tra_mgr.current_scn._draw()
@@ -47,7 +52,7 @@ function tra_bubbles._draw()
       --the circles' radii are
       --influenced by the other
       --sweepy number
-      circfill(x, y, osc2*15, 7)
+      circfill(x+xcam, y+ycam, osc2*15, 7)
     end
   end
 end
