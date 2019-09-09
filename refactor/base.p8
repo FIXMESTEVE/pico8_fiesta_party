@@ -12,6 +12,9 @@ __lua__
 --transitions
 #include transitions/tra_bubbles.lua
 
+--objects
+#include objects/player.lua
+
 function _init()
   scn_mgr=scene_manager:new(scn_title)
   tra_mgr=transition_manager:new(scn_title,scn_board,tra_bubbles)
