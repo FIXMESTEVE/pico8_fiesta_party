@@ -1,6 +1,9 @@
 pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
+--utils
+#include utils/utils.lua
+
 --modules
 #include modules/scene_manager.lua
 #include modules/transition_manager.lua
@@ -14,6 +17,7 @@ __lua__
 
 --objects
 #include objects/player.lua
+#include objects/dice.lua
 
 function _init()
   scn_mgr=scene_manager:new(scn_title)
