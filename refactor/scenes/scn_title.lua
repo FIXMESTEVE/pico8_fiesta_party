@@ -1,4 +1,7 @@
 scn_title={}
+scn_title._display=true
+scn_title._clk=0
+scn_title._blink=false
 scn_title._init=function()
 end
 
@@ -23,9 +26,26 @@ scn_title._draw=function()
  	spr(part3_s,part3_x,part3_y,w,h)
 	spr(logo_s,logo_x,logo_y)
 
-	print("press ❎ to play",30,100,10)
+	clock:update()
+	
+	if(scn_title._blink)then
+		scn_title._clk+=clock.past
+		if(scn_title._clk>0.1)then
+			scn_title._display=false
+			scn_title._clk=0
+		else
+			scn_title._display=true
+		end
+	end
 
-	if(btnp(5))tra_mgr:execute()
+	if(scn_title._display)then
+		print("press ❎ to play",30,100,10)
+	end
+
+	if(btnp(5))then 
+		scn_title._blink=true
+		tra_mgr:execute()
+	end
 end
 
 scn_title._update=function()
