@@ -15,8 +15,8 @@ end
 
 function scene_manager:change_scn(scene)
     self.current_scn=scene
-    _draw=self.current_scn._draw
-    _update60=self.current_scn._update
+    _currentdraw=self.current_scn._draw
+    _currentupdate=self.current_scn._update
     self.current_scn._init()
 end
 

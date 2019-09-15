@@ -7,6 +7,8 @@ __lua__
 --modules
 #include modules/scene_manager.lua
 #include modules/transition_manager.lua
+#include modules/cutscene_manager.lua
+#include modules/discussion_manager.lua
 
 --scenes
 #include scenes/scn_title.lua
@@ -14,6 +16,9 @@ __lua__
 
 --transitions
 #include transitions/tra_bubbles.lua
+
+--cutscenes
+#include cutscenes/intro_cut.lua
 
 --objects
 #include objects/player.lua
@@ -23,10 +28,14 @@ function _init()
   scn_mgr=scene_manager:new(scn_title)
   tra_mgr=transition_manager:new(scn_title,scn_board,tra_bubbles)
   scn_mgr:change_scn(scn_title)
+  cut_mgr=cutscene_manager:new()
 end
 function _draw()
+  _currentdraw()
 end
 function _update60()
+  clock:update()
+  _currentupdate()
 end
 function _currentupdate()end
 function _currentdraw()end

@@ -2,9 +2,9 @@ scn_board={}
 scn_board._init=function()
     debug=false
     boardstate="begin"
-    xcam=160
-    ycam=240
-    camera(xcam, ycam)
+    xcam=0
+    ycam=0
+    --camera(xcam, ycam)
     textbox_x1=-1
     textbox_y1=-1
     textbox_x2=-1
@@ -64,7 +64,8 @@ function make_dice(p)
 end
 
 scn_board._draw=function()
-    cls()
+	cls()
+	camera(xcam,ycam)
     draw_map()
 	draw_special_cells()
 	draw_players()
@@ -73,7 +74,11 @@ scn_board._draw=function()
 end
 
 scn_board._update=function()
-    camera(xcam, ycam)
+	if(boardstate=="begin")then
+		cut_mgr:set_cutscene(intro_cut)
+		cut_mgr:enable()
+		cut_mgr:update()
+	end
 end
 
 function draw_map()

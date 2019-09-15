@@ -26,8 +26,6 @@ scn_title._draw=function()
  	spr(part3_s,part3_x,part3_y,w,h)
 	spr(logo_s,logo_x,logo_y)
 
-	clock:update()
-	
 	if(scn_title._blink)then
 		scn_title._clk+=clock.past
 		if(scn_title._clk>0.1)then
