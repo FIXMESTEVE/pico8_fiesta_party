@@ -8,19 +8,6 @@ function clock:update()
 	clock.last=time()
 end
 
-function camera_move_to(camx_target,camy_target,smoothly)
-    if(smoothly)then
-        --TODO: lerp
-        local timer = time()/4 % 1
-        local lerped = lerp(xcam,ycam,camx_target,camy_target,timer)
-        xcam=lerped.x
-        ycam=lerped.y
-	else
-		xcam=camx_target
-		ycam=camy_target
-	end
-end
-
 function lerpvec(x1,y1,x2,y2,t)
     local ret = {}
     ret.x = x1+(x2-x1)*t
