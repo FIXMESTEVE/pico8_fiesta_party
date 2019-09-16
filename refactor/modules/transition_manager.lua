@@ -17,5 +17,5 @@ function transition_manager:execute()
 end
 
 function transition_manager:finish()
-    scn_mgr:change_scn(self.next_scn)
+    scn_mgr:change_scn(self.next_scn,false)
 end

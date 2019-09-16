@@ -13,11 +13,11 @@ function scene_manager:init_current_scn()
     self.current_scn._init()
 end
 
-function scene_manager:change_scn(scene)
+function scene_manager:change_scn(scene,do_init)
     self.current_scn=scene
     _currentdraw=self.current_scn._draw
     _currentupdate=self.current_scn._update
-    self.current_scn._init()
+    if(do_init)self.current_scn._init()
 end
 
 function scene_manager:get_current_scn()

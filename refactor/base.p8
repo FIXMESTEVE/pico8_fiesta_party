@@ -27,7 +27,7 @@ __lua__
 function _init()
   scn_mgr=scene_manager:new(scn_title)
   tra_mgr=transition_manager:new(scn_title,scn_board,tra_bubbles)
-  scn_mgr:change_scn(scn_title)
+  scn_mgr:change_scn(scn_title,true)
   cut_mgr=cutscene_manager:new()
 end
 function _draw()
