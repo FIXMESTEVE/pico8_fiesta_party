@@ -40,7 +40,7 @@ scn_title._draw=function()
 		print("press ❎ to play",30,100,10)
 	end
 
-	if(btnp(5))then 
+	if(is_pressed(5,0))then 
 		scn_title._blink=true
 		tra_mgr:execute()
 	end

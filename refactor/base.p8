@@ -25,6 +25,7 @@ __lua__
 #include objects/dice.lua
 
 function _init()
+  init_keys()
   scn_mgr=scene_manager:new(scn_title)
   tra_mgr=transition_manager:new(scn_title,scn_board,tra_bubbles)
   scn_mgr:change_scn(scn_title,true)
@@ -34,6 +35,7 @@ function _draw()
   _currentdraw()
 end
 function _update60()
+  upd_keys()
   clock:update()
   _currentupdate()
 end
