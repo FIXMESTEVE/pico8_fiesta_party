@@ -71,6 +71,7 @@ scn_board._draw=function()
 	draw_players()
 	draw_hud()
 	if(debug)draw_cells_debug()
+	cut_mgr:draw()
 end
 
 scn_board._update=function()

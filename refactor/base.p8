@@ -4,6 +4,9 @@ __lua__
 --utils
 #include utils/utils.lua
 
+--libs
+#include libs/dtb.lua
+
 --modules
 #include modules/scene_manager.lua
 #include modules/transition_manager.lua
@@ -26,6 +29,7 @@ __lua__
 
 function _init()
   init_keys()
+  dtb_init(3)
   scn_mgr=scene_manager:new(scn_title)
   tra_mgr=transition_manager:new(scn_title,scn_board,tra_bubbles)
   scn_mgr:change_scn(scn_title,true)
