@@ -1,6 +1,6 @@
 -- Dialog Text Box Library
 -- Credit: Oli414
--- https://www.lexaloffle.com/bbs/?tid=28465
+-- Original version: https://www.lexaloffle.com/bbs/?tid=28465
 
 -- call this before you start using dtb.
 -- optional parameter is the number of lines that are displayed. default is 3.
@@ -112,9 +112,9 @@ function dtb_update()
                     dtb_dislines[dislineslength]=curlines[dtb_curline]
                 end
             else
-                if btnp(4) then
+                --if btnp(4) then
                     _dtb_nextline()
-                end
+                --end
             end
         end
     end
