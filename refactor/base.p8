@@ -32,7 +32,6 @@ __lua__
 function _init()
   init_keys()
   dtb_init(3)
-  dis_mgr=discussion_manager:new()
   scn_mgr=scene_manager:new(scn_title)
   tra_mgr=transition_manager:new(scn_title,scn_board,tra_bubbles)
   scn_mgr:change_scn(scn_title,true)
