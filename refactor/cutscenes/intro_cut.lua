@@ -5,20 +5,24 @@ intro_cut.yorigin=ycam
 intro_cut.xtarget=170
 intro_cut.ytarget=270
 intro_cut.state=0
-function intro_cut.update()
+intro_cut.dices={}
+function intro_cut:update()
     intro_cut._clk+=clock.past
-    if(intro_cut.state==0)intro_cut.camera_move()
-    if(intro_cut.state==1)intro_cut.dialog()    
+    if(intro_cut.state==0)intro_cut:camera_move()
+    if(intro_cut.state==1)intro_cut:dialog()
+    if(intro_cut.state==2)intro_cut:decideorder()
 end
 
-function intro_cut.draw()
+function intro_cut:draw()
     --draw additionnal elements during the cutscene here
     dtb_draw(xcam,ycam)
+      
+    for i=1,#self.dices do
+        self.dices[i]:draw()
+    end
 end
 
-function intro_cut.camera_move()
-    printh("--xcam "..xcam.." intro_cut.xtarget "..intro_cut.xtarget,"@clip")
-
+function intro_cut:camera_move()
     local timer = intro_cut._clk/2 % 1
     xcam = lerp(intro_cut.xorigin,intro_cut.xtarget,easeInOut(timer))
     ycam = lerp(intro_cut.yorigin,intro_cut.ytarget,easeInOut(timer))
@@ -29,8 +33,23 @@ function intro_cut.camera_move()
     end
 end
 
-function intro_cut.dialog()
+function intro_cut:dialog()
     intro_disc:build()
     intro_disc:queue()
     dtb_update()
+end
+
+function intro_cut:spawndices()
+    for i=1,#players do
+        local yoffset=10
+        local d=dice:new(players[i].x+8/2, players[i].y - yoffset)
+        add(self.dices,d)
+    end
+    intro_cut.state=2
+end
+
+function intro_cut:decideorder()
+    for i=1,#self.dices do
+        self.dices[i]:update()
+    end
 end

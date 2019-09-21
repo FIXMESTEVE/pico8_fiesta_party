@@ -23,9 +23,9 @@ function cutscene_manager:disable(cutscene)
 end
 
 function cutscene_manager:draw()
-    if(self.enabled)self.cut.draw()
+    if(self.enabled)self.cut:draw()
 end
 
 function cutscene_manager:update()
-    if(self.enabled)self.cut.update()
+    if(self.enabled)self.cut:update()
 end

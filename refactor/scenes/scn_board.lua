@@ -70,8 +70,8 @@ scn_board._draw=function()
 	draw_special_cells()
 	draw_players()
 	draw_hud()
+	if(boardstate=="begin")cut_mgr:draw()
 	if(debug)draw_cells_debug()
-	cut_mgr:draw()
 end
 
 scn_board._update=function()

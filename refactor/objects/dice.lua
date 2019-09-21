@@ -15,7 +15,7 @@ function dice:new(x,y)
 end
 
 function dice:update()
-    if(self.state==0)then
+    if(self._state==0)then
         self._clk+=clock.past
         if(self._clk>0.05)then
             local n=flr(rnd(6)) + 1
@@ -26,4 +26,14 @@ function dice:update()
             self._clk=0
         end
     end
+end
+
+function dice:draw()
+    -- rectfill(self.x-2,self.y-2,self.x+6,self.y+6,7)
+    circfill(self.x+1,self.y+2,4,7)
+    print(""..self.number,self.x-1,self.y,1)
+    print(""..self.number,self.x+1,self.y,1)
+    print(""..self.number,self.x,self.y+1,1)
+    print(""..self.number,self.x,self.y-1,1)
+    print(""..self.number,self.x,self.y,10)
 end
