@@ -12,6 +12,12 @@ function intro_cut:update()
     if(intro_cut.state==0)intro_cut:camera_move()
     if(intro_cut.state==1)intro_cut:dialog()
     if(intro_cut.state==2)intro_cut:decideorder()
+
+    if cor and costatus(cor) != 'dead' then
+        coresume(cor, players[1], self.dices[1])
+    else
+        cor = nil
+    end    
 end
 
 function intro_cut:draw()
@@ -56,5 +62,14 @@ function intro_cut:decideorder()
     end
     if(self.canhitdices)then
         --TODO: implement input listening for hitting dices with each player
+        if(is_pressed(5,0))then
+            cor = cocreate(co_anim_player_hit_dice)
+        end
+    end
+end
+
+function co_anim_player_hit_dice(player,dice)
+    while(player.y > dice.y)then
+        player.y-=1
     end
 end
