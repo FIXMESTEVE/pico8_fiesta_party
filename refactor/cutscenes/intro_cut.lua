@@ -6,6 +6,7 @@ intro_cut.xtarget=170
 intro_cut.ytarget=270
 intro_cut.state=0
 intro_cut.dices={}
+intro_cut.canhitdices=false
 function intro_cut:update()
     intro_cut._clk+=clock.past
     if(intro_cut.state==0)intro_cut:camera_move()
@@ -45,11 +46,15 @@ function intro_cut:spawndices()
         local d=dice:new(players[i].x+8/2, players[i].y - yoffset)
         add(self.dices,d)
     end
+    self.canhitdices=true
     intro_cut.state=2
 end
 
 function intro_cut:decideorder()
     for i=1,#self.dices do
         self.dices[i]:update()
+    end
+    if(self.canhitdices)then
+        --TODO: implement input listening for hitting dices with each player
     end
 end
