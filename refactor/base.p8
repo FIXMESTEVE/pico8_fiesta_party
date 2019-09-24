@@ -3,6 +3,7 @@ version 18
 __lua__
 --utils
 #include utils/utils.lua
+#include utils/particles.lua
 
 --libs
 #include libs/dtb.lua

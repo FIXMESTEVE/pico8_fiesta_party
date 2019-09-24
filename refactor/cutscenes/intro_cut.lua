@@ -21,6 +21,10 @@ function intro_cut:update()
     if(intro_cut.state==1)intro_cut:dialog()
     if(intro_cut.state==2)intro_cut:decideorder()
 
+    for i=1,#particles do
+        particles[i].update()
+    end
+
     for i=1,#self.coroutines do
         if self.coroutines[i] and costatus(self.coroutines[i]) != 'dead' then
             coresume(self.coroutines[i], players[i], self.dices[i])
@@ -37,6 +41,11 @@ function intro_cut:draw()
     for i=1,#self.dices do
         self.dices[i]:draw()
     end
+
+    for i=1,#particles do
+        particles[i].draw()
+    end
+    particles.clean()
 end
 
 function intro_cut:camera_move()
@@ -85,8 +94,24 @@ function co_anim_player_hit_dice(player,dice)
         player.y-=1
         yield()
     end
+    if(player.y <= dice.y+8/2)then
+        gen_dice_particles(dice.x+dice.radius/2,dice.y+dice.radius/2)
+        dice.state=1
+    end
     while(player.y < player_y_original)do  
         player.y+=1
         yield()
     end
+    for i=0,20 do
+        if(dice.display)then
+            dice.display=false
+        else
+            dice.display=true
+        end
+        yield()
+        yield()
+        yield()
+        yield()
+    end
+    dice.display=true
 end

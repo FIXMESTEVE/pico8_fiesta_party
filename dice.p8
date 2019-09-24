@@ -103,7 +103,7 @@ dice={}
 
 function gen_particles()
     for i=1, 100 do
-        particles.make_particle(rnd(48),64,64,rnd(99)/100)
+        particles.make_particle(rnd(10),64,64,rnd(99)/100)
     end
 end
 
