@@ -7,17 +7,27 @@ intro_cut.ytarget=270
 intro_cut.state=0
 intro_cut.dices={}
 intro_cut.canhitdices=false
+intro_cut.coroutines={}
+
+function intro_cut:init()
+    for i=1,#players do
+        add(intro_cut.coroutines,nil)
+    end
+end
+
 function intro_cut:update()
     intro_cut._clk+=clock.past
     if(intro_cut.state==0)intro_cut:camera_move()
     if(intro_cut.state==1)intro_cut:dialog()
     if(intro_cut.state==2)intro_cut:decideorder()
 
-    if cor and costatus(cor) != 'dead' then
-        coresume(cor, players[1], self.dices[1])
-    else
-        cor = nil
-    end    
+    for i=1,#self.coroutines do
+        if self.coroutines[i] and costatus(self.coroutines[i]) != 'dead' then
+            coresume(self.coroutines[i], players[i], self.dices[i])
+        else
+            self.coroutines[i] = nil
+        end
+    end
 end
 
 function intro_cut:draw()
@@ -61,15 +71,22 @@ function intro_cut:decideorder()
         self.dices[i]:update()
     end
     if(self.canhitdices)then
-        --TODO: implement input listening for hitting dices with each player
-        if(is_pressed(5,0))then
-            cor = cocreate(co_anim_player_hit_dice)
+        for i=1,#players do
+            if(is_pressed(5,i-1) and self.coroutines[i]==nil and self.dices[i].state==0)then
+                self.coroutines[i] = cocreate(co_anim_player_hit_dice)
+            end
         end
     end
 end
 
 function co_anim_player_hit_dice(player,dice)
-    while(player.y > dice.y)then
+    local player_y_original=player.y
+    while(player.y > dice.y+8/2)do  
         player.y-=1
+        yield()
+    end
+    while(player.y < player_y_original)do  
+        player.y+=1
+        yield()
     end
 end

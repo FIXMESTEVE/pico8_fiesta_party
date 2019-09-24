@@ -7,7 +7,7 @@ function dice:new(x,y)
         y=y,
         number=flr(rnd(6)) + 1,
 
-        _state=0,
+        state=0,
         _clk=0
     }
     setmetatable(t,self)
@@ -15,7 +15,7 @@ function dice:new(x,y)
 end
 
 function dice:update()
-    if(self._state==0)then
+    if(self.state==0)then
         self._clk+=clock.past
         if(self._clk>0.05)then
             local n=flr(rnd(6)) + 1

@@ -12,6 +12,7 @@ end
 
 function cutscene_manager:set_cutscene(cutscene)
     self.cut=cutscene
+    self.cut:init()
 end
 
 function cutscene_manager:enable(cutscene)
