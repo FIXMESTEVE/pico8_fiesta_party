@@ -18,7 +18,8 @@ function intro_disc:queue()
     if(self.isqueued)return
 
     for i=1,#self.lines do
-        dtb_disp(self.lines[i].line,self.lines[i].callback)
+        -- dtb_disp(self.lines[i].line,self.lines[i].callback)
+        my_dtb_disp(self.lines[i])
     end
 
     self.isqueued=true

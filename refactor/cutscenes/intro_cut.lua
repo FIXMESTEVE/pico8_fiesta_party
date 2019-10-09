@@ -36,7 +36,7 @@ end
 
 function intro_cut:draw()
     --draw additionnal elements during the cutscene here
-    dtb_draw(xcam,ycam)
+    my_dtb_draw(xcam,ycam)
       
     for i=1,#self.dices do
         self.dices[i]:draw()
@@ -62,7 +62,7 @@ end
 function intro_cut:dialog()
     intro_disc:build()
     intro_disc:queue()
-    dtb_update()
+    my_dtb_update()
 end
 
 function intro_cut:spawndices()
