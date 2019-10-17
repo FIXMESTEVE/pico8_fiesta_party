@@ -29,9 +29,28 @@ function my_dtb_draw(xoffset,yoffset)
     local x2=125
     local y2=125
     local offset=0
+    
     if(#my_dtb_queue>0)then
+        local str=my_dtb_queue[1].line
+        local words={}
+        local w=""
+        for i=1,#str do
+            if(sub(str,i,i)!=" ")w=w..sub(str,i,i)
+            if(sub(str,i,i)==" " or i==#str)then
+                add(words, w)
+                w=""
+            end
+        end
+
         rectfill(x1+xoffset,y1-boxlines*8+yoffset,x2+xoffset,y2+yoffset,0)
-        print(my_dtb_queue[1].line,4+xoffset,124-(boxlines+offset)*8+yoffset,7)
+
+        
+        local lettersize=4
+        local wordoffset=0
+        for i=1,#words do
+            print(words[i].." ",4+xoffset+wordoffset,124-(boxlines+offset)*8+yoffset,7)
+            wordoffset+=#words[i]*lettersize+4
+        end
     end
 end
 
