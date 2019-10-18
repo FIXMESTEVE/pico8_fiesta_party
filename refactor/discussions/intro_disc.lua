@@ -5,9 +5,13 @@ intro_disc.isqueued=false
 
 function intro_disc:build()
     if(self.isbuilt)return
-
-    local line1={line="welcome to pico-8 fiesta party!",callback=nil}
-    local line2={line="do you want to know the rules of this game?",callback=function() intro_cut:spawndices() end}
+    local yesno={"yes","no"}
+    local line1={line="welcome to pico-8 fiesta party!",options=nil,callback=nil}
+    local line2={line="do you want to know the rules of this game?",options=yesno,callback=function(option) 
+        if(option==2)then
+            intro_cut:spawndices() 
+        end
+    end}
     add(self.lines,line1)
     add(self.lines,line2)
 
