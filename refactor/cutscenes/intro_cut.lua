@@ -11,7 +11,7 @@ intro_cut.coroutines={}
 
 function intro_cut:init()
     for i=1,#players do
-        add(intro_cut.coroutines,nil)
+        add(intro_cut.coroutines,nil) --set up empty coroutines
     end
 end
 
@@ -25,7 +25,7 @@ function intro_cut:update()
         particles[i].update()
     end
 
-    for i=1,#self.coroutines do
+    for i=1,#self.coroutines do --cycle all coroutines, if a coroutine exists then update it
         if self.coroutines[i] and costatus(self.coroutines[i]) != 'dead' then
             coresume(self.coroutines[i], players[i], self.dices[i])
         else
@@ -72,7 +72,6 @@ function intro_cut:spawndices()
         add(self.dices,d)
     end
     self.canhitdices=true
-    intro_cut.state=2
 end
 
 function intro_cut:decideorder()

@@ -9,7 +9,8 @@ function intro_disc:build()
     local line1={line="welcome to pico-8 fiesta party!",options=nil,callback=nil}
     local line2={line="do you want to know the rules of this game?",options=yesno,callback=function(option) 
         if(option==2)then
-            intro_cut:spawndices() 
+            intro_cut:spawndices()
+            intro_cut.state=2            
         end
     end}
     add(self.lines,line1)
