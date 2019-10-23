@@ -9,8 +9,8 @@ function intro_disc:build()
     local line1={line="welcome to pico-8 fiesta party!",options=nil,callback=nil}
     local line2={line="do you want to know the rules of this game?",options=yesno,callback=function(option) 
         if(option==2)then
-            intro_cut:spawndices()
-            intro_cut.state=2            
+            intro_disc_part2:build()
+            intro_disc_part2:queue()         
         end
     end}
     add(self.lines,line1)
@@ -23,7 +23,6 @@ function intro_disc:queue()
     if(self.isqueued)return
 
     for i=1,#self.lines do
-        -- dtb_disp(self.lines[i].line,self.lines[i].callback)
         my_dtb_disp(self.lines[i])
     end
 

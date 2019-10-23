@@ -25,6 +25,7 @@ __lua__
 
 --discussions
 #include discussions/intro_disc.lua
+#include discussions/intro_disc_part2.lua
 
 --objects
 #include objects/player.lua
