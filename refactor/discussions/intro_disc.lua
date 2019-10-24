@@ -7,6 +7,7 @@ function intro_disc:build()
     if(self.isbuilt)return --this function will only be fired once
 
     my_dtb_init() --reset my_dtb
+    my_dtb_portrait=197
     local yesno={"yes","no"}
     local line1={line="welcome to pico-8 fiesta party!",options=nil,callback=nil}
     local line2={line="do you want to know the rules of this game?",options=yesno,callback=function(option) 

@@ -4,12 +4,16 @@ player_control=0
 my_dtb_clk=0.0
 my_dtb_queue={}
 boxlines=3
+my_dtb_portrait=nil
     
 -- call this before you start using dtb.
 function my_dtb_init()
-    lerpedx2=0
-    lerpedy2=0
+    textbox_lerpedx2=0
+    textbox_lerpedy2=0
+    portrait_lerpedx2=0
+    portrait_lerpedy1=0
     boxready=false
+    my_dtb_portrait=nil
 end
 
 -- this will add a piece of text to the queu. the queu is processed automatically.
@@ -39,26 +43,46 @@ function my_dtb_draw(xoffset,yoffset)
     local y1=125-boxlines*8
     local x2=125
     local y2=125
+    local portrait_x1=x1
+    local portrait_y1=y1-17
+    local portrait_x2=x1+17
+    local portrait_y2=y1
     local offset=0
     local timer = my_dtb_clk*3 % 1
     
     if(#my_dtb_queue>0)then
         --FIXMESTEVE: replace this with a coroutine
-        if(abs(lerpedx2-x2)<1)then
-            lerpedx2=x2
+        if(abs(textbox_lerpedx2-x2)<1)then
+            textbox_lerpedx2=x2
             boxready=true
         else
-            lerpedx2 = lerp(x1,x2,easeInOut(timer))
+            textbox_lerpedx2 = lerp(x1,x2,easeInOut(timer))
         end
-        if(abs(lerpedy2-y2)<1)then
-            lerpedy2=y2
+        if(abs(textbox_lerpedy2-y2)<1)then
+            textbox_lerpedy2=y2
             boxready=true
         else
-            lerpedy2 = lerp(y1,y2,easeInOut(timer))
+            textbox_lerpedy2 = lerp(y1,y2,easeInOut(timer))
         end
 
-        rectfill(x1+xoffset,y1+yoffset,lerpedx2+xoffset,lerpedy2+yoffset,0)
+        if(my_dtb_portrait!=nil)then
+            if(abs(portrait_lerpedx2-portrait_x2)<1)then
+                portrait_lerpedx2=portrait_x2
+            else
+                portrait_lerpedx2 = lerp(portrait_x1,portrait_x2,easeInOut(timer))
+            end
+            if(abs(portrait_lerpedy1-portrait_y1)<1)then
+                portrait_lerpedy1=portrait_y1
+            else
+                portrait_lerpedy1 = lerp(portrait_y2,portrait_y1,easeInOut(timer))
+            end 
+
+            rectfill(portrait_x1+xoffset,portrait_lerpedy1+yoffset,portrait_lerpedx2+xoffset,portrait_y2+yoffset,0)
+        end
+
+        rectfill(x1+xoffset,y1+yoffset,textbox_lerpedx2+xoffset,textbox_lerpedy2+yoffset,0)
         if(not boxready)return
+        if(my_dtb_portrait!=nil)spr(my_dtb_portrait,portrait_x1+1+xoffset,portrait_y1+1+yoffset,2,2)
 
         --get the words
         local str=my_dtb_queue[1].line
