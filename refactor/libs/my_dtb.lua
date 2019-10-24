@@ -1,17 +1,15 @@
--- Dialog Text Box Library
--- Credit: Oli414
--- Original version: https://www.lexaloffle.com/bbs/?tid=28465
-
--- call this before you start using dtb.
--- optional parameter is the number of lines that are displayed. default is 3.
-
 --global param
 my_dtb_option=1
 player_control=0
-
+my_dtb_clk=0.0
+my_dtb_queue={}
+boxlines=3
+    
+-- call this before you start using dtb.
 function my_dtb_init()
-    my_dtb_queue={}
-    boxlines=3
+    lerpedx2=0
+    lerpedy2=0
+    boxready=false
 end
 
 -- this will add a piece of text to the queu. the queu is processed automatically.
@@ -22,6 +20,8 @@ end
 -- make sure that this function is called each update.
 function my_dtb_update()
     if(#my_dtb_queue>0)then
+        my_dtb_clk+=clock.past
+        if(not boxready)return
         if (is_pressed(4,player_control)) then --O button
             _dtb_nexttext(my_dtb_option)
             return
@@ -36,12 +36,30 @@ end
 -- make sure to call this function everytime you draw.
 function my_dtb_draw(xoffset,yoffset)
     local x1=2
-    local y1=125
+    local y1=125-boxlines*8
     local x2=125
     local y2=125
     local offset=0
+    local timer = my_dtb_clk*3 % 1
     
     if(#my_dtb_queue>0)then
+        --FIXMESTEVE: replace this with a coroutine
+        if(abs(lerpedx2-x2)<1)then
+            lerpedx2=x2
+            boxready=true
+        else
+            lerpedx2 = lerp(x1,x2,easeInOut(timer))
+        end
+        if(abs(lerpedy2-y2)<1)then
+            lerpedy2=y2
+            boxready=true
+        else
+            lerpedy2 = lerp(y1,y2,easeInOut(timer))
+        end
+
+        rectfill(x1+xoffset,y1+yoffset,lerpedx2+xoffset,lerpedy2+yoffset,0)
+        if(not boxready)return
+
         --get the words
         local str=my_dtb_queue[1].line
         local words={}
@@ -54,9 +72,6 @@ function my_dtb_draw(xoffset,yoffset)
             end
         end
 
-        --display the box
-        rectfill(x1+xoffset,y1-boxlines*8+yoffset,x2+xoffset,y2+yoffset,0)
-
         --print the words
         local lettercount=0
         local letterw=4
@@ -64,7 +79,7 @@ function my_dtb_draw(xoffset,yoffset)
         local wordxoffset=0
         local wordyoffset=0
         for i=1,#words do
-            print(words[i].." ",x1+6+xoffset+wordxoffset,y1+2-(boxlines+offset)*8+yoffset+wordyoffset,7) --i wrote this y calculation and it's garbage
+            print(words[i].." ",x1+6+xoffset+wordxoffset,y1+2-offset*8+yoffset+wordyoffset,7) --i wrote this y calculation and it's garbage
             wordxoffset+=#words[i]*letterw+4 --add 4 for space
             lettercount+=#words[i]
             if(lettercount>15 and wordyoffset==0)then
@@ -78,11 +93,24 @@ function my_dtb_draw(xoffset,yoffset)
             local option1=my_dtb_queue[1].options[1]
             local option2=my_dtb_queue[1].options[2]
             local col=7
-            if(my_dtb_option==1)col=8
-            print(option1,x1+6+xoffset,y1+2-(boxlines+offset)*8+yoffset+6*2+2,col)
+            local txt=option1
+            
+            if(my_dtb_option==1)then
+                txt="🅾️"..option1
+                col=8
+            end
+            print(txt,x1+6+xoffset,y1+2-(offset)*8+yoffset+6*2+2,col)
+            
+            txt=option2
             col=7
-            if(my_dtb_option==2)col=8
-            print(option2,x1+110+xoffset,y1+2-(boxlines+offset)*8+yoffset+6*2+2,col)
+            if(my_dtb_option==2)then
+                txt="🅾️"..option2
+                col=8
+            end
+            print(txt,x1+105+xoffset,y1+2-(offset)*8+yoffset+6*2+2,col)
+        else
+            local col=8
+            print("🅾️next",x1+100+xoffset,y1+2-(offset)*8+yoffset+6*2+2,col)
         end
     end
 end
