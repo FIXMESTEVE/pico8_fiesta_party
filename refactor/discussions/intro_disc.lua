@@ -8,6 +8,7 @@ function intro_disc:build()
 
     my_dtb_init() --reset my_dtb
     my_dtb_portrait=197
+    my_dtb_name="the announcer"
     local yesno={"yes","no"}
     local line1={line="welcome to pico-8 fiesta party!",options=nil,callback=nil}
     local line2={line="do you want to know the rules of this game?",options=yesno,callback=function(option) 

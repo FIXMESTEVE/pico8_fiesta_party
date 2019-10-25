@@ -5,6 +5,7 @@ my_dtb_clk=0.0
 my_dtb_queue={}
 boxlines=3
 my_dtb_portrait=nil
+my_dtb_name=nil
     
 -- call this before you start using dtb.
 function my_dtb_init()
@@ -12,8 +13,11 @@ function my_dtb_init()
     textbox_lerpedy2=0
     portrait_lerpedx2=0
     portrait_lerpedy1=0
+    namebox_lerpedx2=0
+    namebox_lerpedy1=0
     boxready=false
     my_dtb_portrait=nil
+    my_dtb_name=nil
 end
 
 -- this will add a piece of text to the queu. the queu is processed automatically.
@@ -47,6 +51,10 @@ function my_dtb_draw(xoffset,yoffset)
     local portrait_y1=y1-17
     local portrait_x2=x1+17
     local portrait_y2=y1
+    local namebox_x1=x1
+    local namebox_y1=y1-8
+    local namebox_x2=x1+70
+    local namebox_y2=y1
     local offset=0
     local timer = my_dtb_clk*3 % 1
     
@@ -80,10 +88,28 @@ function my_dtb_draw(xoffset,yoffset)
             rectfill(portrait_x1+xoffset,portrait_lerpedy1+yoffset,portrait_lerpedx2+xoffset,portrait_y2+yoffset,0)
         end
 
+        if(my_dtb_name!=nil)then
+            if(abs(namebox_lerpedx2-namebox_x2)<1)then
+                namebox_lerpedx2=namebox_x2
+            else
+                namebox_lerpedx2 = lerp(namebox_x1,namebox_x2,easeInOut(timer))
+            end
+            if(abs(namebox_lerpedy1-namebox_y1)<1)then
+                namebox_lerpedy1=namebox_y1
+            else
+                namebox_lerpedy1 = lerp(namebox_y2,namebox_y1,easeInOut(timer))
+            end 
+
+            rectfill(namebox_x1+xoffset,namebox_lerpedy1+yoffset,namebox_lerpedx2+xoffset,namebox_y2+yoffset,0)
+        end
+
         rectfill(x1+xoffset,y1+yoffset,textbox_lerpedx2+xoffset,textbox_lerpedy2+yoffset,0)
         if(not boxready)return
         if(my_dtb_portrait!=nil)spr(my_dtb_portrait,portrait_x1+1+xoffset,portrait_y1+1+yoffset,2,2)
-
+        if(my_dtb_name!=nil)then
+            print(my_dtb_name,namebox_x1+18+xoffset,namebox_y1+1+yoffset,7)
+            line(namebox_x1+18+xoffset,namebox_y2-1+yoffset,namebox_x1+69+xoffset,namebox_y2-1+yoffset,7)
+        end
         --get the words
         local str=my_dtb_queue[1].line
         local words={}
