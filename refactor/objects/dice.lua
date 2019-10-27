@@ -9,7 +9,7 @@ function dice:new(x,y)
         display=true,
         number=flr(rnd(6)) + 1,
 
-        state=0,
+        state=0, -- 0: not hit, 1: hit
         _clk=0
     }
     setmetatable(t,self)

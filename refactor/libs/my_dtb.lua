@@ -59,7 +59,7 @@ function my_dtb_draw(xoffset,yoffset)
     local timer = my_dtb_clk*3 % 1
     
     if(#my_dtb_queue>0)then
-        --FIXMESTEVE: replace this with a coroutine
+        --FIXMESTEVE: refactor these with a function or replace with a coroutine
         if(abs(textbox_lerpedx2-x2)<1)then
             textbox_lerpedx2=x2
             boxready=true

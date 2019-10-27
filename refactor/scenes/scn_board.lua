@@ -18,13 +18,13 @@ scn_board._init=function()
 
     players={}
     p1=player:new(1,player_start_x,player_start_y,128,0,0)
-    p2=player:new(2,player_start_x+16,player_start_y,144,0,0)
-    p3=player:new(3,player_start_x+32,player_start_y,160,0,0)
-    p4=player:new(4,player_start_x+48,player_start_y,176,0,0)
+    -- p2=player:new(2,player_start_x+16,player_start_y,144,0,0)
+    -- p3=player:new(3,player_start_x+32,player_start_y,160,0,0)
+    -- p4=player:new(4,player_start_x+48,player_start_y,176,0,0)
     add(players,p1)
-    add(players,p2)
-    add(players,p3)
-    add(players,p4)
+    -- add(players,p2)
+    -- add(players,p3)
+    -- add(players,p4)
 
     map_parts={}
     part1={}
@@ -135,7 +135,7 @@ function draw_players()
 end
 
 function draw_hud()
-    for i=1,4 do
+    for i=1,#players do
 		local w=32
 		local h=16
 		local xoffset=0
