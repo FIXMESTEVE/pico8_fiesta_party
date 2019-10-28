@@ -67,7 +67,9 @@ function intro_cut:dialog_1()
 end
 
 function intro_cut:dialog_2()
---TODO
+    intro_disc_part3:build()
+    intro_disc_part3:queue()
+    my_dtb_update()
 end
 
 function intro_cut:spawndices()
