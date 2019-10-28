@@ -63,56 +63,56 @@ function my_dtb_draw(xoffset,yoffset)
     
     if(#my_dtb_queue>0)then
         -- --FIXMESTEVE: refactor these with a function or replace with a coroutine
-        -- if(abs(textbox_lerpedx2-x2)<1)then
-        --     textbox_lerpedx2=x2
-        --     boxready=true
-        -- else
-        --     textbox_lerpedx2 = lerp(x1,x2,easeInOut(timer))
-        -- end
-        -- if(abs(textbox_lerpedy2-y2)<1)then
-        --     textbox_lerpedy2=y2
-        --     boxready=true
-        -- else
-        --     textbox_lerpedy2 = lerp(y1,y2,easeInOut(timer))
-        -- end
+        if(abs(textbox_lerpedx2-x2)<1)then
+            textbox_lerpedx2=x2
+            boxready=true
+        else
+            textbox_lerpedx2 = lerp(x1,x2,easeInOut(timer))
+        end
+        if(abs(textbox_lerpedy2-y2)<1)then
+            textbox_lerpedy2=y2
+            boxready=true
+        else
+            textbox_lerpedy2 = lerp(y1,y2,easeInOut(timer))
+        end
 
-        -- if(my_dtb_portrait!=nil)then
-        --     if(abs(portrait_lerpedx2-portrait_x2)<1)then
-        --         portrait_lerpedx2=portrait_x2
-        --     else
-        --         portrait_lerpedx2 = lerp(portrait_x1,portrait_x2,easeInOut(timer))
-        --     end
-        --     if(abs(portrait_lerpedy1-portrait_y1)<1)then
-        --         portrait_lerpedy1=portrait_y1
-        --     else
-        --         portrait_lerpedy1 = lerp(portrait_y2,portrait_y1,easeInOut(timer))
-        --     end 
+        if(my_dtb_portrait!=nil)then
+            if(abs(portrait_lerpedx2-portrait_x2)<1)then
+                portrait_lerpedx2=portrait_x2
+            else
+                portrait_lerpedx2 = lerp(portrait_x1,portrait_x2,easeInOut(timer))
+            end
+            if(abs(portrait_lerpedy1-portrait_y1)<1)then
+                portrait_lerpedy1=portrait_y1
+            else
+                portrait_lerpedy1 = lerp(portrait_y2,portrait_y1,easeInOut(timer))
+            end 
 
-        --     rectfill(portrait_x1+xoffset,portrait_lerpedy1+yoffset,portrait_lerpedx2+xoffset,portrait_y2+yoffset,0)
-        -- end
+            rectfill(portrait_x1+xoffset,portrait_lerpedy1+yoffset,portrait_lerpedx2+xoffset,portrait_y2+yoffset,0)
+        end
 
-        -- if(my_dtb_name!=nil)then
-        --     if(abs(namebox_lerpedx2-namebox_x2)<1)then
-        --         namebox_lerpedx2=namebox_x2
-        --     else
-        --         namebox_lerpedx2 = lerp(namebox_x1,namebox_x2,easeInOut(timer))
-        --     end
-        --     if(abs(namebox_lerpedy1-namebox_y1)<1)then
-        --         namebox_lerpedy1=namebox_y1
-        --     else
-        --         namebox_lerpedy1 = lerp(namebox_y2,namebox_y1,easeInOut(timer))
-        --     end 
+        if(my_dtb_name!=nil)then
+            if(abs(namebox_lerpedx2-namebox_x2)<1)then
+                namebox_lerpedx2=namebox_x2
+            else
+                namebox_lerpedx2 = lerp(namebox_x1,namebox_x2,easeInOut(timer))
+            end
+            if(abs(namebox_lerpedy1-namebox_y1)<1)then
+                namebox_lerpedy1=namebox_y1
+            else
+                namebox_lerpedy1 = lerp(namebox_y2,namebox_y1,easeInOut(timer))
+            end
 
-        --     rectfill(namebox_x1+xoffset,namebox_lerpedy1+yoffset,namebox_lerpedx2+xoffset,namebox_y2+yoffset,0)
-        -- end
+            rectfill(namebox_x1+xoffset,namebox_lerpedy1+yoffset,namebox_lerpedx2+xoffset,namebox_y2+yoffset,0)
+        end
 
-        -- rectfill(x1+xoffset,y1+yoffset,textbox_lerpedx2+xoffset,textbox_lerpedy2+yoffset,0)
-        -- if(not boxready)return
-        -- if(my_dtb_portrait!=nil)spr(my_dtb_portrait,portrait_x1+1+xoffset,portrait_y1+1+yoffset,2,2)
-        -- if(my_dtb_name!=nil)then
-        --     print(my_dtb_name,namebox_x1+18+xoffset,namebox_y1+1+yoffset,7)
-        --     line(namebox_x1+18+xoffset,namebox_y2-1+yoffset,namebox_x1+69+xoffset,namebox_y2-1+yoffset,7)
-        -- end
+        rectfill(x1+xoffset,y1+yoffset,textbox_lerpedx2+xoffset,textbox_lerpedy2+yoffset,0)
+        if(not boxready)return
+        if(my_dtb_portrait!=nil)spr(my_dtb_portrait,portrait_x1+1+xoffset,portrait_y1+1+yoffset,2,2)
+        if(my_dtb_name!=nil)then
+            print(my_dtb_name,namebox_x1+18+xoffset,namebox_y1+1+yoffset,7)
+            line(namebox_x1+18+xoffset,namebox_y2-1+yoffset,namebox_x1+69+xoffset,namebox_y2-1+yoffset,7)
+        end
         --get the words
         local str=my_dtb_queue[1].line
         local words={}

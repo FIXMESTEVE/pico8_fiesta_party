@@ -17,7 +17,7 @@ scn_board._init=function()
     player_start_y=336
 
     players={}
-    p1=player:new(1,player_start_x,player_start_y,128,0,0)
+    p1=player:new(1,player_start_x,player_start_y,128,0,0,"blue")
     -- p2=player:new(2,player_start_x+16,player_start_y,144,0,0)
     -- p3=player:new(3,player_start_x+32,player_start_y,160,0,0)
     -- p4=player:new(4,player_start_x+48,player_start_y,176,0,0)

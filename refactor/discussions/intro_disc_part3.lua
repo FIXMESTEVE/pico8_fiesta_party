@@ -27,7 +27,7 @@ function intro_disc_part3:build()
                 intro_cut.state=4
             end
         end
-        local line={line=i.." will be playing "..order.."!",options=nil,callback=call}
+        local line={line=players[i].name.." will be playing "..order.."!",options=nil,callback=call}
 
         add(self.lines,line)
     end
