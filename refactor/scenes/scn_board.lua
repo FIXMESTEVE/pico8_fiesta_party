@@ -18,11 +18,11 @@ scn_board._init=function()
 
     players={}
     p1=player:new(1,player_start_x,player_start_y,128,0,0,"blue")
-    -- p2=player:new(2,player_start_x+16,player_start_y,144,0,0)
+    p2=player:new(2,player_start_x+16,player_start_y,144,0,0,"red")
     -- p3=player:new(3,player_start_x+32,player_start_y,160,0,0)
     -- p4=player:new(4,player_start_x+48,player_start_y,176,0,0)
     add(players,p1)
-    -- add(players,p2)
+    add(players,p2)
     -- add(players,p3)
     -- add(players,p4)
 
@@ -72,6 +72,10 @@ scn_board._draw=function()
 	draw_hud()
 	if(boardstate=="begin")cut_mgr:draw()
 	if(debug)draw_cells_debug()
+
+	if(boardstate=="editor")then
+		--TODO
+	end
 end
 
 scn_board._update=function()
@@ -79,6 +83,10 @@ scn_board._update=function()
 		cut_mgr:set_cutscene(intro_cut)
 		cut_mgr:enable()
 		cut_mgr:update()
+	end
+
+	if(boardstate=="editor")then
+		--TODO
 	end
 end
 
