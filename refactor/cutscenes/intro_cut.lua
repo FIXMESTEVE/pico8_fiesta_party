@@ -21,6 +21,7 @@ function intro_cut:update()
     if(intro_cut.state==1)intro_cut:dialog_1()
     if(intro_cut.state==2)intro_cut:decideorder()
     if(intro_cut.state==3)intro_cut:dialog_2()
+    if(intro_cut.state==4)intro_cut:place_emblem()
 
     for i=1,#particles do
         particles[i].update()
@@ -58,6 +59,10 @@ function intro_cut:camera_move()
     if(xcam==intro_cut.xtarget and ycam==intro_cut.ytarget)then
         intro_cut.state=1
     end
+end
+
+function intro_cut:place_emblem()
+    --TODO
 end
 
 function intro_cut:dialog_1()
