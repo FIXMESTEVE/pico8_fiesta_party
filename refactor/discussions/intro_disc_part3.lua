@@ -25,6 +25,9 @@ function intro_disc_part3:build()
         if(i==#players)then
             call=function()
                 intro_cut.state=4
+            
+                --delete the dices
+                intro_cut.dices={}
             end
         end
         local line={line=players[i].name.." will be playing "..order.."!",options=nil,callback=call}
