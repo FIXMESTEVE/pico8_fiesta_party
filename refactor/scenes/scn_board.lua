@@ -1,18 +1,11 @@
 scn_board={}
 scn_board._init=function()
     debug=false
-    boardstate="begin"
+    -- boardstate="begin"
+    boardstate="editor"
     xcam=0
     ycam=0
-    --camera(xcam, ycam)
-    textbox_x1=-1
-    textbox_y1=-1
-    textbox_x2=-1
-    textbox_y2=-1
-    textbox_x1_max=10
-    textbox_y1_max=80
-    textbox_x2_max=100
-    textbox_y2_max=10
+	
     player_start_x=224
     player_start_y=336
 
@@ -56,11 +49,14 @@ scn_board._init=function()
 
     startcell=nil
 
-    init_map_raw()
-end
-
-function make_dice(p)
-
+	init_map_raw()
+	
+	if(boardstate=="editor")then
+		poke(0x5f2d,1)
+		mousex=stat(32)
+		mousey=stat(33)
+		mouseb=stat(34)
+	end
 end
 
 scn_board._draw=function()
@@ -74,7 +70,7 @@ scn_board._draw=function()
 	if(debug)draw_cells_debug()
 
 	if(boardstate=="editor")then
-		--TODO
+		spr(4,mousex,mousey)
 	end
 end
 
@@ -86,7 +82,13 @@ scn_board._update=function()
 	end
 
 	if(boardstate=="editor")then
-		--TODO
+		if(btn(2))ycam-=3
+		if(btn(3))ycam+=3
+		if(btn(0))xcam-=3
+		if(btn(1))xcam+=3
+		mousex=stat(32)+xcam
+		mousey=stat(33)+ycam
+		mouseb=stat(34)
 	end
 end
 
