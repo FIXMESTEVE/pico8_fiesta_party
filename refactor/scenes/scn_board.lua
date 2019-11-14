@@ -82,9 +82,9 @@ end
 
 function draw_editor()
 	for i=1,#editor_cells do
-		rect(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,6)
+		rectfill(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,5)
 		if(editor_cells[i].selected==true)then
-			rectfill(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,6)
+			rect(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,9)
 		end
 		print(editor_cells[i].letter,editor_cells[i].x1+2,editor_cells[i].y1+2,6)
 	end
@@ -115,7 +115,7 @@ function update_editor()
 
 	--refresh editor cells pos
 	for i=1,#editor_cells do
-		local off=i*8
+		local off=i*9
 		local x1=0+off+xcam
 		local y1=119+ycam
 		local x2=8+off+xcam
