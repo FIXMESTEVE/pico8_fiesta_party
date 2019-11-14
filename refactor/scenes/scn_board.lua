@@ -4,8 +4,8 @@ scn_board._init=function()
     -- boardstate="begin"
 	boardstate="editor"
 	editor_cells={}
-	local start_cell={type=1,letter="s",selected=false} --start
-	local path_select_cell={type=2,letter="p",selected=false} --path select
+	local start_cell={type=1,letter="s",selected=false,x1=0,x2=0,y1=0,y2=0} --start
+	local path_select_cell={type=2,letter="p",selected=false,x1=0,x2=0,y1=0,y2=0} --path select
 	add(editor_cells,start_cell)
 	add(editor_cells,path_select_cell)
 
@@ -83,8 +83,10 @@ end
 function draw_editor()
 	for i=1,#editor_cells do
 		rect(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,6)
-		if(editor_cells[i].selected==true)rectfill(x1,y1,x2,y2,6)
-		print(editor_cells[i].letter,x1+1,y1+2,6)
+		if(editor_cells[i].selected==true)then
+			rectfill(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,6)
+		end
+		print(editor_cells[i].letter,editor_cells[i].x1+2,editor_cells[i].y1+2,6)
 	end
 	spr(4,mousex,mousey)
 end
@@ -113,19 +115,22 @@ function update_editor()
 
 	--refresh editor cells pos
 	for i=1,#editor_cells do
-		local off=i-1*8
-		local x1=0+off
-		local y1=119
-		local x2=8+off
-		local y1=127
+		local off=i*8
+		local x1=0+off+xcam
+		local y1=119+ycam
+		local x2=8+off+xcam
+		local y2=127+ycam
 		editor_cells[i].x1=x1
 		editor_cells[i].y1=y1
 		editor_cells[i].x2=x2
 		editor_cells[i].y2=y2
 
-		if(b==1)then
+		if(mouseb==1)then
 			if(mousex>=x1 and mousex<=x2 and mousey>=y1 and mousey<=y2)then
-				editor_celles[i].selected=true
+				for i=1,#editor_cells do
+					editor_cells[i].selected=false
+				end
+				editor_cells[i].selected=true
 			end
 		end
 	end
