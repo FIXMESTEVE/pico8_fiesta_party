@@ -75,6 +75,21 @@ scn_board._draw=function()
 end
 
 function draw_editor()
+	local editor_cells={}
+	local start_cell={type=1,letter="s"} --start
+	local path_select_cell={type=2,letter="p"} --path select
+	add(editor_cells,start_cell)
+	add(editor_cells,path_select_cell)
+
+	for i=1,#editor_cells do
+		local off=i-1*8
+		local x1=0+off
+		local y1=119
+		local x2=8+off
+		local y1=127
+		rect(x1,y1,x2,y2,6)
+		print(editor_cells[i].letter,x1+1,y1+2,6)
+	end
 	spr(4,mousex,mousey)
 end
 
