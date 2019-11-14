@@ -2,7 +2,13 @@ scn_board={}
 scn_board._init=function()
     debug=false
     -- boardstate="begin"
-    boardstate="editor"
+	boardstate="editor"
+	editor_cells={}
+	local start_cell={type=1,letter="s",selected=false} --start
+	local path_select_cell={type=2,letter="p",selected=false} --path select
+	add(editor_cells,start_cell)
+	add(editor_cells,path_select_cell)
+
     xcam=0
     ycam=0
 	
@@ -75,19 +81,9 @@ scn_board._draw=function()
 end
 
 function draw_editor()
-	local editor_cells={}
-	local start_cell={type=1,letter="s"} --start
-	local path_select_cell={type=2,letter="p"} --path select
-	add(editor_cells,start_cell)
-	add(editor_cells,path_select_cell)
-
 	for i=1,#editor_cells do
-		local off=i-1*8
-		local x1=0+off
-		local y1=119
-		local x2=8+off
-		local y1=127
-		rect(x1,y1,x2,y2,6)
+		rect(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,6)
+		if(editor_cells[i].selected==true)rectfill(x1,y1,x2,y2,6)
 		print(editor_cells[i].letter,x1+1,y1+2,6)
 	end
 	spr(4,mousex,mousey)
@@ -106,6 +102,7 @@ scn_board._update=function()
 end
 
 function update_editor()
+	--input
 	if(btn(2))ycam-=3
 	if(btn(3))ycam+=3
 	if(btn(0))xcam-=3
@@ -113,6 +110,25 @@ function update_editor()
 	mousex=stat(32)+xcam
 	mousey=stat(33)+ycam
 	mouseb=stat(34)
+
+	--refresh editor cells pos
+	for i=1,#editor_cells do
+		local off=i-1*8
+		local x1=0+off
+		local y1=119
+		local x2=8+off
+		local y1=127
+		editor_cells[i].x1=x1
+		editor_cells[i].y1=y1
+		editor_cells[i].x2=x2
+		editor_cells[i].y2=y2
+
+		if(b==1)then
+			if(mousex>=x1 and mousex<=x2 and mousey>=y1 and mousey<=y2)then
+				editor_celles[i].selected=true
+			end
+		end
+	end
 end
 
 function draw_map()
