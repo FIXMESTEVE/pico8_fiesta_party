@@ -70,8 +70,12 @@ scn_board._draw=function()
 	if(debug)draw_cells_debug()
 
 	if(boardstate=="editor")then
-		spr(4,mousex,mousey)
+		draw_editor()
 	end
+end
+
+function draw_editor()
+	spr(4,mousex,mousey)
 end
 
 scn_board._update=function()
@@ -82,14 +86,18 @@ scn_board._update=function()
 	end
 
 	if(boardstate=="editor")then
-		if(btn(2))ycam-=3
-		if(btn(3))ycam+=3
-		if(btn(0))xcam-=3
-		if(btn(1))xcam+=3
-		mousex=stat(32)+xcam
-		mousey=stat(33)+ycam
-		mouseb=stat(34)
+		update_editor()
 	end
+end
+
+function update_editor()
+	if(btn(2))ycam-=3
+	if(btn(3))ycam+=3
+	if(btn(0))xcam-=3
+	if(btn(1))xcam+=3
+	mousex=stat(32)+xcam
+	mousey=stat(33)+ycam
+	mouseb=stat(34)
 end
 
 function draw_map()
