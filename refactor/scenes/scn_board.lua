@@ -4,10 +4,14 @@ scn_board._init=function()
     -- boardstate="begin"
 	boardstate="editor"
 	editor_cells={}
-	local start_cell={type=1,letter="s",selected=false,x1=0,x2=0,y1=0,y2=0} --start
-	local path_select_cell={type=2,letter="p",selected=false,x1=0,x2=0,y1=0,y2=0} --path select
+	local start_cell={type=1,letter="s",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --start
+	local path_select_cell={type=2,letter="p",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --path select
+	local blue_cell={type=2,letter="b",col=12,selected=false,x1=0,x2=0,y1=0,y2=0} --blue cell
+	local red_cell={type=2,letter="r",col=8,selected=false,x1=0,x2=0,y1=0,y2=0} --red cell
 	add(editor_cells,start_cell)
 	add(editor_cells,path_select_cell)
+	add(editor_cells,blue_cell)
+	add(editor_cells,red_cell)
 
     xcam=0
     ycam=0
@@ -82,11 +86,13 @@ end
 
 function draw_editor()
 	for i=1,#editor_cells do
-		rectfill(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,5)
+		rectfill(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,editor_cells[i].col)
 		if(editor_cells[i].selected==true)then
 			rect(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,9)
+			rectfill(mousex,mousey,mousex+8,mousey+8,editor_cells[i].col)
+			print(editor_cells[i].letter,mousex+2,mousey+2,7)
 		end
-		print(editor_cells[i].letter,editor_cells[i].x1+2,editor_cells[i].y1+2,6)
+		print(editor_cells[i].letter,editor_cells[i].x1+2,editor_cells[i].y1+2,7)
 	end
 	spr(4,mousex,mousey)
 end
