@@ -88,14 +88,14 @@ function draw_editor()
 	for i=1,#editor_cells do
 		rectfill(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,editor_cells[i].col)
 		if(editor_cells[i].selected==true)then
+			rectfill(mousex-mousex%8,mousey-mousey%8,(mousex-mousex%8)+7,(mousey-mousey%8)+7,editor_cells[i].col)
+			print(editor_cells[i].letter,mousex-mousex%8+2,mousey-mousey%8+2,7)
 			rect(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,9)
-			rectfill(mousex,mousey,mousex+8,mousey+8,editor_cells[i].col)
-			print(editor_cells[i].letter,mousex+2,mousey+2,7)
 		end
 		print(editor_cells[i].letter,editor_cells[i].x1+2,editor_cells[i].y1+2,7)
 	end
 	spr(4,mousex,mousey)
-end
+end 
 
 scn_board._update=function()
 	if(boardstate=="begin")then
@@ -121,10 +121,10 @@ function update_editor()
 
 	--refresh editor cells pos
 	for i=1,#editor_cells do
-		local off=i*9
+		local off=(i-1)*8
 		local x1=0+off+xcam
-		local y1=119+ycam
-		local x2=8+off+xcam
+		local y1=120+ycam
+		local x2=7+off+xcam
 		local y2=127+ycam
 		editor_cells[i].x1=x1
 		editor_cells[i].y1=y1
