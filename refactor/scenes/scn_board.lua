@@ -86,13 +86,15 @@ scn_board._draw=function()
 end
 
 function draw_editor()
-	--todo:
-	-- draw placed cells
 	for i=1,#editor_cells_menu do
 		if(editor_cells_menu[i].selected==true)then
 			drawcell(mousex-mousex%8,mousey-mousey%8,(mousex-mousex%8)+7,(mousey-mousey%8)+7,editor_cells_menu[i].letter,editor_cells_menu[i].col,false)
 		end
 		drawcell(editor_cells_menu[i].x1,editor_cells_menu[i].y1,editor_cells_menu[i].x2,editor_cells_menu[i].y2,editor_cells_menu[i].letter,editor_cells_menu[i].col,editor_cells_menu[i].selected)
+	end
+
+	for i=1,#editor_cells do
+		drawcell(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,editor_cells[i].letter,editor_cells[i].col,false)
 	end
 
 	spr(4,mousex,mousey)
@@ -147,9 +149,18 @@ function update_editor()
 				return
 			end
 			if(editor_cells_menu[i].selected==true)then
-				local newcell=editor_cells_menu[i]
-				newcell.x = mousex-mousex%8
-				newcell.y = mousey-mousey%8
+				--todo: replace this with a copy constructor
+				--todo: prevent cell placement on already existing cell (or erase existing cell)
+				local newcell={
+					type=editor_cells_menu[i].type,
+					letter=editor_cells_menu[i].letter,
+					col=editor_cells_menu[i].col,
+					selected=false,
+					x1=mousex-mousex%8,
+					x2=mousex-mousex%8+7,
+					y1=mousey-mousey%8,
+					y2=mousey-mousey%8+7
+				}
 				add(editor_cells,newcell)
 			end
 		end
