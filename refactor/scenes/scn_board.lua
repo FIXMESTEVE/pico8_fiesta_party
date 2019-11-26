@@ -3,15 +3,16 @@ scn_board._init=function()
     debug=false
     -- boardstate="begin"
 	boardstate="editor"
+	editor_cells_menu={}
 	editor_cells={}
 	local start_cell={type=1,letter="s",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --start
 	local path_select_cell={type=2,letter="p",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --path select
 	local blue_cell={type=2,letter="b",col=12,selected=false,x1=0,x2=0,y1=0,y2=0} --blue cell
 	local red_cell={type=2,letter="r",col=8,selected=false,x1=0,x2=0,y1=0,y2=0} --red cell
-	add(editor_cells,start_cell)
-	add(editor_cells,path_select_cell)
-	add(editor_cells,blue_cell)
-	add(editor_cells,red_cell)
+	add(editor_cells_menu,start_cell)
+	add(editor_cells_menu,path_select_cell)
+	add(editor_cells_menu,blue_cell)
+	add(editor_cells_menu,red_cell)
 
     xcam=0
     ycam=0
@@ -85,17 +86,26 @@ scn_board._draw=function()
 end
 
 function draw_editor()
-	for i=1,#editor_cells do
-		rectfill(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,editor_cells[i].col)
-		if(editor_cells[i].selected==true)then
-			rectfill(mousex-mousex%8,mousey-mousey%8,(mousex-mousex%8)+7,(mousey-mousey%8)+7,editor_cells[i].col)
-			print(editor_cells[i].letter,mousex-mousex%8+2,mousey-mousey%8+2,7)
-			rect(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,9)
+	--todo:
+	-- draw menu
+	-- draw cell cursor when selected
+	-- draw placed cells
+
+	for i=1,#editor_cells_menu do
+		rectfill(editor_cells_menu[i].x1,editor_cells_menu[i].y1,editor_cells_menu[i].x2,editor_cells_menu[i].y2,editor_cells_menu[i].col)
+		if(editor_cells_menu[i].selected==true)then
+			rectfill(mousex-mousex%8,mousey-mousey%8,(mousex-mousex%8)+7,(mousey-mousey%8)+7,editor_cells_menu[i].col)
+			print(editor_cells_menu[i].letter,mousex-mousex%8+2,mousey-mousey%8+2,7)
+			rect(editor_cells_menu[i].x1,editor_cells_menu[i].y1,editor_cells_menu[i].x2,editor_cells_menu[i].y2,9)
 		end
-		print(editor_cells[i].letter,editor_cells[i].x1+2,editor_cells[i].y1+2,7)
+		print(editor_cells_menu[i].letter,editor_cells_menu[i].x1+2,editor_cells_menu[i].y1+2,7)
 	end
 	spr(4,mousex,mousey)
-end 
+end
+
+function drawcell(x,y,letter,col,selected)
+	--todo
+end
 
 scn_board._update=function()
 	if(boardstate=="begin")then
@@ -119,24 +129,31 @@ function update_editor()
 	mousey=stat(33)+ycam
 	mouseb=stat(34)
 
-	--refresh editor cells pos
-	for i=1,#editor_cells do
+	--refresh editor cells menu pos
+	for i=1,#editor_cells_menu do
 		local off=(i-1)*8
 		local x1=0+off+xcam
 		local y1=120+ycam
 		local x2=7+off+xcam
 		local y2=127+ycam
-		editor_cells[i].x1=x1
-		editor_cells[i].y1=y1
-		editor_cells[i].x2=x2
-		editor_cells[i].y2=y2
+		editor_cells_menu[i].x1=x1
+		editor_cells_menu[i].y1=y1
+		editor_cells_menu[i].x2=x2
+		editor_cells_menu[i].y2=y2
 
-		if(mouseb==1)then
+		if(is_pressed(4,0))then
 			if(mousex>=x1 and mousex<=x2 and mousey>=y1 and mousey<=y2)then
-				for i=1,#editor_cells do
-					editor_cells[i].selected=false
+				for i=1,#editor_cells_menu do
+					editor_cells_menu[i].selected=false
 				end
-				editor_cells[i].selected=true
+				editor_cells_menu[i].selected=true
+				return
+			end
+			if(editor_cells_menu[i].selected==true)then
+				local newcell=editor_cells_menu[i]
+				newcell.x = mousex-mousex%8
+				newcell.y = mousey-mousey%8
+				add(editor_cells,newcell)
 			end
 		end
 	end
