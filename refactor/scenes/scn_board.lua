@@ -87,24 +87,21 @@ end
 
 function draw_editor()
 	--todo:
-	-- draw menu
-	-- draw cell cursor when selected
 	-- draw placed cells
-
 	for i=1,#editor_cells_menu do
-		rectfill(editor_cells_menu[i].x1,editor_cells_menu[i].y1,editor_cells_menu[i].x2,editor_cells_menu[i].y2,editor_cells_menu[i].col)
 		if(editor_cells_menu[i].selected==true)then
-			rectfill(mousex-mousex%8,mousey-mousey%8,(mousex-mousex%8)+7,(mousey-mousey%8)+7,editor_cells_menu[i].col)
-			print(editor_cells_menu[i].letter,mousex-mousex%8+2,mousey-mousey%8+2,7)
-			rect(editor_cells_menu[i].x1,editor_cells_menu[i].y1,editor_cells_menu[i].x2,editor_cells_menu[i].y2,9)
+			drawcell(mousex-mousex%8,mousey-mousey%8,(mousex-mousex%8)+7,(mousey-mousey%8)+7,editor_cells_menu[i].letter,editor_cells_menu[i].col,false)
 		end
-		print(editor_cells_menu[i].letter,editor_cells_menu[i].x1+2,editor_cells_menu[i].y1+2,7)
+		drawcell(editor_cells_menu[i].x1,editor_cells_menu[i].y1,editor_cells_menu[i].x2,editor_cells_menu[i].y2,editor_cells_menu[i].letter,editor_cells_menu[i].col,editor_cells_menu[i].selected)
 	end
+
 	spr(4,mousex,mousey)
 end
 
-function drawcell(x,y,letter,col,selected)
-	--todo
+function drawcell(x1,y1,x2,y2,letter,col,selected)
+	rectfill(x1,y1,x2,y2,col)
+	print(letter,x1+2,y1+2,7)
+	if(selected==true)rect(x1,y1,x2,y2,7)
 end
 
 scn_board._update=function()
