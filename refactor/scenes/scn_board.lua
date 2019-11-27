@@ -7,12 +7,17 @@ scn_board._init=function()
 	editor_cells={}
 	local start_cell={type=1,letter="s",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --start
 	local path_select_cell={type=2,letter="p",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --path select
-	local blue_cell={type=2,letter="b",col=12,selected=false,x1=0,x2=0,y1=0,y2=0} --blue cell
-	local red_cell={type=2,letter="r",col=8,selected=false,x1=0,x2=0,y1=0,y2=0} --red cell
+	local blue_cell={type=3,letter="b",col=12,selected=false,x1=0,x2=0,y1=0,y2=0} --blue cell
+	local red_cell={type=4,letter="r",col=8,selected=false,x1=0,x2=0,y1=0,y2=0} --red cell
+	local eraser={type=-1,letter="x",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --eraser tool
+	local linker={type=0,letter="|",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --linker tool
+
 	add(editor_cells_menu,start_cell)
 	add(editor_cells_menu,path_select_cell)
 	add(editor_cells_menu,blue_cell)
 	add(editor_cells_menu,red_cell)
+	add(editor_cells_menu,eraser)
+	add(editor_cells_menu,linker)
 
     xcam=0
     ycam=0
@@ -86,17 +91,15 @@ scn_board._draw=function()
 end
 
 function draw_editor()
-	for i=1,#editor_cells_menu do
-		if(editor_cells_menu[i].selected==true)then
-			drawcell(mousex-mousex%8,mousey-mousey%8,(mousex-mousex%8)+7,(mousey-mousey%8)+7,editor_cells_menu[i].letter,editor_cells_menu[i].col,false)
-		end
-		drawcell(editor_cells_menu[i].x1,editor_cells_menu[i].y1,editor_cells_menu[i].x2,editor_cells_menu[i].y2,editor_cells_menu[i].letter,editor_cells_menu[i].col,editor_cells_menu[i].selected)
-	end
-
 	for i=1,#editor_cells do
 		drawcell(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,editor_cells[i].letter,editor_cells[i].col,false)
 	end
-
+	for i=1,#editor_cells_menu do
+		if(editor_cells_menu[i].selected==true)then
+			if(editor_cells_menu[i].type>0)drawcell(mousex-mousex%8,mousey-mousey%8,(mousex-mousex%8)+7,(mousey-mousey%8)+7,editor_cells_menu[i].letter,editor_cells_menu[i].col,false)
+		end
+		drawcell(editor_cells_menu[i].x1,editor_cells_menu[i].y1,editor_cells_menu[i].x2,editor_cells_menu[i].y2,editor_cells_menu[i].letter,editor_cells_menu[i].col,editor_cells_menu[i].selected)
+	end
 	spr(4,mousex,mousey)
 end
 
@@ -149,20 +152,38 @@ function update_editor()
 				return
 			end
 			if(editor_cells_menu[i].selected==true)then
-				--todo: replace this with a copy constructor
-				--todo: prevent cell placement on already existing cell (or erase existing cell)
-				local newcell={
-					type=editor_cells_menu[i].type,
-					letter=editor_cells_menu[i].letter,
-					col=editor_cells_menu[i].col,
-					selected=false,
-					x1=mousex-mousex%8,
-					x2=mousex-mousex%8+7,
-					y1=mousey-mousey%8,
-					y2=mousey-mousey%8+7
-				}
-				add(editor_cells,newcell)
+				if(editor_cells_menu[i].type==-1)then
+					erase_cell_under_cursor(mousex,mousey)
+				elseif(editor_cells_menu[i].type==0)then
+					--todo: linker tool
+				else
+					--todo: replace this with a copy constructor
+					--todo: prevent cell placement on already existing cell (or erase existing cell)
+					local newcell={
+						type=editor_cells_menu[i].type,
+						letter=editor_cells_menu[i].letter,
+						col=editor_cells_menu[i].col,
+						selected=false,
+						x1=mousex-mousex%8,
+						x2=mousex-mousex%8+7,
+						y1=mousey-mousey%8,
+						y2=mousey-mousey%8+7,
+						linkedcells={}
+					}
+					add(editor_cells,newcell)
+				end
 			end
+		end
+	end
+end
+
+function erase_cell_under_cursor(mousex,mousey)
+	--todo: eraser tool
+	local x=mousex-mousex%8
+	local y=mousey-mousey%8
+	for c in all(editor_cells) do
+		if(c.x1==x and c.y1==y)then
+			del(editor_cells,c)
 		end
 	end
 end
