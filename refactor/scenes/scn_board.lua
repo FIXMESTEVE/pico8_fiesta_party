@@ -19,6 +19,7 @@ scn_board._init=function()
 	add(editor_cells_menu,path_select_cell)
 	add(editor_cells_menu,blue_cell)
 	add(editor_cells_menu,red_cell)
+	add(editor_cells_menu,dummy_cell)
 	add(editor_cells_menu,eraser)
 	add(editor_cells_menu,linker)
 
@@ -96,6 +97,7 @@ scn_board._draw=function()
 end
 
 function draw_editor()
+	--todo: display links between linked cells
 	for i=1,#editor_cells do
 		drawcell(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,editor_cells[i].letter,editor_cells[i].col,false)
 	end
@@ -192,7 +194,8 @@ function link_cell_under_cursor(mousex,mousey)
 	if(linker_cell==nil)then
 		linker_cell=c
 	else
-		--todo
+		add(linker_cell.linkedcells,c)
+		linker_cell=nil
 	end
 end
 
