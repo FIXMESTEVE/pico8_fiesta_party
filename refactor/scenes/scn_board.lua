@@ -222,6 +222,19 @@ function erase_cell_under_cursor(mousex,mousey)
 	end
 end
 
+function dump(o)
+	if type(o) == 'table' then
+	   local s = '{ '
+	   for k,v in pairs(o) do
+		  if type(k) ~= 'number' then k = '"'..k..'"' end
+		  s = s .. '['..k..'] = ' .. dump(v) .. ','
+	   end
+	   return s .. '} '
+	else
+	   return tostr(o)
+	end
+ end
+
 function find_cell(x,y)
 	local x=mousex-mousex%8
 	local y=mousey-mousey%8
