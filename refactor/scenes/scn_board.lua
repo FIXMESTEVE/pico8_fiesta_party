@@ -100,6 +100,12 @@ function draw_editor()
 	--todo: display links between linked cells
 	for i=1,#editor_cells do
 		drawcell(editor_cells[i].x1,editor_cells[i].y1,editor_cells[i].x2,editor_cells[i].y2,editor_cells[i].letter,editor_cells[i].col,false)
+		for j=1,#editor_cells[i].linkedcells do
+			local a=editor_cells[i]
+			local b=editor_cells[i].linkedcells[j]
+			line(a.x1+(a.x2-a.x1)/2,a.y1+(a.y2-a.y1)/2,b.x1+(b.x2-b.x1)/2,b.y1+(b.y2-b.y1)/2,6)
+			circ(b.x1+(b.x2-b.x1)/2,b.y1+(b.y2-b.y1)/2,4,6)
+		end
 	end
 	for i=1,#editor_cells_menu do
 		if(editor_cells_menu[i].selected==true)then
@@ -203,7 +209,16 @@ function erase_cell_under_cursor(mousex,mousey)
 	local c=find_cell(x,y)
 	if(c!=nil)then
 		del(editor_cells,c)
-		if(c==linker_cell)linker_cell=nil
+		if(c==linker_cell)then
+			linker_cell=nil
+		end
+
+		--remove links
+		for i in all(editor_cells) do
+			for j in all(i.linkedcells) do
+				if(j==c)del(i.linkedcells,c)
+			end
+		end
 	end
 end
 
