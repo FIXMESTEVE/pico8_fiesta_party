@@ -7,6 +7,7 @@ scn_board._init=function()
 	--editor mode vars
 	editor_cells_menu={}
 	editor_cells={}
+	
 	linker_cell=nil
 	local start_cell={type=1,letter="s",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --start
 	local path_select_cell={type=2,letter="p",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --path select
@@ -68,10 +69,6 @@ scn_board._init=function()
             end
         end
     end
-
-    startcell=nil
-
-	init_map_raw()
 	
 	if(boardstate=="editor")then
 		poke(0x5f2d,1)
@@ -84,8 +81,8 @@ end
 scn_board._draw=function()
 	cls()
 	camera(xcam,ycam)
-    draw_map()
-	draw_special_cells()
+	--draw_map()
+	--draw_special_cells()
 	draw_players()
 	draw_hud()
 	if(boardstate=="begin")cut_mgr:draw()
@@ -174,20 +171,22 @@ function update_editor()
 				elseif(editor_cells_menu[i].type==0)then
 					link_cell_under_cursor(mousex,mousey)
 				else
-					--todo: replace this with a copy constructor
-					--todo: prevent cell placement on already existing cell (or erase existing cell)
-					local newcell={
-						type=editor_cells_menu[i].type,
-						letter=editor_cells_menu[i].letter,
-						col=editor_cells_menu[i].col,
-						selected=false,
-						x1=mousex-mousex%8,
-						x2=mousex-mousex%8+7,
-						y1=mousey-mousey%8,
-						y2=mousey-mousey%8+7,
-						linkedcells={}
-					}
-					add(editor_cells,newcell)
+					if(mousey<=y1)then
+						--todo: replace this with a copy constructor
+						--todo: prevent cell placement on already existing cell (or erase existing cell)
+						local newcell={
+							type=editor_cells_menu[i].type,
+							letter=editor_cells_menu[i].letter,
+							col=editor_cells_menu[i].col,
+							selected=false,
+							x1=mousex-mousex%8,
+							x2=mousex-mousex%8+7,
+							y1=mousey-mousey%8,
+							y2=mousey-mousey%8+7,
+							linkedcells={}
+						}
+						add(editor_cells,newcell)
+					end
 				end
 			end
 		end
@@ -222,12 +221,36 @@ function erase_cell_under_cursor(mousex,mousey)
 	end
 end
 
+function editor_export()
+	local s = '{'
+	for i=1,#editor_cells do
+		local e = dump(editor_cells[i])
+		e = sub(e, 1, #e-3)..sub(e, #e-1, #e)
+		s=s..e
+		if(i!=#editor_cells)s=s..',\n'
+	end
+	s=s..'}\n'
+	for i=1,#editor_cells do
+		if(#editor_cells[i].linkedcells>0)then
+			for c in all(editor_cells[i].linkedcells) do
+				for j=1,#editor_cells do
+					if(c==editor_cells[j])then
+						s=s.."add(editor_cells["..i.."].linkedcells,editor_cells["..j.."])\n"
+					end
+				end
+			end
+		end
+	end
+	return s
+end
+
 function dump(o)
 	if type(o) == 'table' then
 	   local s = '{ '
 	   for k,v in pairs(o) do
-		  if type(k) ~= 'number' then k = '"'..k..'"' end
-		  s = s .. '['..k..'] = ' .. dump(v) .. ','
+		  --if type(k) ~= 'number' then k = '"'..k..'"' end
+		  if (type(v) ~= 'number' and type(v) ~= 'boolean' and k ~= 'linkedcells') then v = '"'..v..'"' end
+		  if(k ~= 'linkedcells') then s = s ..k..' = ' .. dump(v) .. ',' else s = s ..k..' = {},' end 
 	   end
 	   return s .. '} '
 	else
@@ -339,8 +362,6 @@ function draw_hud()
 		rectfill(x1+xcam,y1+ycam,x2+xcam,y2+ycam,1)
 		
 		--TODO:should we keep this?
-		--rect(x1+xcam,y1+ycam,x2+xcam,y2+ycam,10)
-		--circfill(charx+4,chary+4,8,1)
 		print(players[i].coins,coinstxtx+1+coinpadding,coinstxty+1,1)
 		print(players[i].coins,coinstxtx+coinpadding,coinstxty,7)
 		print(players[i].emblems,emblemstxtx+1+emblempadding,emblemstxty+1,1)
@@ -377,113 +398,4 @@ function draw_cells_debug()
 			show_neighbours(c.n2)
 		end		
 	end)
-end
-
-function init_map_raw()
-	--the sort of code that fucks your brain right here
-	startcell=make_cell(71,7)
-	local path_cell=add_neighbours(startcell,71,6)
-	for i=5,0,-1 do
-		path_cell=add_neighbours(path_cell[1],71,i)
-	end
-	for i=31,26,-1 do
-		path_cell=add_neighbours(path_cell[1],31,i)
-	end
-	--now add two neighbours
-	path_cell=add_neighbours(path_cell[1],31,25,30,26)
-	local path_cell_alternative=add_neighbours(path_cell[2],29,26)
-	for i=28,21,-1 do
-		path_cell_alternative=add_neighbours(path_cell_alternative[1],i,26)
-	end
-	for i=26,31 do
-		path_cell_alternative=add_neighbours(path_cell_alternative[1],21,i)
-	end
-	for i=0,5 do
-		path_cell_alternative=add_neighbours(path_cell_alternative[1],61,i)
-	end
-	for i=61,70 do
-		path_cell_alternative=add_neighbours(path_cell_alternative[1],i,5)
-	end
-	path_cell_alternative[1].n1=cells.get_cell(71,5)
-
-	for i=25,19,-1 do
-		path_cell=add_neighbours(path_cell[1],31,i)
-	end
-	path_cell=add_neighbours(path_cell[1],31,18,30,19)
-	path_cell_alternative=add_neighbours(path_cell[2],29,19)
-	for i=29,22,-1 do
-		path_cell_alternative=add_neighbours(path_cell_alternative[1],i,19);
-	end
-	for i=19,7,-1 do
-		path_cell_alternative=add_neighbours(path_cell_alternative[1],22,i)
-	end
-	for i=18,6,-1 do
-		path_cell=add_neighbours(path_cell[1],31,i)
-	end
-	for i=30,13,-1 do
-		path_cell=add_neighbours(path_cell[1],i,6)
-	end
-	path_cell_alternative[1].n1=cells.get_cell(22,6)
-	
-	path_cell=add_neighbours(path_cell[1],12,6,13,7)
-	path_cell_alternative=add_neighbours(path_cell[2],13,8)
-	for i=9,21,1 do
-		path_cell_alternative=add_neighbours(path_cell_alternative[1],13,i);
-	end
-	for i=13,8,-1 do
-		path_cell_alternative=add_neighbours(path_cell_alternative[1],i,21);
-	end
-	--todo alternative path top left
-	for i=11,7,-1 do
-		path_cell=add_neighbours(path_cell[1],i,6)
-	end
-	for i=7,31,1 do
-		path_cell=add_neighbours(path_cell[1],7,i)
-	end
-	for i=0,5,1 do
-		path_cell=add_neighbours(path_cell[1],47,i)
-	end
-	path_cell_alternative[1].n1=cells.get_cell(7,21)
-	for i=47,60,1 do
-		path_cell=add_neighbours(path_cell[1],i,5)
-	end
-	path_cell[1].n1=cells.get_cell(61,5)
-end
-
-
-function add_neighbours(c,n1x,n1y,n2x,n2y)
-	newcells={}
-	c.n1=make_cell(n1x,n1y,c)
-	add(newcells,c.n1)
-	if(n2x!=nil)then
-		c.n2=make_cell(n2x,n2y)
-		add(newcells,c.n2)
-	end
-	return newcells
-end
-
-function make_cell(mapx,mapy,parent)
-	local c={}
-	c.flag=fget(mget(mapx,mapy))
-	c.special=false
-	if(c.flag==16 or c.flag==32 or c.flag==64 or c.flag==192 or c.flag==144)then
-		c.special=true
-	end
-	c.mapx=mapx
-	c.mapy=mapy
-	local mapxoffset=0
-	local mapyoffset=0
-	if(c.mapx>31)then
-		mapxoffset=-40
-		mapyoffset=32
-	end
-	c.sx=(c.mapx+mapxoffset)*8
-	c.sy=(c.mapy+mapyoffset)*8
-	--next cells
-	c.n1=nil
-	c.n2=nil
-	c.p=nil
-	if(parent!=nil)c.p=parent
-	add(cells,c)
-	return c
 end
