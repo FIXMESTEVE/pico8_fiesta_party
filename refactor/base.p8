@@ -12,6 +12,7 @@ __lua__
 #include modules/scene_manager.lua
 #include modules/transition_manager.lua
 #include modules/cutscene_manager.lua
+--#include modules/editor.lua
 
 --scenes
 #include scenes/scn_title.lua
