@@ -6,8 +6,60 @@ scn_board._init=function()
 
 	--editor mode vars
 	editor_cells_menu={}
-	editor_cells={}
-	
+	editor_cells={{ selected = false,x2 = 255,x1 = 248,y1 = 320,type = 1,y2 = 327,linkedcells = {},letter = "s",col = 5} ,
+	{ selected = false,x2 = 255,x1 = 248,y1 = 296,type = 3,y2 = 303,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 255,x1 = 248,y1 = 272,type = 4,y2 = 279,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 255,x1 = 248,y1 = 248,type = 3,y2 = 255,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 255,x1 = 248,y1 = 192,type = 3,y2 = 199,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 255,x1 = 248,y1 = 168,type = 3,y2 = 175,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 231,x1 = 224,y1 = 152,type = 3,y2 = 159,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 207,x1 = 200,y1 = 208,type = 3,y2 = 215,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 231,x1 = 224,y1 = 208,type = 4,y2 = 215,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 255,x1 = 248,y1 = 112,type = 4,y2 = 119,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 255,x1 = 248,y1 = 88,type = 4,y2 = 95,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 255,x1 = 248,y1 = 48,type = 3,y2 = 55,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 207,x1 = 200,y1 = 48,type = 3,y2 = 55,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 183,x1 = 176,y1 = 48,type = 3,y2 = 55,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 159,x1 = 152,y1 = 48,type = 4,y2 = 55,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 87,x1 = 80,y1 = 48,type = 4,y2 = 55,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 63,x1 = 56,y1 = 48,type = 3,y2 = 55,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 63,x1 = 56,y1 = 88,type = 3,y2 = 95,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 111,x1 = 104,y1 = 88,type = 3,y2 = 95,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 63,x1 = 56,y1 = 112,type = 4,y2 = 119,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 63,x1 = 56,y1 = 144,type = 3,y2 = 151,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 111,x1 = 104,y1 = 144,type = 3,y2 = 151,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 63,x1 = 56,y1 = 192,type = 3,y2 = 199,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 87,x1 = 80,y1 = 168,type = 4,y2 = 175,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 87,x1 = 80,y1 = 128,type = 4,y2 = 135,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 151,x1 = 144,y1 = 208,type = 4,y2 = 215,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 79,x1 = 72,y1 = 208,type = 3,y2 = 215,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 127,x1 = 120,y1 = 208,type = 3,y2 = 215,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 63,x1 = 56,y1 = 224,type = 3,y2 = 231,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 63,x1 = 56,y1 = 248,type = 4,y2 = 255,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 103,x1 = 96,y1 = 296,type = 4,y2 = 303,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 127,x1 = 120,y1 = 328,type = 4,y2 = 335,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 151,x1 = 144,y1 = 328,type = 4,y2 = 335,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 127,x1 = 120,y1 = 296,type = 3,y2 = 303,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 151,x1 = 144,y1 = 296,type = 3,y2 = 303,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 175,x1 = 168,y1 = 272,type = 3,y2 = 279,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 63,x1 = 56,y1 = 272,type = 3,y2 = 279,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 63,x1 = 56,y1 = 312,type = 3,y2 = 319,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 79,x1 = 72,y1 = 296,type = 3,y2 = 303,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 103,x1 = 96,y1 = 328,type = 3,y2 = 335,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 175,x1 = 168,y1 = 296,type = 4,y2 = 303,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 207,x1 = 200,y1 = 296,type = 3,y2 = 303,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 175,x1 = 168,y1 = 232,type = 3,y2 = 239,linkedcells = {},letter = "b",col = 12} ,
+	{ selected = false,x2 = 183,x1 = 176,y1 = 152,type = 5,y2 = 159,linkedcells = {},letter = "",col = 5} ,
+	{ selected = false,x2 = 183,x1 = 176,y1 = 88,type = 4,y2 = 95,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 183,x1 = 176,y1 = 136,type = 4,y2 = 143,linkedcells = {},letter = "r",col = 8} ,
+	{ selected = false,x2 = 111,x1 = 104,y1 = 168,type = 5,y2 = 175,linkedcells = {},letter = "",col = 5} ,
+	{ selected = false,x2 = 111,x1 = 104,y1 = 128,type = 5,y2 = 135,linkedcells = {},letter = "",col = 5} ,
+	{ selected = false,x2 = 63,x1 = 56,y1 = 328,type = 5,y2 = 335,linkedcells = {},letter = "",col = 5} ,
+	{ selected = false,x2 = 255,x1 = 248,y1 = 208,type = 2,y2 = 215,linkedcells = {},letter = "p",col = 5} ,
+	{ selected = false,x2 = 255,x1 = 248,y1 = 152,type = 2,y2 = 159,linkedcells = {},letter = "p",col = 5} ,
+	{ selected = false,x2 = 111,x1 = 104,y1 = 48,type = 2,y2 = 55,linkedcells = {},letter = "p",col = 5} ,
+	{ selected = false,x2 = 63,x1 = 56,y1 = 128,type = 2,y2 = 135,linkedcells = {},letter = "p",col = 5} }	
+
 	linker_cell=nil
 	local start_cell={type=1,letter="s",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --start
 	local path_select_cell={type=2,letter="p",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --path select
@@ -55,20 +107,6 @@ scn_board._init=function()
     part2.yend=20
     add(map_parts,part1)
     add(map_parts,part2)
-
-    cells={}
-    cells.get_cell = function(mapx,mapy)
-        --printh("Looking for cell MAPX :"..mapx.." MAPY: "..mapy)
-        for i=1,#cells do
-            local c=cells[i]
-            if(c.mapx==mapx and c.mapy==mapy)then
-                --printh(" ");
-                --printh("cell found ")
-                --printh("X: "..c.sx.." Y: "..c.sy.." MAPX: "..c.mapx.." MAPY: "..c.mapy)
-                return c
-            end
-        end
-    end
 	
 	if(boardstate=="editor")then
 		poke(0x5f2d,1)
@@ -81,7 +119,7 @@ end
 scn_board._draw=function()
 	cls()
 	camera(xcam,ycam)
-	--draw_map()
+	draw_map()
 	--draw_special_cells()
 	draw_players()
 	draw_hud()
@@ -173,7 +211,7 @@ function update_editor()
 				else
 					if(mousey<=y1)then
 						--todo: replace this with a copy constructor
-						--todo: prevent cell placement on already existing cell (or erase existing cell)
+						erase_cell_under_cursor(mousex,mousey)
 						local newcell={
 							type=editor_cells_menu[i].type,
 							letter=editor_cells_menu[i].letter,
@@ -224,8 +262,8 @@ end
 function editor_export()
 	local s = '{'
 	for i=1,#editor_cells do
-		local e = dump(editor_cells[i])
-		e = sub(e, 1, #e-3)..sub(e, #e-1, #e)
+		local e = dump_cell(editor_cells[i])
+		--e = sub(e, 1, #e-3)..sub(e, #e-1, #e)
 		s=s..e
 		if(i!=#editor_cells)s=s..',\n'
 	end
@@ -242,6 +280,14 @@ function editor_export()
 		end
 	end
 	return s
+end
+
+function make_editor_cell(_x1,_y1,_x2,_y2,_type,_letter,_col)
+	return{selected=false,linkedcells={},x1=_x1,y1=_y1,x2=_x2,y2=_y2,type=_type,letter=_letter,col=_col}
+end
+
+function dump_cell(c)
+	return "make_editor_cell("..c.x1..","..c.y1..","..c.x2..","..c.y2..","..c.type..",'"..c.letter.."',"..c.col..")"
 end
 
 function dump(o)
