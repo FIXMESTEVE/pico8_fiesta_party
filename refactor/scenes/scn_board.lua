@@ -2,7 +2,7 @@ scn_board={}
 scn_board._init=function()
     debug=false
 	boardstate="begin"
-	--boardstate="editor"
+	-- boardstate="editor"
 
 	--TODO: put all this data in a string and write an unserializer to free 1000+ tokens.
 	--tip for future self: use an explode function
@@ -61,26 +61,26 @@ scn_board._init=function()
 	make_editor_cell(176,112,183,119,5,'!',3),
 	make_editor_cell(128,48,135,55,5,'!',3),
 	make_editor_cell(224,48,231,55,5,'!',3),
-	make_editor_cell(248,136,255,143,7,'s',3),
 	make_editor_cell(248,224,255,231,5,'!',3),
 	make_editor_cell(168,208,175,215,6,'i',3),
 	make_editor_cell(224,296,231,303,6,'i',3),
 	make_editor_cell(96,208,103,215,6,'i',3),
-	make_editor_cell(72,328,79,335,6,'i',3),
 	make_editor_cell(56,168,63,175,8,'d',8),
 	make_editor_cell(248,208,255,215,2,'p',5),
 	make_editor_cell(224,208,231,215,4,'r',8),
 	make_editor_cell(200,152,207,159,6,'i',3),
 	make_editor_cell(56,208,63,215,2,'p',5),
-	make_editor_cell(56,296,63,303,2,'p',5)}
+	make_editor_cell(56,296,63,303,2,'p',5),
+	make_editor_cell(72,328,79,335,8,'s',3),
+	make_editor_cell(248,136,255,143,8,'s',3)}
 	link(1,2)
 	link(2,3)
 	link(3,4)
-	link(4,57)
+	link(4,56)
 	link(5,6)
 	link(6,49)
-	link(7,65)
-	link(8,58)
+	link(7,63)
+	link(8,57)
 	link(9,10)
 	link(10,11)
 	link(11,55)
@@ -92,13 +92,13 @@ scn_board._init=function()
 	link(17,19)
 	link(18,52)
 	link(19,51)
-	link(20,62)
+	link(20,60)
 	link(21,46)
-	link(22,66)
-	link(23,62)
+	link(22,64)
+	link(23,60)
 	link(24,47)
-	link(25,58)
-	link(26,60)
+	link(25,57)
+	link(26,59)
 	link(27,25)
 	link(28,29)
 	link(29,36)
@@ -108,20 +108,21 @@ scn_board._init=function()
 	link(33,34)
 	link(34,40)
 	link(35,40)
-	link(36,67)
+	link(36,65)
 	link(37,48)
 	link(38,30)
 	link(39,31)
 	link(40,41)
-	link(41,59)
+	link(41,58)
 	link(42,35)
 	link(43,45)
 	link(44,13)
 	link(45,53)
 	link(46,23)
 	link(47,21)
-	link(48,61)
+	link(48,66)
 	link(49,7)
+	link(49,67)
 	link(50,18)
 	link(50,15)
 	link(51,24)
@@ -130,21 +131,21 @@ scn_board._init=function()
 	link(53,44)
 	link(54,50)
 	link(55,12)
-	link(56,9)
-	link(57,63)
-	link(58,42)
-	link(59,2)
-	link(60,27)
-	link(61,39)
-	link(62,22)
-	link(63,64)
-	link(63,5)
-	link(64,8)
-	link(65,43)
-	link(66,26)
-	link(66,28)
-	link(67,37)
-	link(67,38)
+	link(56,61)
+	link(57,42)
+	link(58,2)
+	link(59,27)
+	link(60,22)
+	link(61,62)
+	link(61,5)
+	link(62,8)
+	link(63,43)
+	link(64,26)
+	link(64,28)
+	link(65,37)
+	link(65,38)
+	link(66,39)
+	link(67,9)
 	
 	linker_cell=nil
 
@@ -247,7 +248,7 @@ function draw_special_cells()
 end
 
 function isboardcell(c)
-	if(c.type>=3 and c.type<=8)return true
+	if(c.type>=3 and c.type<=7)return true
 	return false
 end
 
@@ -259,7 +260,7 @@ function draw_special_cell_circle(c)
 		colfill=12
 		col=10
 	end
-	if(c.type==4 or c.type==8)then
+	if(c.type==4 or c.type==7)then
 		colfill=8
 		col=10
 	end
@@ -272,7 +273,7 @@ function draw_special_cell_circle(c)
 	if(c.type==5)then
 		spr(76,c.x1,c.y1)	
 	end
-	if(c.type==8)then
+	if(c.type==7)then
 		spr(91,c.x1,c.y1)
 	end
 	if(c.type==6)then

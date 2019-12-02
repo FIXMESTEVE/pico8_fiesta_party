@@ -6,8 +6,8 @@ editor_cells_menu={
 	make_editor_cell(0,0,0,0,4,'r',8), --red cell
 	make_editor_cell(0,0,0,0,5,'!',3), --green hazard cell
 	make_editor_cell(0,0,0,0,6,'i',3), --green get item cell
-	make_editor_cell(0,0,0,0,7,'s',3), --shop cell
-	make_editor_cell(0,0,0,0,8,'d',8), --red danger cell
+	make_editor_cell(0,0,0,0,7,'d',8), --red danger cell
+	make_editor_cell(0,0,0,0,8,'s',3), --shop cell
 	make_editor_cell(0,0,0,0,9,'',5), --dummy cell
 	make_editor_cell(0,0,0,0,-1,'x',5), --eraser tool
 	make_editor_cell(0,0,0,0,0,'|',5) --linker tool
