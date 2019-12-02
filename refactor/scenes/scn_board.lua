@@ -1,8 +1,8 @@
 scn_board={}
 scn_board._init=function()
     debug=false
-	--boardstate="begin"
-	boardstate="editor"
+	boardstate="begin"
+	--boardstate="editor"
 
 	--TODO: put all this data in a string and write an unserializer to free 1000+ tokens.
 	--tip for future self: use an explode function
@@ -192,7 +192,7 @@ scn_board._draw=function()
 	cls()
 	camera(xcam,ycam)
 	draw_map()
-	--draw_special_cells()
+	draw_special_cells()
 	draw_players()
 	draw_hud()
 	if(boardstate=="begin")cut_mgr:draw()
@@ -229,17 +229,6 @@ function make_editor_cell(_x1,_y1,_x2,_y2,_type,_letter,_col)
 	return{selected=false,linkedcells={},x1=_x1,y1=_y1,x2=_x2,y2=_y2,type=_type,letter=_letter,col=_col}
 end
 
-function find_cell(x,y)
-	local x=mousex-mousex%8
-	local y=mousey-mousey%8
-	for c in all(editor_cells) do
-		if(c.x1==x and c.y1==y)then
-			return c
-		end
-	end
-	return nil
-end
-
 function draw_map()
     local ysbegin=0
 	foreach(map_parts, function(p)
@@ -249,40 +238,45 @@ function draw_map()
 end
 
 function draw_special_cells()
-    for i=1,#cells do
-		local c=cells[i]
-		if(c.special)then
+    for i=1,#editor_cells do
+		local c=editor_cells[i]
+		if(isboardcell(c))then
 			draw_special_cell_circle(c)
 		end
 	end
+end
+
+function isboardcell(c)
+	if(c.type>=3 and c.type<=8)return true
+	return false
 end
 
 function draw_special_cell_circle(c)
 	local colfill=1
 	local col=1
 	local circ_radius=7
-	if(c.flag==32)then
+	if(c.type==3)then
 		colfill=12
 		col=10
 	end
-	if(c.flag==64 or c.flag==192)then
+	if(c.type==4 or c.type==8)then
 		colfill=8
 		col=10
 	end
-	if(c.flag==16 or c.flag==144)then
+	if(c.type==5 or c.type==6)then
 		colfill=11
 		col=10
 	end
-	circfill(c.sx+4,c.sy+4,circ_radius,colfill)
-	circ(c.sx+4,c.sy+4,circ_radius,col)
-	if(c.flag==16)then
-		spr(76,c.sx,c.sy)	
+	circfill(c.x1+4,c.y1+4,circ_radius,colfill)
+	circ(c.x1+4,c.y1+4,circ_radius,col)
+	if(c.type==5)then
+		spr(76,c.x1,c.y1)	
 	end
-	if(c.flag==192)then
-		spr(91,c.sx,c.sy)
+	if(c.type==8)then
+		spr(91,c.x1,c.y1)
 	end
-	if(c.flag==144)then
-		spr(92,c.sx,c.sy)
+	if(c.type==6)then
+		spr(92,c.x1,c.y1)
 	end
 end
 

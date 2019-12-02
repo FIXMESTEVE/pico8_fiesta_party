@@ -13,6 +13,17 @@ editor_cells_menu={
 	make_editor_cell(0,0,0,0,0,'|',5) --linker tool
 }
 
+function find_cell(x,y)
+	local x=mousex-mousex%8
+	local y=mousey-mousey%8
+	for c in all(editor_cells) do
+		if(c.x1==x and c.y1==y)then
+			return c
+		end
+	end
+	return nil
+end
+
 function draw_editor()
 	--todo: display links between linked cells
 	for i=1,#editor_cells do
