@@ -1,11 +1,23 @@
 scn_board={}
 scn_board._init=function()
     debug=false
-    boardstate="begin"
+	boardstate="begin"
 	--boardstate="editor"
 
 	--editor mode vars
-	editor_cells_menu={}
+	editor_cells_menu={
+		make_editor_cell(0,0,0,0,1,'s',5), --start
+		make_editor_cell(0,0,0,0,2,'p',5), --path select
+		make_editor_cell(0,0,0,0,3,'b',12), --blue cell
+		make_editor_cell(0,0,0,0,4,'r',8), --red cell
+		make_editor_cell(0,0,0,0,5,'!',3), --green hazard cell
+		make_editor_cell(0,0,0,0,6,'i',3), --green get item cell
+		make_editor_cell(0,0,0,0,7,'s',3), --shop cell
+		make_editor_cell(0,0,0,0,8,'d',8), --red danger cell
+		make_editor_cell(0,0,0,0,9,'',5), --dummy cell
+		make_editor_cell(0,0,0,0,-1,'x',5), --eraser tool
+		make_editor_cell(0,0,0,0,0,'|',5) --linker tool
+	}
 	editor_cells={make_editor_cell(248,320,255,327,1,'s',5),
 	make_editor_cell(248,296,255,303,3,'b',12),
 	make_editor_cell(248,272,255,279,4,'r',8),
@@ -14,7 +26,6 @@ scn_board._init=function()
 	make_editor_cell(248,168,255,175,3,'b',12),
 	make_editor_cell(224,152,231,159,3,'b',12),
 	make_editor_cell(200,208,207,215,3,'b',12),
-	make_editor_cell(224,208,231,215,4,'r',8),
 	make_editor_cell(248,112,255,119,4,'r',8),
 	make_editor_cell(248,88,255,95,4,'r',8),
 	make_editor_cell(248,48,255,55,3,'b',12),
@@ -55,26 +66,100 @@ scn_board._init=function()
 	make_editor_cell(104,168,111,175,5,'',5),
 	make_editor_cell(104,128,111,135,5,'',5),
 	make_editor_cell(56,328,63,335,5,'',5),
-	make_editor_cell(248,208,255,215,2,'p',5),
 	make_editor_cell(248,152,255,159,2,'p',5),
 	make_editor_cell(104,48,111,55,2,'p',5),
-	make_editor_cell(56,128,63,135,2,'p',5)}
+	make_editor_cell(56,128,63,135,2,'p',5),
+	make_editor_cell(104,112,111,119,5,'!',3),
+	make_editor_cell(176,112,183,119,5,'!',3),
+	make_editor_cell(128,48,135,55,5,'!',3),
+	make_editor_cell(224,48,231,55,5,'!',3),
+	make_editor_cell(248,136,255,143,7,'s',3),
+	make_editor_cell(248,224,255,231,5,'!',3),
+	make_editor_cell(168,208,175,215,6,'i',3),
+	make_editor_cell(224,296,231,303,6,'i',3),
+	make_editor_cell(96,208,103,215,6,'i',3),
+	make_editor_cell(72,328,79,335,6,'i',3),
+	make_editor_cell(56,168,63,175,8,'d',8),
+	make_editor_cell(248,208,255,215,2,'p',5),
+	make_editor_cell(224,208,231,215,4,'r',8),
+	make_editor_cell(200,152,207,159,6,'i',3),
+	make_editor_cell(56,208,63,215,2,'p',5),
+	make_editor_cell(56,296,63,303,2,'p',5)}
+	add(editor_cells[1].linkedcells,editor_cells[2])
+	add(editor_cells[2].linkedcells,editor_cells[3])
+	add(editor_cells[3].linkedcells,editor_cells[4])
+	add(editor_cells[4].linkedcells,editor_cells[57])
+	add(editor_cells[5].linkedcells,editor_cells[6])
+	add(editor_cells[6].linkedcells,editor_cells[49])
+	add(editor_cells[7].linkedcells,editor_cells[65])
+	add(editor_cells[8].linkedcells,editor_cells[58])
+	add(editor_cells[9].linkedcells,editor_cells[10])
+	add(editor_cells[10].linkedcells,editor_cells[11])
+	add(editor_cells[11].linkedcells,editor_cells[55])
+	add(editor_cells[12].linkedcells,editor_cells[13])
+	add(editor_cells[13].linkedcells,editor_cells[14])
+	add(editor_cells[14].linkedcells,editor_cells[54])
+	add(editor_cells[15].linkedcells,editor_cells[16])
+	add(editor_cells[16].linkedcells,editor_cells[17])
+	add(editor_cells[17].linkedcells,editor_cells[19])
+	add(editor_cells[18].linkedcells,editor_cells[52])
+	add(editor_cells[19].linkedcells,editor_cells[51])
+	add(editor_cells[20].linkedcells,editor_cells[62])
+	add(editor_cells[21].linkedcells,editor_cells[46])
+	add(editor_cells[22].linkedcells,editor_cells[66])
+	add(editor_cells[23].linkedcells,editor_cells[62])
+	add(editor_cells[24].linkedcells,editor_cells[47])
+	add(editor_cells[25].linkedcells,editor_cells[58])
+	add(editor_cells[26].linkedcells,editor_cells[60])
+	add(editor_cells[27].linkedcells,editor_cells[25])
+	add(editor_cells[28].linkedcells,editor_cells[29])
+	add(editor_cells[29].linkedcells,editor_cells[36])
+	add(editor_cells[30].linkedcells,editor_cells[33])
+	add(editor_cells[31].linkedcells,editor_cells[32])
+	add(editor_cells[32].linkedcells,editor_cells[34])
+	add(editor_cells[33].linkedcells,editor_cells[34])
+	add(editor_cells[34].linkedcells,editor_cells[40])
+	add(editor_cells[35].linkedcells,editor_cells[40])
+	add(editor_cells[36].linkedcells,editor_cells[67])
+	add(editor_cells[37].linkedcells,editor_cells[48])
+	add(editor_cells[38].linkedcells,editor_cells[30])
+	add(editor_cells[39].linkedcells,editor_cells[31])
+	add(editor_cells[40].linkedcells,editor_cells[41])
+	add(editor_cells[41].linkedcells,editor_cells[59])
+	add(editor_cells[42].linkedcells,editor_cells[35])
+	add(editor_cells[43].linkedcells,editor_cells[45])
+	add(editor_cells[44].linkedcells,editor_cells[13])
+	add(editor_cells[45].linkedcells,editor_cells[53])
+	add(editor_cells[46].linkedcells,editor_cells[23])
+	add(editor_cells[47].linkedcells,editor_cells[21])
+	add(editor_cells[48].linkedcells,editor_cells[61])
+	add(editor_cells[49].linkedcells,editor_cells[7])
+	add(editor_cells[50].linkedcells,editor_cells[18])
+	add(editor_cells[50].linkedcells,editor_cells[15])
+	add(editor_cells[51].linkedcells,editor_cells[24])
+	add(editor_cells[51].linkedcells,editor_cells[20])
+	add(editor_cells[52].linkedcells,editor_cells[47])
+	add(editor_cells[53].linkedcells,editor_cells[44])
+	add(editor_cells[54].linkedcells,editor_cells[50])
+	add(editor_cells[55].linkedcells,editor_cells[12])
+	add(editor_cells[56].linkedcells,editor_cells[9])
+	add(editor_cells[57].linkedcells,editor_cells[63])
+	add(editor_cells[58].linkedcells,editor_cells[42])
+	add(editor_cells[59].linkedcells,editor_cells[2])
+	add(editor_cells[60].linkedcells,editor_cells[27])
+	add(editor_cells[61].linkedcells,editor_cells[39])
+	add(editor_cells[62].linkedcells,editor_cells[22])
+	add(editor_cells[63].linkedcells,editor_cells[64])
+	add(editor_cells[63].linkedcells,editor_cells[5])
+	add(editor_cells[64].linkedcells,editor_cells[8])
+	add(editor_cells[65].linkedcells,editor_cells[43])
+	add(editor_cells[66].linkedcells,editor_cells[26])
+	add(editor_cells[66].linkedcells,editor_cells[28])
+	add(editor_cells[67].linkedcells,editor_cells[37])
+	add(editor_cells[67].linkedcells,editor_cells[38])
+	
 
 	linker_cell=nil
-	local start_cell={type=1,letter="s",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --start
-	local path_select_cell={type=2,letter="p",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --path select
-	local blue_cell={type=3,letter="b",col=12,selected=false,x1=0,x2=0,y1=0,y2=0} --blue cell
-	local red_cell={type=4,letter="r",col=8,selected=false,x1=0,x2=0,y1=0,y2=0} --red cell
-	local dummy_cell={type=5,letter="",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --dummy cell
-	local eraser={type=-1,letter="x",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --eraser tool
-	local linker={type=0,letter="|",col=5,selected=false,x1=0,x2=0,y1=0,y2=0} --linker tool
-	add(editor_cells_menu,start_cell)
-	add(editor_cells_menu,path_select_cell)
-	add(editor_cells_menu,blue_cell)
-	add(editor_cells_menu,red_cell)
-	add(editor_cells_menu,dummy_cell)
-	add(editor_cells_menu,eraser)
-	add(editor_cells_menu,linker)
 
 	--camera
     xcam=0
