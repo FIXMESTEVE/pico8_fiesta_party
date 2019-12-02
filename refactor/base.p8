@@ -8,15 +8,15 @@ __lua__
 --libs
 #include libs/my_dtb.lua
 
+--scenes
+#include scenes/scn_title.lua
+#include scenes/scn_board.lua
+
 --modules
 #include modules/scene_manager.lua
 #include modules/transition_manager.lua
 #include modules/cutscene_manager.lua
 --#include modules/editor.lua
-
---scenes
-#include scenes/scn_title.lua
-#include scenes/scn_board.lua
 
 --transitions
 #include transitions/tra_bubbles.lua

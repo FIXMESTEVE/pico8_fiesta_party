@@ -1,3 +1,17 @@
+--editor mode vars
+editor_cells_menu={
+	make_editor_cell(0,0,0,0,1,'s',5), --start
+	make_editor_cell(0,0,0,0,2,'p',5), --path select
+	make_editor_cell(0,0,0,0,3,'b',12), --blue cell
+	make_editor_cell(0,0,0,0,4,'r',8), --red cell
+	make_editor_cell(0,0,0,0,5,'!',3), --green hazard cell
+	make_editor_cell(0,0,0,0,6,'i',3), --green get item cell
+	make_editor_cell(0,0,0,0,7,'s',3), --shop cell
+	make_editor_cell(0,0,0,0,8,'d',8), --red danger cell
+	make_editor_cell(0,0,0,0,9,'',5), --dummy cell
+	make_editor_cell(0,0,0,0,-1,'x',5), --eraser tool
+	make_editor_cell(0,0,0,0,0,'|',5) --linker tool
+}
 
 function draw_editor()
 	--todo: display links between linked cells
@@ -86,6 +100,8 @@ function link_cell_under_cursor(mousex,mousey)
 	if(c==nil)return
 	if(linker_cell==nil)then
 		linker_cell=c
+	elseif(linker_cell==nil)then
+		return
 	else
 		add(linker_cell.linkedcells,c)
 		linker_cell=nil
@@ -123,7 +139,7 @@ function editor_export()
 			for c in all(editor_cells[i].linkedcells) do
 				for j=1,#editor_cells do
 					if(c==editor_cells[j])then
-						s=s.."add(editor_cells["..i.."].linkedcells,editor_cells["..j.."])\n"
+						s=s.."link("..i..","..j..")\n"
 					end
 				end
 			end

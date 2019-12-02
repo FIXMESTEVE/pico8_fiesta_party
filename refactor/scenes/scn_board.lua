@@ -1,23 +1,11 @@
 scn_board={}
 scn_board._init=function()
     debug=false
-	boardstate="begin"
-	--boardstate="editor"
+	--boardstate="begin"
+	boardstate="editor"
 
-	--editor mode vars
-	editor_cells_menu={
-		make_editor_cell(0,0,0,0,1,'s',5), --start
-		make_editor_cell(0,0,0,0,2,'p',5), --path select
-		make_editor_cell(0,0,0,0,3,'b',12), --blue cell
-		make_editor_cell(0,0,0,0,4,'r',8), --red cell
-		make_editor_cell(0,0,0,0,5,'!',3), --green hazard cell
-		make_editor_cell(0,0,0,0,6,'i',3), --green get item cell
-		make_editor_cell(0,0,0,0,7,'s',3), --shop cell
-		make_editor_cell(0,0,0,0,8,'d',8), --red danger cell
-		make_editor_cell(0,0,0,0,9,'',5), --dummy cell
-		make_editor_cell(0,0,0,0,-1,'x',5), --eraser tool
-		make_editor_cell(0,0,0,0,0,'|',5) --linker tool
-	}
+	--TODO: put all this data in a string and write an unserializer to free 1000+ tokens.
+	--tip for future self: use an explode function
 	editor_cells={make_editor_cell(248,320,255,327,1,'s',5),
 	make_editor_cell(248,296,255,303,3,'b',12),
 	make_editor_cell(248,272,255,279,4,'r',8),
@@ -85,80 +73,79 @@ scn_board._init=function()
 	make_editor_cell(200,152,207,159,6,'i',3),
 	make_editor_cell(56,208,63,215,2,'p',5),
 	make_editor_cell(56,296,63,303,2,'p',5)}
-	add(editor_cells[1].linkedcells,editor_cells[2])
-	add(editor_cells[2].linkedcells,editor_cells[3])
-	add(editor_cells[3].linkedcells,editor_cells[4])
-	add(editor_cells[4].linkedcells,editor_cells[57])
-	add(editor_cells[5].linkedcells,editor_cells[6])
-	add(editor_cells[6].linkedcells,editor_cells[49])
-	add(editor_cells[7].linkedcells,editor_cells[65])
-	add(editor_cells[8].linkedcells,editor_cells[58])
-	add(editor_cells[9].linkedcells,editor_cells[10])
-	add(editor_cells[10].linkedcells,editor_cells[11])
-	add(editor_cells[11].linkedcells,editor_cells[55])
-	add(editor_cells[12].linkedcells,editor_cells[13])
-	add(editor_cells[13].linkedcells,editor_cells[14])
-	add(editor_cells[14].linkedcells,editor_cells[54])
-	add(editor_cells[15].linkedcells,editor_cells[16])
-	add(editor_cells[16].linkedcells,editor_cells[17])
-	add(editor_cells[17].linkedcells,editor_cells[19])
-	add(editor_cells[18].linkedcells,editor_cells[52])
-	add(editor_cells[19].linkedcells,editor_cells[51])
-	add(editor_cells[20].linkedcells,editor_cells[62])
-	add(editor_cells[21].linkedcells,editor_cells[46])
-	add(editor_cells[22].linkedcells,editor_cells[66])
-	add(editor_cells[23].linkedcells,editor_cells[62])
-	add(editor_cells[24].linkedcells,editor_cells[47])
-	add(editor_cells[25].linkedcells,editor_cells[58])
-	add(editor_cells[26].linkedcells,editor_cells[60])
-	add(editor_cells[27].linkedcells,editor_cells[25])
-	add(editor_cells[28].linkedcells,editor_cells[29])
-	add(editor_cells[29].linkedcells,editor_cells[36])
-	add(editor_cells[30].linkedcells,editor_cells[33])
-	add(editor_cells[31].linkedcells,editor_cells[32])
-	add(editor_cells[32].linkedcells,editor_cells[34])
-	add(editor_cells[33].linkedcells,editor_cells[34])
-	add(editor_cells[34].linkedcells,editor_cells[40])
-	add(editor_cells[35].linkedcells,editor_cells[40])
-	add(editor_cells[36].linkedcells,editor_cells[67])
-	add(editor_cells[37].linkedcells,editor_cells[48])
-	add(editor_cells[38].linkedcells,editor_cells[30])
-	add(editor_cells[39].linkedcells,editor_cells[31])
-	add(editor_cells[40].linkedcells,editor_cells[41])
-	add(editor_cells[41].linkedcells,editor_cells[59])
-	add(editor_cells[42].linkedcells,editor_cells[35])
-	add(editor_cells[43].linkedcells,editor_cells[45])
-	add(editor_cells[44].linkedcells,editor_cells[13])
-	add(editor_cells[45].linkedcells,editor_cells[53])
-	add(editor_cells[46].linkedcells,editor_cells[23])
-	add(editor_cells[47].linkedcells,editor_cells[21])
-	add(editor_cells[48].linkedcells,editor_cells[61])
-	add(editor_cells[49].linkedcells,editor_cells[7])
-	add(editor_cells[50].linkedcells,editor_cells[18])
-	add(editor_cells[50].linkedcells,editor_cells[15])
-	add(editor_cells[51].linkedcells,editor_cells[24])
-	add(editor_cells[51].linkedcells,editor_cells[20])
-	add(editor_cells[52].linkedcells,editor_cells[47])
-	add(editor_cells[53].linkedcells,editor_cells[44])
-	add(editor_cells[54].linkedcells,editor_cells[50])
-	add(editor_cells[55].linkedcells,editor_cells[12])
-	add(editor_cells[56].linkedcells,editor_cells[9])
-	add(editor_cells[57].linkedcells,editor_cells[63])
-	add(editor_cells[58].linkedcells,editor_cells[42])
-	add(editor_cells[59].linkedcells,editor_cells[2])
-	add(editor_cells[60].linkedcells,editor_cells[27])
-	add(editor_cells[61].linkedcells,editor_cells[39])
-	add(editor_cells[62].linkedcells,editor_cells[22])
-	add(editor_cells[63].linkedcells,editor_cells[64])
-	add(editor_cells[63].linkedcells,editor_cells[5])
-	add(editor_cells[64].linkedcells,editor_cells[8])
-	add(editor_cells[65].linkedcells,editor_cells[43])
-	add(editor_cells[66].linkedcells,editor_cells[26])
-	add(editor_cells[66].linkedcells,editor_cells[28])
-	add(editor_cells[67].linkedcells,editor_cells[37])
-	add(editor_cells[67].linkedcells,editor_cells[38])
+	link(1,2)
+	link(2,3)
+	link(3,4)
+	link(4,57)
+	link(5,6)
+	link(6,49)
+	link(7,65)
+	link(8,58)
+	link(9,10)
+	link(10,11)
+	link(11,55)
+	link(12,13)
+	link(13,14)
+	link(14,54)
+	link(15,16)
+	link(16,17)
+	link(17,19)
+	link(18,52)
+	link(19,51)
+	link(20,62)
+	link(21,46)
+	link(22,66)
+	link(23,62)
+	link(24,47)
+	link(25,58)
+	link(26,60)
+	link(27,25)
+	link(28,29)
+	link(29,36)
+	link(30,33)
+	link(31,32)
+	link(32,34)
+	link(33,34)
+	link(34,40)
+	link(35,40)
+	link(36,67)
+	link(37,48)
+	link(38,30)
+	link(39,31)
+	link(40,41)
+	link(41,59)
+	link(42,35)
+	link(43,45)
+	link(44,13)
+	link(45,53)
+	link(46,23)
+	link(47,21)
+	link(48,61)
+	link(49,7)
+	link(50,18)
+	link(50,15)
+	link(51,24)
+	link(51,20)
+	link(52,47)
+	link(53,44)
+	link(54,50)
+	link(55,12)
+	link(56,9)
+	link(57,63)
+	link(58,42)
+	link(59,2)
+	link(60,27)
+	link(61,39)
+	link(62,22)
+	link(63,64)
+	link(63,5)
+	link(64,8)
+	link(65,43)
+	link(66,26)
+	link(66,28)
+	link(67,37)
+	link(67,38)
 	
-
 	linker_cell=nil
 
 	--camera
@@ -216,6 +203,9 @@ scn_board._draw=function()
 	end
 end
 
+function link(n1,n2)
+	add(editor_cells[n1].linkedcells,editor_cells[n2])
+end
 
 function drawcell(x1,y1,x2,y2,letter,col,selected)
 	rectfill(x1,y1,x2,y2,col)
