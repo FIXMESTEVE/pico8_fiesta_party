@@ -274,7 +274,7 @@ function draw_special_cell_circle(c)
 	end
 	circfill(c.x1+4,c.y1+4,circ_radius,colfill)
 	circ(c.x1+4,c.y1+4,circ_radius,col)
-	if(c.isemblemspace==3)then
+	if(c.isemblemspace==true)then
 		sspr(32,96,8,8,c.x1-4.10,c.y1-4.10,16,16)
 		return
 	end
