@@ -268,8 +268,16 @@ function draw_special_cell_circle(c)
 		colfill=11
 		col=10
 	end
+	if(c.isemblemspace==true)then
+		colfill=5
+		col=7
+	end
 	circfill(c.x1+4,c.y1+4,circ_radius,colfill)
 	circ(c.x1+4,c.y1+4,circ_radius,col)
+	if(c.isemblemspace==3)then
+		sspr(32,96,8,8,c.x1-4.10,c.y1-4.10,16,16)
+		return
+	end
 	if(c.type==5)then
 		spr(76,c.x1,c.y1)	
 	end

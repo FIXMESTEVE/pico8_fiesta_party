@@ -65,7 +65,7 @@ function intro_cut:place_emblem()
     for c in all(editor_cells)do
         c.isemblemspace=false
     end
-    local i=1+rnd(#editor_cells-1)
+    local i=flr(1+rnd(#editor_cells-1))
     if(editor_cells[i].type==3 or editor_cells[i].type==4)then
         editor_cells[i].isemblemspace=true
     else
