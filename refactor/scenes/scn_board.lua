@@ -227,7 +227,7 @@ scn_board._update=function()
 end
 
 function make_editor_cell(_x1,_y1,_x2,_y2,_type,_letter,_col)
-	return{selected=false,linkedcells={},x1=_x1,y1=_y1,x2=_x2,y2=_y2,type=_type,letter=_letter,col=_col,isstarspace=false}
+	return{selected=false,linkedcells={},x1=_x1,y1=_y1,x2=_x2,y2=_y2,type=_type,letter=_letter,col=_col,isemblemspace=false}
 end
 
 function draw_map()

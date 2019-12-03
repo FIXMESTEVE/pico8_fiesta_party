@@ -62,7 +62,17 @@ function intro_cut:camera_move()
 end
 
 function intro_cut:place_emblem()
-    --TODO
+    for c in all(editor_cells)do
+        c.isemblemspace=false
+    end
+    local i=1+rnd(#editor_cells-1)
+    if(editor_cells[i].type==3 or editor_cells[i].type==4)then
+        editor_cells[i].isemblemspace=true
+    else
+        intro_cut:place_emblem()
+        return
+    end
+    intro_cut.state=5
 end
 
 function intro_cut:dialog_1()
