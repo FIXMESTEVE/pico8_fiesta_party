@@ -1,3 +1,4 @@
+--TODO: move these in introcut:init
 intro_cut={}
 intro_cut._clk=0.0
 intro_cut.xorigin=xcam
@@ -21,7 +22,6 @@ function intro_cut:update()
     if(intro_cut.state==1)intro_cut:dialog_1()
     if(intro_cut.state==2)intro_cut:decideorder()
     if(intro_cut.state==3)intro_cut:dialog_2()
-    if(intro_cut.state==4)intro_cut:place_emblem()
 
     for i=1,#particles do
         particles[i].update()
@@ -59,20 +59,6 @@ function intro_cut:camera_move()
     if(xcam==intro_cut.xtarget and ycam==intro_cut.ytarget)then
         intro_cut.state=1
     end
-end
-
-function intro_cut:place_emblem()
-    for c in all(editor_cells)do
-        c.isemblemspace=false
-    end
-    local i=flr(1+rnd(#editor_cells-1))
-    if(editor_cells[i].type==3 or editor_cells[i].type==4)then
-        editor_cells[i].isemblemspace=true
-    else
-        intro_cut:place_emblem()
-        return
-    end
-    intro_cut.state=5
 end
 
 function intro_cut:dialog_1()

@@ -219,11 +219,31 @@ scn_board._update=function()
 		cut_mgr:set_cutscene(intro_cut)
 		cut_mgr:enable()
 		cut_mgr:update()
-	end
-
-	if(boardstate=="editor")then
+		if(intro_cut.state==4)then
+			cut_mgr:disable()
+			place_emblem()
+			boardstate=="newemblem"
+		end
+	elseif(boardstate=="newemblem")then
+		cut_mgr:set_cutscene(newemblem_cut)
+		cut_mgr:enable()
+		cut_mgr:update()
+	elseif(boardstate=="editor")then
 		update_editor()
 	end
+end
+
+function place_emblem()
+    for c in all(editor_cells)do
+        c.isemblemspace=false
+    end
+    local i=flr(1+rnd(#editor_cells-1))
+    if(editor_cells[i].type==3 or editor_cells[i].type==4)then
+        editor_cells[i].isemblemspace=true
+    else
+        intro_cut:place_emblem()
+        return
+    end
 end
 
 function make_editor_cell(_x1,_y1,_x2,_y2,_type,_letter,_col)
