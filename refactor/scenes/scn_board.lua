@@ -1,7 +1,6 @@
 scn_board={}
 scn_board._init=function()
-    debug=false
-	boardstate="begin"
+	boardstate="cut_begin"
 	-- boardstate="editor"
 
 	--TODO: put all this data in a string and write an unserializer to free 1000+ tokens.
@@ -187,6 +186,8 @@ scn_board._init=function()
 		mousey=stat(33)+ycam
 		mouseb=stat(34)
 	end
+
+	turn=1
 end
 
 scn_board._draw=function()
@@ -196,8 +197,7 @@ scn_board._draw=function()
 	draw_special_cells()
 	draw_players()
 	draw_hud()
-	if(boardstate=="begin")cut_mgr:draw()
-	if(debug)draw_cells_debug()
+	cut_mgr:draw()
 
 	if(boardstate=="editor")then
 		draw_editor()
@@ -215,19 +215,25 @@ function drawcell(x1,y1,x2,y2,letter,col,selected)
 end
 
 scn_board._update=function()
-	if(boardstate=="begin")then
+	cut_mgr:update()
+
+	if(boardstate=="cut_begin")then
 		cut_mgr:set_cutscene(intro_cut)
 		cut_mgr:enable()
-		cut_mgr:update()
 		if(intro_cut.state==4)then
 			cut_mgr:disable()
 			place_emblem()
-			boardstate=="newemblem"
+			boardstate="cut_newemblem"
 		end
-	elseif(boardstate=="newemblem")then
-		cut_mgr:set_cutscene(newemblem_cut)
-		cut_mgr:enable()
-		cut_mgr:update()
+	elseif(boardstate=="cut_newemblem")then
+		-- TODO: implement these
+		-- cut_mgr:set_cutscene(newemblem_cut)
+		-- cut_mgr:enable()
+		boardstate="cut_newturn"
+	elseif(boardstate=="cut_newturn")then
+		--TODO
+	elseif(boardstate=="game_dice")then
+		--TODO
 	elseif(boardstate=="editor")then
 		update_editor()
 	end
@@ -241,7 +247,7 @@ function place_emblem()
     if(editor_cells[i].type==3 or editor_cells[i].type==4)then
         editor_cells[i].isemblemspace=true
     else
-        intro_cut:place_emblem()
+        place_emblem()
         return
     end
 end
