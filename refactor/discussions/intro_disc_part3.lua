@@ -9,6 +9,7 @@ function intro_disc_part3:build()
     my_dtb_portrait=197
     my_dtb_name="the announcer"
 
+    --TODO reorder the table and this text according to dice results
     for i=1,#players do
         local order=""
         if(i==1)then

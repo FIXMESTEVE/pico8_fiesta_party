@@ -234,6 +234,7 @@ scn_board._update=function()
 		--TODO
 		place_players()
 	elseif(boardstate=="player_turn")then
+		
 		--TODO
 	elseif(boardstate=="editor")then
 		update_editor()
