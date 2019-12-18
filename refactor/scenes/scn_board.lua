@@ -335,7 +335,6 @@ function draw_hud()
 			xoffset=128-1-w
 			yoffset=128-1-h
 		end
-
 		
 		local x1=xoffset
 		local y1=yoffset
@@ -361,7 +360,6 @@ function draw_hud()
 		
 		rectfill(x1+xcam,y1+ycam,x2+xcam,y2+ycam,1)
 		
-		--TODO:should we keep this?
 		print(players[i].coins,coinstxtx+1+coinpadding,coinstxty+1,1)
 		print(players[i].coins,coinstxtx+coinpadding,coinstxty,7)
 		print(players[i].emblems,emblemstxtx+1+emblempadding,emblemstxty+1,1)

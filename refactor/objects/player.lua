@@ -9,7 +9,8 @@ function player:new(number,x,y,char,coins,emblems,name)
         char=char,
         coins=coins,
         emblems=emblems,
-        name=name
+        name=name,
+        cell=editor_cells[1] --init start cell
     }
     setmetatable(t,self)
     return t
