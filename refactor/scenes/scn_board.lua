@@ -232,10 +232,36 @@ scn_board._update=function()
 		boardstate="cut_newturn"
 	elseif(boardstate=="cut_newturn")then
 		--TODO
-	elseif(boardstate=="game_dice")then
+		place_players()
+	elseif(boardstate=="player_turn")then
 		--TODO
 	elseif(boardstate=="editor")then
 		update_editor()
+	end
+end
+
+function place_players()
+	for p in all(players) do
+		local xoff=0
+		local yoff=0
+		if(p.number==1)then
+			xoff=-4
+			yoff=-4
+		end
+		if(p.number==2)then
+			xoff=4
+			yoff=-4
+		end
+		if(p.number==3)then
+			xoff=-4
+			yoff=4
+		end
+		if(p.number==4)then
+			xoff=4
+			yoff=4
+		end
+		p.x=p.cell.x1+xoff
+		p.y=p.cell.y1+yoff
 	end
 end
 
