@@ -26,7 +26,8 @@ function intro_disc_part3:build()
         if(i==#players)then
             call=function()
                 intro_cut.state=4
-            
+                intro_cut:reorder_players()
+
                 --delete the dices
                 intro_cut.dices={}
             end

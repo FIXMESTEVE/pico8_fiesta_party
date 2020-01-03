@@ -89,8 +89,6 @@ function intro_cut:decideorder()
     for i=1,#self.coroutines do --cycle all coroutines, if a coroutine exists then update it
         if(self.coroutines[i] and costatus(self.coroutines[i]) != 'dead') then
             if(self.press[i]==true)coresume(self.coroutines[i], players[i], self.dices[i])
-        else
-            self.coroutines[i] = nil
         end
     end
 end
@@ -121,7 +119,10 @@ function co_anim_player_hit_dice(player,dice)
         yield()
     end
     dice.display=true
-    if(intro_cut:are_all_intro_dices_hit())intro_cut.state=3
+    if(intro_cut:are_all_intro_dices_hit())then
+        --FIXMESTEVE: this prevents other coroutines from completing, causing dice.display to be false sometimes for some dices.
+        intro_cut.state=3
+    end
 end
 
 --this function checks if all dices of the intro have been hit
@@ -130,4 +131,24 @@ function intro_cut:are_all_intro_dices_hit()
         if(self.dices[i].state!=1)return false
     end
     return true
+end
+
+function intro_cut:reorder_players()
+    local ordered_i={}
+    
+    for d in all(self.dices) do
+        local tmp_max_val=0
+        local tmp_max_i=0
+        for i=1,#self.dices do
+            if(table_contains(ordered_i,i)==false and self.dices[i].number>tmp_max_val)then
+                tmp_max_val=self.dices[i].number
+                tmp_max_i=i
+            end
+        end
+        if(tmp_max_i>0)add(ordered_i,tmp_max_i)
+    end
+
+    for i=1,#players do
+        players[i].number=ordered_i[i]
+    end
 end

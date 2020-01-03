@@ -67,3 +67,10 @@ function upd_keys()
 		end
 	end
 end
+
+function table_contains(tbl,val)
+    for i=1,#tbl do
+        if(tbl[i]==val)return true
+    end
+    return false
+end
