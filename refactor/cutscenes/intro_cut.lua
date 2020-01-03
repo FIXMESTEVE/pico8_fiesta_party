@@ -9,10 +9,11 @@ intro_cut.state=0
 intro_cut.dices={}
 intro_cut.canhitdices=false
 intro_cut.coroutines={}
+intro_cut.press={false,false,false,false}
 
 function intro_cut:init()
     for i=1,#players do
-        add(intro_cut.coroutines,nil) --set up empty coroutines
+        add(intro_cut.coroutines,cocreate(co_anim_player_hit_dice)) --set up empty coroutines
     end
 end
 
@@ -25,14 +26,6 @@ function intro_cut:update()
 
     for i=1,#particles do
         particles[i].update()
-    end
-
-    for i=1,#self.coroutines do --cycle all coroutines, if a coroutine exists then update it
-        if self.coroutines[i] and costatus(self.coroutines[i]) != 'dead' then
-            coresume(self.coroutines[i], players[i], self.dices[i])
-        else
-            self.coroutines[i] = nil
-        end
     end
 end
 
@@ -88,9 +81,16 @@ function intro_cut:decideorder()
     end
     if(self.canhitdices)then
         for i=1,#players do
-            if(is_pressed(5,i-1) and self.coroutines[i]==nil and self.dices[i].state==0)then
-                self.coroutines[i] = cocreate(co_anim_player_hit_dice)
+            if(is_pressed(5,i-1) and self.coroutines[i]!=nil and self.dices[i].state==0)then
+                self.press[i]=true
             end
+        end
+    end
+    for i=1,#self.coroutines do --cycle all coroutines, if a coroutine exists then update it
+        if(self.coroutines[i] and costatus(self.coroutines[i]) != 'dead') then
+            if(self.press[i]==true)coresume(self.coroutines[i], players[i], self.dices[i])
+        else
+            self.coroutines[i] = nil
         end
     end
 end
