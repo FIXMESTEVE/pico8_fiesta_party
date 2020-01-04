@@ -11,6 +11,7 @@ function cutscene_manager:new()
 end
 
 function cutscene_manager:set_cutscene(cutscene)
+    if(self.cut==cutscene)return
     self.cut=cutscene
     self.cut:init()
 end

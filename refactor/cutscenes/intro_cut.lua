@@ -21,7 +21,15 @@ function intro_cut:update()
     intro_cut._clk+=clock.past
     if(intro_cut.state==0)intro_cut:camera_move()
     if(intro_cut.state==1)intro_cut:dialog_1()
-    if(intro_cut.state==2)intro_cut:decideorder()
+    if(intro_cut.state==2)then
+        if(intro_cut:are_all_dice_coroutines_dead())then
+            if(intro_cut:are_all_intro_dices_hit())then
+                intro_cut.state=3
+            end
+        else
+            intro_cut:decideorder()
+        end
+    end
     if(intro_cut.state==3)intro_cut:dialog_2()
 
     for i=1,#particles do
@@ -119,10 +127,6 @@ function co_anim_player_hit_dice(player,dice)
         yield()
     end
     dice.display=true
-    if(intro_cut:are_all_intro_dices_hit())then
-        --FIXMESTEVE: this prevents other coroutines from completing, causing dice.display to be false sometimes for some dices.
-        intro_cut.state=3
-    end
 end
 
 --this function checks if all dices of the intro have been hit
@@ -151,4 +155,11 @@ function intro_cut:reorder_players()
     for i=1,#players do
         players[i].number=ordered_i[i]
     end
+end
+
+function intro_cut:are_all_dice_coroutines_dead()
+    for c in all(self.coroutines)do
+        if(costatus(c) != 'dead')return false
+    end
+    return true
 end
