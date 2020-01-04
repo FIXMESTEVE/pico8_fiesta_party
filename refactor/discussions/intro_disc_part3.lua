@@ -8,6 +8,7 @@ function intro_disc_part3:build()
     my_dtb_init() --reset my_dtb
     my_dtb_portrait=197
     my_dtb_name="the announcer"
+    intro_cut:reorder_players()
 
     --TODO reorder the table and this text according to dice results
     for i=1,#players do
@@ -26,10 +27,11 @@ function intro_disc_part3:build()
         if(i==#players)then
             call=function()
                 intro_cut.state=4
-                intro_cut:reorder_players()
 
                 --delete the dices
                 intro_cut.dices={}
+
+                players=reordered_players_tbl
             end
         end
         local line={line=players[i].name.." will be playing "..order.."!",options=nil,callback=call}

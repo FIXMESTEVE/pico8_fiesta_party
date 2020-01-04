@@ -155,6 +155,10 @@ function intro_cut:reorder_players()
     for i=1,#players do
         players[i].number=ordered_i[i]
     end
+
+    for i in all(ordered_i)do
+        add(reordered_players_tbl, players[i])
+    end
 end
 
 function intro_cut:are_all_dice_coroutines_dead()

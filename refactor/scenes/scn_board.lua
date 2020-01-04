@@ -156,11 +156,12 @@ scn_board._init=function()
     player_start_y=336
 
 	--players
-    players={}
-    p1=player:new(1,player_start_x,player_start_y,128,0,0,"blue")
-    p2=player:new(2,player_start_x+16,player_start_y,144,0,0,"red")
-    -- p3=player:new(3,player_start_x+32,player_start_y,160,0,0)
-    -- p4=player:new(4,player_start_x+48,player_start_y,176,0,0)
+	players={}
+    reordered_players_tbl={}
+    p1=player:new(1,player_start_x,player_start_y,128,0,0,"blue",1)
+    p2=player:new(2,player_start_x+16,player_start_y,144,0,0,"red",2)
+    -- p3=player:new(3,player_start_x+32,player_start_y,160,0,0,"todo",3)
+    -- p4=player:new(4,player_start_x+48,player_start_y,176,0,0,"todo",4)
     add(players,p1)
     add(players,p2)
     -- add(players,p3)
