@@ -234,6 +234,7 @@ scn_board._update=function()
 	elseif(boardstate=="cut_newturn")then
 		--TODO
 		place_players()
+		boardstate="player_turn"
 	elseif(boardstate=="player_turn")then
 		
 		--TODO

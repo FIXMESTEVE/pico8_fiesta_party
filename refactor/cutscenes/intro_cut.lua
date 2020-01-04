@@ -89,7 +89,7 @@ function intro_cut:decideorder()
     end
     if(self.canhitdices)then
         for i=1,#players do
-            if(is_pressed(5,i-1) and self.coroutines[i]!=nil and self.dices[i].state==0)then
+            if(is_pressed(5,players[i].port-1) and self.coroutines[i]!=nil and self.dices[i].state==0)then
                 self.press[i]=true
             end
         end
