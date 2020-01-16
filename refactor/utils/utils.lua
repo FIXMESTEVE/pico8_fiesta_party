@@ -74,3 +74,12 @@ function table_contains(tbl,val)
     end
     return false
 end
+
+function move_camera(xorigin,yorigin,xtarget,ytarget,timer)
+    xcam = lerp(xorigin,xtarget,easeInOut(timer))
+    ycam = lerp(yorigin,ytarget,easeInOut(timer))
+    if(abs(xcam-xtarget)<0.1)xcam=xtarget
+    if(abs(ycam-ytarget)<0.1)ycam=ytarget
+    if(abs(xcam-xtarget)<0.1 and abs(ycam-ytarget)<0.1)return true
+    return false
+end

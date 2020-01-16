@@ -53,10 +53,7 @@ end
 
 function intro_cut:camera_move()
     local timer = intro_cut._clk/2 % 1
-    xcam = lerp(intro_cut.xorigin,intro_cut.xtarget,easeInOut(timer))
-    ycam = lerp(intro_cut.yorigin,intro_cut.ytarget,easeInOut(timer))
-    if(abs(xcam-intro_cut.xtarget)<0.1)xcam=intro_cut.xtarget
-    if(abs(ycam-intro_cut.ytarget)<0.1)ycam=intro_cut.ytarget
+    move_camera(intro_cut.xorigin,intro_cut.yorigin,intro_cut.xtarget,intro_cut.ytarget,timer)
     if(xcam==intro_cut.xtarget and ycam==intro_cut.ytarget)then
         intro_cut.state=1
     end

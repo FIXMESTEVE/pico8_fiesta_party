@@ -189,6 +189,8 @@ scn_board._init=function()
 	end
 
 	turn=1
+	curr_player=1 --current player
+	coroutine=nil
 end
 
 scn_board._draw=function()
@@ -223,6 +225,7 @@ scn_board._update=function()
 		cut_mgr:enable()
 		if(intro_cut.state==4)then
 			cut_mgr:disable()
+			place_players()
 			place_emblem()
 			boardstate="cut_newemblem"
 		end
@@ -232,11 +235,16 @@ scn_board._update=function()
 		-- cut_mgr:enable()
 		boardstate="cut_newturn"
 	elseif(boardstate=="cut_newturn")then
-		--TODO
-		place_players()
-		boardstate="player_turn"
+		--TODO: a fancy animation "player 1's turn!", in a coroutine please
+		if(coroutine==nil)coroutine=cocreate(coroutine_newturn)
+		coresume(coroutine,xcam,ycam,players[curr_player].x-64,players[curr_player].y-64)
+		if(costatus(coroutine)=='dead')then
+			boardstate="player_turn"
+			coroutine=nil
+		end
 	elseif(boardstate=="player_turn")then
-		
+		xcam=players[curr_player].x-64
+		ycam=players[curr_player].y-64
 		--TODO
 	elseif(boardstate=="editor")then
 		update_editor()
@@ -397,5 +405,13 @@ function draw_hud()
 		spr(1,coinsprx,coinspry)
 		spr(3,emblemsprx,emblemspry)
 		spr(players[i].char,charx,chary)
+	end
+end
+
+function coroutine_newturn(xorigin,yorigin,xtarget,ytarget)
+	local time=0
+	while(move_camera(xorigin,yorigin,xtarget,ytarget,time)==false)do
+		time+=clock.past
+		yield()
 	end
 end
