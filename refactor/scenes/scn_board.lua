@@ -190,7 +190,8 @@ scn_board._init=function()
 
 	turn=1
 	curr_player=1 --current player
-	coroutine=nil
+	update_coroutine=nil
+	draw_coroutine=nil
 end
 
 scn_board._draw=function()
@@ -204,6 +205,11 @@ scn_board._draw=function()
 
 	if(boardstate=="editor")then
 		draw_editor()
+	end
+
+	if(boardstate=="cut_nextplayer")then
+		if(draw_coroutine==nil)draw_coroutine=cocreate(co_nextplayer_cutscene_draw)
+		coresume(draw_coroutine)
 	end
 end
 
@@ -233,14 +239,13 @@ scn_board._update=function()
 		-- TODO: implement these
 		-- cut_mgr:set_cutscene(newemblem_cut)
 		-- cut_mgr:enable()
-		boardstate="cut_newturn"
-	elseif(boardstate=="cut_newturn")then
-		--TODO: a fancy animation "player 1's turn!", in a coroutine please
-		if(coroutine==nil)coroutine=cocreate(coroutine_newturn)
-		coresume(coroutine,xcam,ycam,players[curr_player].x-64,players[curr_player].y-64)
-		if(costatus(coroutine)=='dead')then
+		boardstate="cut_nextplayer"
+	elseif(boardstate=="cut_nextplayer")then
+		--TODO: a fancy animation "player 1's turn!", in a update_coroutine please
+		if(update_coroutine==nil)update_coroutine=cocreate(co_nextplayer_cutscene_update)
+		coresume(update_coroutine,xcam,ycam,players[curr_player].x-64,players[curr_player].y-64)
+		if(costatus(update_coroutine)=='dead' and costatus(draw_coroutine)=='dead')then
 			boardstate="player_turn"
-			coroutine=nil
 		end
 	elseif(boardstate=="player_turn")then
 		xcam=players[curr_player].x-64
@@ -408,10 +413,53 @@ function draw_hud()
 	end
 end
 
-function coroutine_newturn(xorigin,yorigin,xtarget,ytarget)
+function co_nextplayer_cutscene_update(xorigin,yorigin,xtarget,ytarget)
 	local time=0
 	while(move_camera(xorigin,yorigin,xtarget,ytarget,time)==false)do
 		time+=clock.past
 		yield()
 	end
+end
+
+function co_nextplayer_cutscene_draw()
+	local time=0
+	local x1=0
+	local y1=64
+	local x2=128
+	local y2=64
+	local upperlineoff=-12
+	local bottomlineoff=12
+	local pushed=false
+	local endco=false
+	while(endco==false)do
+		if(y2<72 and pushed==false)then
+			y1-=1
+			y2+=1
+		end
+		
+		if(y2>64 and pushed==true)then
+			y1+=1
+			y2-=1
+		end
+
+		if(y2==64 and pushed==true)then
+			endco=true
+		end
+
+		upperlineoff+=4
+		bottomlineoff-=4
+
+		rectfill(x1+xcam,y1+ycam,x2+xcam,y2+ycam,7)
+		line(x1+xcam+upperlineoff,y1+ycam,x1+xcam+12+upperlineoff,y1+ycam,1)
+		line(x2+xcam+bottomlineoff,y2+ycam,x2+xcam-12+bottomlineoff,y2+ycam,1)
+		
+		if(y2>=70)then
+			print(players[curr_player].name..", it's your turn!",25+xcam,58+ycam,1)
+			print("go!",58+xcam,64+ycam,1)
+		end
+
+		if(pushed==false)pushed=is_pressed(5,players[curr_player].port-1)
+		yield()
+	end
+	yield()
 end
