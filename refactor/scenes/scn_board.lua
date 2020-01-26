@@ -326,24 +326,8 @@ end
 
 function place_players()
 	for p in all(players) do
-		local xoff=0
-		local yoff=0
-		if(p.number==1)then
-			xoff=-4
-			yoff=-4
-		end
-		if(p.number==2)then
-			xoff=4
-			yoff=-4
-		end
-		if(p.number==3)then
-			xoff=-4
-			yoff=4
-		end
-		if(p.number==4)then
-			xoff=4
-			yoff=4
-		end
+		local xoff,yoff=get_cell_player_offset(p)
+		
 		p.x=p.cell.x1+xoff
 		p.y=p.cell.y1+yoff
 	end
@@ -490,7 +474,6 @@ function co_nextplayer_cutscene_update(xorigin,yorigin,xtarget,ytarget)
 end
 
 function co_nextplayer_cutscene_draw()
-	local time=0
 	local x1=0
 	local y1=64
 	local x2=128
@@ -533,11 +516,42 @@ function co_nextplayer_cutscene_draw()
 end
 
 function co_player_move()
+	local time=0
 	local p=players[curr_player]
 	local done=false
+	local xorigin=p.x
+	local yorigin=p.y
 	while(done==false)do
+		time+=clock.past*6%1
 		p:update_dice()
-		p.x+=1
+		local linkedcell=p.cell.linkedcells[1]
+		local lerpfinished=false
+		local xoff,yoff=get_cell_player_offset(p)
+		p.x,lerpfinished=lerpfix(xorigin,linkedcell.x1+xoff,time)
+		p.y,lerpfinished=lerpfix(yorigin,linkedcell.y1+yoff,time)
 		yield()
 	end
+end
+
+function get_cell_player_offset(p)
+	local xoff=0
+	local yoff=0
+	if(p.number==1)then
+		xoff=-4
+		yoff=-4
+	end
+	if(p.number==2)then
+		xoff=4
+		yoff=-4
+	end
+	if(p.number==3)then
+		xoff=-4
+		yoff=4
+	end
+	if(p.number==4)then
+		xoff=4
+		yoff=4
+	end
+
+	return xoff,yoff
 end
