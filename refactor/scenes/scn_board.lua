@@ -1,7 +1,7 @@
 scn_board={}
 scn_board._init=function()
 	boardstate="cut_begin"
-	-- boardstate="editor"
+	--boardstate="editor"
 
 	--TODO: put all this data in a string and write an unserializer to free 1000+ tokens.
 	--tip for future self: use an explode function
@@ -280,10 +280,14 @@ scn_board._update=function()
 				if(player_turn_dice_done==false)then
 					if(update_coroutine==nil)update_coroutine=cocreate(co_anim_player_hit_dice)
 					coresume(update_coroutine,players[curr_player],players[curr_player].dice)
-					if(costatus(update_coroutine)=='dead')player_turn_dice_done=true
+					if(costatus(update_coroutine)=='dead')then
+						update_coroutine=nil
+						player_turn_dice_done=true
+					end
 				else
-					update_coroutine=cocreate(co_player_move)
+					if(update_coroutine==nil)update_coroutine=cocreate(co_player_move)
 					coresume(update_coroutine)
+					if(costatus(update_coroutine)=='dead')boardstate="newstate"
 				end
 			end
 		end
@@ -468,7 +472,7 @@ end
 function co_nextplayer_cutscene_update(xorigin,yorigin,xtarget,ytarget)
 	local time=0
 	while(move_camera(xorigin,yorigin,xtarget,ytarget,time)==false)do
-		time+=clock.past
+		time+=clock.past%1
 		yield()
 	end
 end
@@ -522,13 +526,21 @@ function co_player_move()
 	local xorigin=p.x
 	local yorigin=p.y
 	while(done==false)do
-		time+=clock.past*6%1
+		time=(time+clock.past)%1
 		p:update_dice()
-		local linkedcell=p.cell.linkedcells[1]
-		local lerpfinished=false
 		local xoff,yoff=get_cell_player_offset(p)
-		p.x,lerpfinished=lerpfix(xorigin,linkedcell.x1+xoff,time)
-		p.y,lerpfinished=lerpfix(yorigin,linkedcell.y1+yoff,time)
+		local xtarget=p.cell.linkedcells[1].x1+xoff
+		local ytarget=p.cell.linkedcells[1].y1+yoff
+		p.x=lerp(xorigin,xtarget,easeOut(time))
+		p.y=lerp(yorigin,ytarget,easeOut(time))
+		if(abs(p.x-xtarget)<0.1 and abs(p.y-ytarget)<0.1)then
+			p.dice.number-=1
+			p.cell=p.cell.linkedcells[1]
+			xorigin=p.x
+			yorigin=p.y
+			time=0
+			if(p.dice.number==0)done=true
+		end
 		yield()
 	end
 end

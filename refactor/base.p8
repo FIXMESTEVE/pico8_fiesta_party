@@ -16,7 +16,7 @@ __lua__
 #include modules/scene_manager.lua
 #include modules/transition_manager.lua
 #include modules/cutscene_manager.lua
---#include modules/editor.lua
+#include modules/editor.lua
 
 --transitions
 #include transitions/tra_bubbles.lua

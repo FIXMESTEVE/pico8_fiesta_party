@@ -13,11 +13,6 @@ function lerp(a, b, t)
     return a + (b-a)*t
 end
 
-function lerpfix(a, b, t)
-    if(abs(a-b)<0.1)return b,true
-    return lerp(a,b,t),false
-end
-
 function easeIn(t)
     return t*t
 end
