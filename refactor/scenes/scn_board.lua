@@ -165,7 +165,11 @@ scn_board._init=function()
     add(players,p1)
     add(players,p2)
     -- add(players,p3)
-    -- add(players,p4)
+	-- add(players,p4)
+	
+	player_turn_menu_select=0
+	player_turn_menu_done=false
+	player_turn_dice_done=false
 
     map_parts={}
     part1={}
@@ -203,6 +207,10 @@ scn_board._draw=function()
 	draw_hud()
 	cut_mgr:draw()
 
+	for i=1,#particles do
+        particles[i].draw()
+    end
+
 	if(boardstate=="editor")then
 		draw_editor()
 	end
@@ -210,6 +218,11 @@ scn_board._draw=function()
 	if(boardstate=="cut_nextplayer")then
 		if(draw_coroutine==nil)draw_coroutine=cocreate(co_nextplayer_cutscene_draw)
 		coresume(draw_coroutine)
+	end
+
+	if(boardstate=="player_turn")then
+		if(players[curr_player].dice!=nil)players[curr_player].dice:draw()
+		draw_player_menu()
 	end
 end
 
@@ -224,6 +237,11 @@ function drawcell(x1,y1,x2,y2,letter,col,selected)
 end
 
 scn_board._update=function()
+	for i=1,#particles do
+        particles[i].update()
+	end
+	particles.clean()
+	
 	cut_mgr:update()
 
 	if(boardstate=="cut_begin")then
@@ -241,18 +259,68 @@ scn_board._update=function()
 		-- cut_mgr:enable()
 		boardstate="cut_nextplayer"
 	elseif(boardstate=="cut_nextplayer")then
-		--TODO: a fancy animation "player 1's turn!", in a update_coroutine please
+		--starts nextplayer coroutine cutscene
 		if(update_coroutine==nil)update_coroutine=cocreate(co_nextplayer_cutscene_update)
 		coresume(update_coroutine,xcam,ycam,players[curr_player].x-64,players[curr_player].y-64)
 		if(costatus(update_coroutine)=='dead' and costatus(draw_coroutine)=='dead')then
+			update_coroutine=nil
+			draw_coroutine=nil
+			reset_player_turn_globals()
 			boardstate="player_turn"
 		end
 	elseif(boardstate=="player_turn")then
 		xcam=players[curr_player].x-64
 		ycam=players[curr_player].y-64
-		--TODO
+		players[curr_player]:make_dice()
+		players[curr_player].dice:update()
+		if(player_turn_menu_done==false)then
+			update_player_menu()
+		else
+			if(player_turn_menu_select==0)then
+				if(player_turn_dice_done==false)then
+					if(update_coroutine==nil)update_coroutine=cocreate(co_anim_player_hit_dice)
+					coresume(update_coroutine,players[curr_player],players[curr_player].dice)
+					if(costatus(update_coroutine)=='dead')player_turn_dice_done=true
+				else
+					update_coroutine=cocreate(co_player_move)
+					coresume(update_coroutine)
+				end
+			end
+		end
 	elseif(boardstate=="editor")then
 		update_editor()
+	end
+end
+
+function reset_player_turn_globals()
+	player_turn_menu_select=0
+	player_turn_menu_done=false
+	player_turn_dice_done=false
+end
+
+function draw_player_menu()
+	local off=20
+	local xrect1=0+xcam
+	local yrect1=22+ycam
+	local xrect2=40+xcam
+	local yrect2=30+ycam
+	local xtxt=xrect1+4
+	local ytxt=yrect1+2
+	local col=1
+	if(player_turn_menu_select==0)col=8
+	rectfill(xrect1,yrect1,xrect2,yrect2,col)
+	print("hit dice",xtxt,ytxt,7)
+	if(#players[curr_player].items>0)then
+		col=1
+		if(player_turn_menu_select==1)col=8
+		rectfill(xrect1,yrect1+off,xrect2,yrect2+off,col)
+		print("use item",xtxt,ytxt+off,7)
+	end
+end
+
+function update_player_menu()
+	if(is_pressed(5,players[curr_player].port-1))then
+		player_turn_menu_done=true
 	end
 end
 
@@ -462,4 +530,14 @@ function co_nextplayer_cutscene_draw()
 		yield()
 	end
 	yield()
+end
+
+function co_player_move()
+	local p=players[curr_player]
+	local done=false
+	while(done==false)do
+		p:update_dice()
+		p.x+=1
+		yield()
+	end
 end

@@ -31,10 +31,6 @@ function intro_cut:update()
         end
     end
     if(intro_cut.state==3)intro_cut:dialog_2()
-
-    for i=1,#particles do
-        particles[i].update()
-    end
 end
 
 function intro_cut:draw()
@@ -73,8 +69,7 @@ end
 
 function intro_cut:spawndices()
     for i=1,#players do
-        local yoffset=10
-        local d=dice:new(players[i].x+8/2, players[i].y - yoffset)
+        local d=dice:new(players[i].x+8/2, players[i].y - 10)
         add(self.dices,d)
     end
     self.canhitdices=true
@@ -108,7 +103,7 @@ function co_anim_player_hit_dice(player,dice)
         gen_dice_particles(dice.x+dice.radius/2,dice.y+dice.radius/2)
         dice.state=1
     end
-    while(player.y < player_y_original)do  
+    while(player.y < player_y_original)do
         player.y+=1
         yield()
     end

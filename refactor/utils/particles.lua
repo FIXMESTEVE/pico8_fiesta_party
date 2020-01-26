@@ -1,6 +1,7 @@
 particles={}
 make_dice_particle = function(max_radius, x, y, angle_percent)
     local p={}
+    p.type="dice_particle"
     p.max_radius=max_radius
     p.radius=0
     p.originx=x
@@ -29,8 +30,10 @@ make_dice_particle = function(max_radius, x, y, angle_percent)
 end
 particles.clean = function()
     foreach(particles, function(obj)
-        if(obj.radius > obj.max_radius)then
-            del(particles,obj)
+        if(obj.type=="dice_particle")then
+            if(obj.radius > obj.max_radius)then
+                del(particles,obj)
+            end
         end
     end)
 end
