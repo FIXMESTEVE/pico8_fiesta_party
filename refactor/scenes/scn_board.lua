@@ -382,14 +382,17 @@ function draw_special_cell_circle(c)
 	local circ_radius=7
 	if(c.type==3)then
 		colfill=12
+		if(is_player_in_cell(players[curr_player],c)==true)colfill=13
 		col=10
 	end
 	if(c.type==4 or c.type==7)then
 		colfill=8
+		if(is_player_in_cell(players[curr_player],c)==true)colfill=14
 		col=10
 	end
 	if(c.type==5 or c.type==6)then
 		colfill=11
+		if(is_player_in_cell(players[curr_player],c)==true)colfill=3
 		col=10
 	end
 	if(c.isemblemspace==true)then
@@ -411,6 +414,17 @@ function draw_special_cell_circle(c)
 	if(c.type==6)then
 		spr(92,c.x1,c.y1)
 	end
+end
+
+function is_player_in_cell(p,c)
+	if(p.x>c.x1-5)then
+		if(p.x+7<c.x2+5)then
+			if(p.y>c.y1-5)then
+				if(p.y+7<c.y2+5)return true
+			end
+		end
+	end
+	return false
 end
 
 function draw_players()
@@ -526,7 +540,7 @@ function co_player_move()
 	local xorigin=p.x
 	local yorigin=p.y
 	while(done==false)do
-		time=(time+clock.past)%1
+		time=(time+clock.past*2)%1
 		p:update_dice()
 		local xoff,yoff=get_cell_player_offset(p)
 		local xtarget=p.cell.linkedcells[1].x1+xoff
