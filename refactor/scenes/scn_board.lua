@@ -545,27 +545,32 @@ function co_player_move()
 	local xorigin=p.x
 	local yorigin=p.y
 	while(done==false)do
-		time=(time+clock.past*2)%1
+		if(is_cell_dice_dicreasing(p.cell)==false and p.cell.type!=1)then
+			--todo: implement appropriate behavior for special, non dice decreasing cells (path select, emblem, shop, etc)
+			yield()
+		else
+			time=(time+clock.past*2)%1
 
-		p:update_dice()
+			p:update_dice()
 
-		local xoff,yoff=get_cell_player_offset(p)
-		local xtarget=p.cell.linkedcells[1].x1+xoff
-		local ytarget=p.cell.linkedcells[1].y1+yoff
+			local xoff,yoff=get_cell_player_offset(p)
+			local xtarget=p.cell.linkedcells[1].x1+xoff
+			local ytarget=p.cell.linkedcells[1].y1+yoff
 
-		p.x=lerp(xorigin,xtarget,easeOut(time))
-		p.y=lerp(yorigin,ytarget,easeOut(time))
+			p.x=lerp(xorigin,xtarget,easeOut(time))
+			p.y=lerp(yorigin,ytarget,easeOut(time))
 
-		if(abs(p.x-xtarget)<0.1 and abs(p.y-ytarget)<0.1)then
-			p.cell=p.cell.linkedcells[1]
-			if(is_cell_dice_dicreasing(p.cell)==true)p.dice.number-=1
-			xorigin=p.x
-			yorigin=p.y
-			time=0
-			if(p.dice.number==0)done=true
+			if(abs(p.x-xtarget)<0.1 and abs(p.y-ytarget)<0.1)then
+				p.cell=p.cell.linkedcells[1]
+				if(is_cell_dice_dicreasing(p.cell)==true)p.dice.number-=1
+				xorigin=p.x
+				yorigin=p.y
+				time=0
+				if(p.dice.number==0)done=true
+			end
+
+			yield()
 		end
-
-		yield()
 	end
 end
 
