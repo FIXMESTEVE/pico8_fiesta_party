@@ -355,6 +355,7 @@ function place_emblem()
 end
 
 function make_editor_cell(_x1,_y1,_x2,_y2,_type,_letter,_col)
+	--TODO: make a cell class and do a new instead of this...
 	return{selected=false,linkedcells={},x1=_x1,y1=_y1,x2=_x2,y2=_y2,type=_type,letter=_letter,col=_col,isemblemspace=false}
 end
 
@@ -569,8 +570,8 @@ function co_player_move()
 end
 
 function is_cell_dice_dicreasing(c)
-	--TODO
-	return true
+	if(c.isemblemspace==false and (c.type==3 or c.type==4 or c.type==5 or c.type==6 or c.type==7))return true
+	return false
 end
 
 function get_cell_player_offset(p)
