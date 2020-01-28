@@ -287,7 +287,12 @@ scn_board._update=function()
 				else
 					if(update_coroutine==nil)update_coroutine=cocreate(co_player_move)
 					coresume(update_coroutine)
-					if(costatus(update_coroutine)=='dead')boardstate="newstate"
+
+					if(costatus(update_coroutine)=='dead')then
+						update_coroutine=nil
+						players[curr_player].dice=nil
+						boardstate="cut_nextplayer"
+					end
 				end
 			end
 		end
@@ -567,6 +572,7 @@ function co_player_move()
 				yorigin=p.y
 				time=0
 				if(p.dice.number==0)done=true
+				--TODO: implement normal cells (blue, red) and hazards (green) cells behavior
 			end
 
 			yield()
