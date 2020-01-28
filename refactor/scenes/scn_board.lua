@@ -312,8 +312,12 @@ function draw_player_menu()
 	local ytxt=yrect1+2
 	local col=1
 	if(player_turn_menu_select==0)col=8
-	rectfill(xrect1,yrect1,xrect2,yrect2,col)
-	print("hit dice",xtxt,ytxt,7)
+	
+	if(player_turn_menu_done==false)then
+		rectfill(xrect1,yrect1,xrect2,yrect2,col)
+		print("hit dice",xtxt,ytxt,7)
+	end
+
 	if(#players[curr_player].items>0)then
 		col=1
 		if(player_turn_menu_select==1)col=8
@@ -541,22 +545,32 @@ function co_player_move()
 	local yorigin=p.y
 	while(done==false)do
 		time=(time+clock.past*2)%1
+
 		p:update_dice()
+
 		local xoff,yoff=get_cell_player_offset(p)
 		local xtarget=p.cell.linkedcells[1].x1+xoff
 		local ytarget=p.cell.linkedcells[1].y1+yoff
+
 		p.x=lerp(xorigin,xtarget,easeOut(time))
 		p.y=lerp(yorigin,ytarget,easeOut(time))
+
 		if(abs(p.x-xtarget)<0.1 and abs(p.y-ytarget)<0.1)then
-			p.dice.number-=1
 			p.cell=p.cell.linkedcells[1]
+			if(is_cell_dice_dicreasing(p.cell)==true)p.dice.number-=1
 			xorigin=p.x
 			yorigin=p.y
 			time=0
 			if(p.dice.number==0)done=true
 		end
+
 		yield()
 	end
+end
+
+function is_cell_dice_dicreasing(c)
+	--TODO
+	return true
 end
 
 function get_cell_player_offset(p)
