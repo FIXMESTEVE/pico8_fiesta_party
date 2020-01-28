@@ -291,6 +291,8 @@ scn_board._update=function()
 					if(costatus(update_coroutine)=='dead')then
 						update_coroutine=nil
 						players[curr_player].dice=nil
+						curr_player+=1
+						if(curr_player>#players)curr_player=1
 						boardstate="cut_nextplayer"
 					end
 				end
