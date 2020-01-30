@@ -8,6 +8,11 @@ __lua__
 --libs
 #include libs/my_dtb.lua
 
+--objects
+#include objects/player.lua
+#include objects/dice.lua
+#include objects/coin.lua
+
 --scenes
 #include scenes/scn_title.lua
 #include scenes/scn_board.lua
@@ -28,10 +33,6 @@ __lua__
 #include discussions/intro_disc.lua
 #include discussions/intro_disc_part2.lua
 #include discussions/intro_disc_part3.lua
-
---objects
-#include objects/player.lua
-#include objects/dice.lua
 
 function _init()
   init_keys()

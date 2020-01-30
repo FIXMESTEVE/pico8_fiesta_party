@@ -196,6 +196,7 @@ scn_board._init=function()
 	curr_player=1 --current player
 	update_coroutine=nil
 	draw_coroutine=nil
+	coroutines={}
 end
 
 scn_board._draw=function()
@@ -291,9 +292,11 @@ scn_board._update=function()
 					if(costatus(update_coroutine)=='dead')then
 						update_coroutine=nil
 						players[curr_player].dice=nil
-						curr_player+=1
-						if(curr_player>#players)curr_player=1
-						boardstate="cut_nextplayer"
+						if(do_cell_behavior()==true)then
+							curr_player+=1
+							if(curr_player>#players)curr_player=1
+							boardstate="cut_nextplayer"
+						end
 					end
 				end
 			end
@@ -301,6 +304,13 @@ scn_board._update=function()
 	elseif(boardstate=="editor")then
 		update_editor()
 	end
+end
+
+function do_cell_behavior()
+	if(coroutines.co_anim_player_coins==nil)coroutines.co_anim_player_coins=cocreate(co_anim_player_coins)
+	coresume(coroutines.co_anim_player_coins,3)
+	if(costatus(coroutines.co_anim_player_coins)=='dead')return true
+	return false		
 end
 
 function reset_player_turn_globals()
@@ -579,6 +589,24 @@ function co_player_move()
 
 			yield()
 		end
+	end
+end
+
+function co_anim_player_coins(ncoins)
+	if(ncoins==0)return
+	local p=players[curr_player]
+	local coins={}
+
+	for i=1,ncoins do
+		add(coins,coin:new(p.x,p.y-70))
+	end
+
+	while(#coins>0)do
+		for coin in all(coins)do
+			coin.y+=1
+			if(coin.y>p.y)del(coins,coin)
+		end
+		yield()
 	end
 end
 
