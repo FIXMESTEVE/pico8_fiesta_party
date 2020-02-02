@@ -200,6 +200,7 @@ scn_board._init=function()
 	coroutines={}
 
 	coins={}
+	ephem={}
 end
 
 scn_board._draw=function()
@@ -221,6 +222,8 @@ scn_board._draw=function()
 		c:draw()
 	end
 
+	foreach(ephem, ephem_draw)
+
 	if(boardstate=="editor")then
 		draw_editor()
 	end
@@ -230,7 +233,7 @@ scn_board._draw=function()
 	end
 
 	if(coroutines.co_anim_player_coins!=nil and costatus(coroutines.co_anim_player_coins)!='dead')then
-		print("+3 coins",p.x+10,p.y-8,1)
+		outline_print("+3 coins",p.x+10,p.y-8,7,12)
 	end
 
 	if(boardstate=="player_turn")then
@@ -316,7 +319,10 @@ end
 
 function do_cell_behavior()
 	play_coroutine("co_anim_player_coins",{3})
-	if(costatus(coroutines.co_anim_player_coins)=='dead')return true
+	if(costatus(coroutines.co_anim_player_coins)=='dead')then
+		coroutines.co_anim_player_coins=nil
+		return true
+	end
 	return false		
 end
 
@@ -501,10 +507,8 @@ function draw_hud()
 		
 		rectfill(x1+xcam,y1+ycam,x2+xcam,y2+ycam,1)
 		
-		print(players[i].coins,coinstxtx+1+coinpadding,coinstxty+1,1)
-		print(players[i].coins,coinstxtx+coinpadding,coinstxty,7)
-		print(players[i].emblems,emblemstxtx+1+emblempadding,emblemstxty+1,1)
-		print(players[i].emblems,emblemstxtx+emblempadding,emblemstxty,7)
+		outline_print(players[i].coins,coinstxtx+coinpadding,coinstxty,7,2)
+		outline_print(players[i].emblems,emblemstxtx+emblempadding,emblemstxty,7,2)
 
 		spr(1,coinsprx,coinspry)
 		spr(3,emblemsprx,emblemspry)
@@ -574,7 +578,7 @@ function cofuncs.co_player_move()
 	local xorigin=p.x
 	local yorigin=p.y
 	while(done==false)do
-		if(is_cell_dice_dicreasing(p.cell)==false and p.cell.type!=1)then
+		if(is_cell_dice_decreasing(p.cell)==false and p.cell.type!=1)then
 			--todo: implement appropriate behavior for special, non dice decreasing cells (path select, emblem, shop, etc)
 			yield()
 		else
@@ -591,7 +595,7 @@ function cofuncs.co_player_move()
 
 			if(abs(p.x-xtarget)<0.1 and abs(p.y-ytarget)<0.1)then
 				p.cell=p.cell.linkedcells[1]
-				if(is_cell_dice_dicreasing(p.cell)==true)p.dice.number-=1
+				if(is_cell_dice_decreasing(p.cell)==true)p.dice.number-=1
 				xorigin=p.x
 				yorigin=p.y
 				time=0
@@ -611,22 +615,27 @@ function cofuncs.co_anim_player_coins(args)
 	local p=players[curr_player]
 
 	for i=1,ncoins do
-		add(coins,coin:new(p.x+2,p.y-70-(8*i)))
+		add(coins,coin:new(p.x+2,p.y-70-(16*i)))
 	end
 
 	while(#coins>0)do
 		for coin in all(coins)do
-			coin.y+=3
+			coin.y+=2
 			if(coin.y>p.y)then
 				del(coins,coin)
+				make_twinkle(p.x+2,p.y-2,4,16)
 				p.coins+=1
 			end
 		end
 		yield()
 	end
+
+	for i=1,10 do
+		yield()
+	end
 end
 
-function is_cell_dice_dicreasing(c)
+function is_cell_dice_decreasing(c)
 	if(c.isemblemspace==false and (c.type==3 or c.type==4 or c.type==5 or c.type==6 or c.type==7))return true
 	return false
 end

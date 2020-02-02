@@ -107,3 +107,8 @@ function outline_sprite(n,col_outline,x,y,w,h,flip_x,flip_y)
     -- draw final sprite
     spr(n,x,y,w,h,flip_x,flip_y)	
   end
+
+  function outline_print(txt,x,y,col,outcol)
+    print(txt,x+1,y+1,outcol)
+    print(txt,x,y,col)
+  end
