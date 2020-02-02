@@ -13,7 +13,7 @@ intro_cut.press={false,false,false,false}
 
 function intro_cut:init()
     for i=1,#players do
-        add(intro_cut.coroutines,cocreate(co_anim_player_hit_dice)) --set up empty coroutines
+        add(intro_cut.coroutines,cocreate(cofuncs.co_anim_player_hit_dice)) --set up empty coroutines
     end
 end
 
@@ -88,12 +88,15 @@ function intro_cut:decideorder()
     end
     for i=1,#self.coroutines do --cycle all coroutines, if a coroutine exists then update it
         if(self.coroutines[i] and costatus(self.coroutines[i]) != 'dead') then
-            if(self.press[i]==true)coresume(self.coroutines[i], players[i], self.dices[i])
+            if(self.press[i]==true)coresume(self.coroutines[i],{players[i], self.dices[i]})
         end
     end
 end
 
-function co_anim_player_hit_dice(player,dice)
+function cofuncs.co_anim_player_hit_dice(args)
+    local player=args[1]
+    local dice=args[2]
+
     local player_y_original=player.y
     while(player.y > dice.y+8/2)do  
         player.y-=1

@@ -1,4 +1,6 @@
 scn_board={}
+cofuncs={}
+
 scn_board._init=function()
 	boardstate="cut_begin"
 	--boardstate="editor"
@@ -194,8 +196,7 @@ scn_board._init=function()
 
 	turn=1
 	curr_player=1 --current player
-	update_coroutine=nil
-	draw_coroutine=nil
+
 	coroutines={}
 end
 
@@ -217,8 +218,7 @@ scn_board._draw=function()
 	end
 
 	if(boardstate=="cut_nextplayer")then
-		if(draw_coroutine==nil)draw_coroutine=cocreate(co_nextplayer_cutscene_draw)
-		coresume(draw_coroutine)
+		play_coroutine("co_nextplayer_cutscene_draw")
 	end
 
 	if(boardstate=="player_turn")then
@@ -261,11 +261,10 @@ scn_board._update=function()
 		boardstate="cut_nextplayer"
 	elseif(boardstate=="cut_nextplayer")then
 		--starts nextplayer coroutine cutscene
-		if(update_coroutine==nil)update_coroutine=cocreate(co_nextplayer_cutscene_update)
-		coresume(update_coroutine,xcam,ycam,players[curr_player].x-64,players[curr_player].y-64)
-		if(costatus(update_coroutine)=='dead' and costatus(draw_coroutine)=='dead')then
-			update_coroutine=nil
-			draw_coroutine=nil
+		play_coroutine("co_nextplayer_cutscene_update", {xcam,ycam,players[curr_player].x-64,players[curr_player].y-64})
+		if(costatus(coroutines.co_nextplayer_cutscene_update)=='dead' and costatus(coroutines.co_nextplayer_cutscene_draw)=='dead')then
+			coroutines.co_nextplayer_cutscene_update=nil
+			coroutines.co_nextplayer_cutscene_draw=nil
 			reset_player_turn_globals()
 			boardstate="player_turn"
 		end
@@ -279,24 +278,21 @@ scn_board._update=function()
 		else
 			if(player_turn_menu_select==0)then
 				if(player_turn_dice_done==false)then
-					if(update_coroutine==nil)update_coroutine=cocreate(co_anim_player_hit_dice)
-					coresume(update_coroutine,players[curr_player],players[curr_player].dice)
-					if(costatus(update_coroutine)=='dead')then
-						update_coroutine=nil
+					play_coroutine("co_anim_player_hit_dice",{players[curr_player],players[curr_player].dice})
+					if(costatus(coroutines.co_anim_player_hit_dice)=='dead')then
+						coroutines.co_anim_player_hit_dice=nil
 						player_turn_dice_done=true
 					end
 				else
-					if(update_coroutine==nil)update_coroutine=cocreate(co_player_move)
-					coresume(update_coroutine)
-
-					if(costatus(update_coroutine)=='dead')then
-						update_coroutine=nil
+					play_coroutine("co_player_move")
+					if(costatus(coroutines.co_player_move)=='dead')then
+						coroutines.co_player_move=nil
 						players[curr_player].dice=nil
-						if(do_cell_behavior()==true)then
-							curr_player+=1
-							if(curr_player>#players)curr_player=1
-							boardstate="cut_nextplayer"
-						end
+						-- if(do_cell_behavior()==true)then
+						-- 	curr_player+=1
+						-- 	if(curr_player>#players)curr_player=1
+						boardstate="cut_nextplayer"
+						-- end
 					end
 				end
 			end
@@ -307,8 +303,7 @@ scn_board._update=function()
 end
 
 function do_cell_behavior()
-	if(coroutines.co_anim_player_coins==nil)coroutines.co_anim_player_coins=cocreate(co_anim_player_coins)
-	coresume(coroutines.co_anim_player_coins,3)
+	play_coroutine("co_anim_player_coins",{3})
 	if(costatus(coroutines.co_anim_player_coins)=='dead')return true
 	return false		
 end
@@ -505,7 +500,12 @@ function draw_hud()
 	end
 end
 
-function co_nextplayer_cutscene_update(xorigin,yorigin,xtarget,ytarget)
+function cofuncs.co_nextplayer_cutscene_update(args)
+	local xorigin=args[1]
+	local yorigin=args[2]
+	local xtarget=args[3]
+	local ytarget=args[4]
+
 	local time=0
 	while(move_camera(xorigin,yorigin,xtarget,ytarget,time)==false)do
 		time+=clock.past%1
@@ -513,7 +513,7 @@ function co_nextplayer_cutscene_update(xorigin,yorigin,xtarget,ytarget)
 	end
 end
 
-function co_nextplayer_cutscene_draw()
+function cofuncs.co_nextplayer_cutscene_draw()
 	local x1=0
 	local y1=64
 	local x2=128
@@ -555,7 +555,7 @@ function co_nextplayer_cutscene_draw()
 	yield()
 end
 
-function co_player_move()
+function cofuncs.co_player_move()
 	local time=0
 	local p=players[curr_player]
 	local done=false
@@ -592,7 +592,8 @@ function co_player_move()
 	end
 end
 
-function co_anim_player_coins(ncoins)
+function cofuncs.co_anim_player_coins(args)
+	local ncoins=args[1]
 	if(ncoins==0)return
 	local p=players[curr_player]
 	local coins={}

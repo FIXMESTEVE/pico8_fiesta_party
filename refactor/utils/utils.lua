@@ -83,3 +83,8 @@ function move_camera(xorigin,yorigin,xtarget,ytarget,timer)
     if(abs(xcam-xtarget)<0.1 and abs(ycam-ytarget)<0.1)return true
     return false
 end
+
+function play_coroutine(co_name,args)
+    if(coroutines[co_name]==nil)coroutines[co_name]=cocreate(cofuncs[co_name])
+	coresume(coroutines[co_name],args)
+end
