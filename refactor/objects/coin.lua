@@ -1,4 +1,5 @@
 coin={}
+coin.__index=coin
 
 function coin:new(x,y)
     local t={
@@ -6,6 +7,7 @@ function coin:new(x,y)
         y=y,
         spr=1
     }
+    setmetatable(t,self)
     return t
 end
 
@@ -14,5 +16,5 @@ function coin:update()
 end
 
 function coin:draw()
-    spr(self.spr,self.x,self.y)
+    outline_sprite(self.spr,1,self.x,self.y,1,1,false,false)
 end

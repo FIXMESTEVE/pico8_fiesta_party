@@ -198,6 +198,8 @@ scn_board._init=function()
 	curr_player=1 --current player
 
 	coroutines={}
+
+	coins={}
 end
 
 scn_board._draw=function()
@@ -209,9 +211,15 @@ scn_board._draw=function()
 	draw_hud()
 	cut_mgr:draw()
 
+	local p=players[curr_player]
+
 	for i=1,#particles do
         particles[i].draw()
-    end
+	end
+	
+	for c in all(coins)do
+		c:draw()
+	end
 
 	if(boardstate=="editor")then
 		draw_editor()
@@ -221,8 +229,12 @@ scn_board._draw=function()
 		play_coroutine("co_nextplayer_cutscene_draw")
 	end
 
+	if(coroutines.co_anim_player_coins!=nil and costatus(coroutines.co_anim_player_coins)!='dead')then
+		print("+3 coins",p.x+10,p.y-8,1)
+	end
+
 	if(boardstate=="player_turn")then
-		if(players[curr_player].dice!=nil)players[curr_player].dice:draw()
+		if(p.dice!=nil)p.dice:draw()
 		draw_player_menu()
 	end
 end
@@ -286,13 +298,13 @@ scn_board._update=function()
 				else
 					play_coroutine("co_player_move")
 					if(costatus(coroutines.co_player_move)=='dead')then
-						coroutines.co_player_move=nil
 						players[curr_player].dice=nil
-						-- if(do_cell_behavior()==true)then
-						-- 	curr_player+=1
-						-- 	if(curr_player>#players)curr_player=1
-						boardstate="cut_nextplayer"
-						-- end
+						if(do_cell_behavior()==true)then
+							curr_player+=1
+							if(curr_player>#players)curr_player=1
+							coroutines.co_player_move=nil
+							boardstate="cut_nextplayer"
+						end
 					end
 				end
 			end
@@ -595,17 +607,20 @@ end
 function cofuncs.co_anim_player_coins(args)
 	local ncoins=args[1]
 	if(ncoins==0)return
+
 	local p=players[curr_player]
-	local coins={}
 
 	for i=1,ncoins do
-		add(coins,coin:new(p.x,p.y-70))
+		add(coins,coin:new(p.x+2,p.y-70-(8*i)))
 	end
 
 	while(#coins>0)do
 		for coin in all(coins)do
-			coin.y+=1
-			if(coin.y>p.y)del(coins,coin)
+			coin.y+=3
+			if(coin.y>p.y)then
+				del(coins,coin)
+				p.coins+=1
+			end
 		end
 		yield()
 	end

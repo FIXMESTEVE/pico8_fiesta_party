@@ -88,3 +88,22 @@ function play_coroutine(co_name,args)
     if(coroutines[co_name]==nil)coroutines[co_name]=cocreate(cofuncs[co_name])
 	coresume(coroutines[co_name],args)
 end
+
+-- https://gist.github.com/Liquidream/1b419261dc324708f008f24ee6d13d7b
+-- draws a sprite to the screen with an outline of the specified colour
+function outline_sprite(n,col_outline,x,y,w,h,flip_x,flip_y)
+    -- reset palette to black
+    for c=1,15 do
+      pal(c,col_outline)
+    end
+    -- draw outline
+    for xx=-1,1 do
+      for yy=-1,1 do
+        spr(n,x+xx,y+yy,w,h,flip_x,flip_y)
+      end
+    end
+    -- reset palette
+    pal()
+    -- draw final sprite
+    spr(n,x,y,w,h,flip_x,flip_y)	
+  end
