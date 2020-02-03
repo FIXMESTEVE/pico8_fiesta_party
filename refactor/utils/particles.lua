@@ -45,13 +45,13 @@ function gen_dice_particles(x,y)
 end
 
 --the original twinkle/ephem code is from super poulet poulet by @retsynNL
-function make_twinkle(x, y, amount, sprnb)
+function make_twinkle(x, y, amount, sprnb, spd)
     for i = 1, amount do
-        make_ephem(ephem, x, y, sprnb)
+        make_ephem(ephem, x, y, sprnb, spd)
     end
 end
 
-function make_ephem(e,x,y,k)
+function make_ephem(e,x,y,k,s)
     local e = {}
     -- k for kind!
     e.k = k
@@ -60,7 +60,7 @@ function make_ephem(e,x,y,k)
     e.ax = 0
     e.ay = 0
     -- lower the better
-    e.animspeed = 20
+    e.animspeed = s
     e.frame = 0
     -- randomize the direction
     e.ax += (-(rnd(.5)))

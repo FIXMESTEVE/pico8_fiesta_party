@@ -232,8 +232,12 @@ scn_board._draw=function()
 		play_coroutine("co_nextplayer_cutscene_draw")
 	end
 
-	if(coroutines.co_anim_player_coins!=nil and costatus(coroutines.co_anim_player_coins)!='dead')then
+	if(coroutines.co_anim_player_get_coins!=nil and costatus(coroutines.co_anim_player_get_coins)!='dead')then
 		outline_print("+3 coins",p.x+10,p.y-8,7,12)
+	end
+
+	if(coroutines.co_anim_player_lose_coins!=nil and costatus(coroutines.co_anim_player_lose_coins)!='dead')then
+		outline_print("-3 coins",p.x+10,p.y-8,7,8)
 	end
 
 	if(boardstate=="player_turn")then
@@ -318,11 +322,24 @@ scn_board._update=function()
 end
 
 function do_cell_behavior()
-	play_coroutine("co_anim_player_coins",{3})
-	if(costatus(coroutines.co_anim_player_coins)=='dead')then
-		coroutines.co_anim_player_coins=nil
-		return true
+	local t=players[curr_player].cell.type
+
+	if(t==3)then
+		play_coroutine("co_anim_player_get_coins",{3})
+		if(costatus(coroutines.co_anim_player_get_coins)=='dead')then
+			coroutines.co_anim_player_get_coins=nil
+			return true
+		end
 	end
+
+	if(t==4)then
+		play_coroutine("co_anim_player_lose_coins",{3})
+		if(costatus(coroutines.co_anim_player_lose_coins)=='dead')then
+			coroutines.co_anim_player_lose_coins=nil
+			return true
+		end
+	end
+
 	return false		
 end
 
@@ -608,9 +625,8 @@ function cofuncs.co_player_move()
 	end
 end
 
-function cofuncs.co_anim_player_coins(args)
+function cofuncs.co_anim_player_get_coins(args)
 	local ncoins=args[1]
-	if(ncoins==0)return
 
 	local p=players[curr_player]
 
@@ -623,7 +639,7 @@ function cofuncs.co_anim_player_coins(args)
 			coin.y+=2
 			if(coin.y>p.y)then
 				del(coins,coin)
-				make_twinkle(p.x+2,p.y-2,4,16)
+				make_twinkle(p.x+2,p.y-2,4,16,20)
 				p.coins+=1
 			end
 		end
@@ -631,6 +647,51 @@ function cofuncs.co_anim_player_coins(args)
 	end
 
 	for i=1,10 do
+		yield()
+	end
+end
+
+function cofuncs.co_anim_player_lose_coins(args)
+	--todo: uuuuh use a real math function to make a nice curve instead of this abomination
+	local ncoins=args[1]
+	local coend=false
+	local p=players[curr_player]
+	local tick=10
+
+	while(ncoins>0 or #coins>0 or tick<90)do
+		if(ncoins>0 and tick>=10)then
+			ncoins-=1
+			if(p.coins>0)then
+				local c=coin:new(p.x+4,p.y+4)
+				p.coins-=1
+				if(p.coins<0)p.coins=0
+				c.falling=false
+				c.y_ceiling=p.y-20+rnd(10)
+				c.y_die=rnd(25)+p.y+12
+				c.x_move=flr(rnd(4 * 100)) / 100 - 2
+				c.y_move=flr(rnd(1.25 * 100)) / 100 + 1.75
+
+				add(coins,c)
+				tick=0
+			end
+		end
+
+		for c in all(coins)do
+			c.x+=c.x_move
+			if(c.y<c.y_ceiling)c.falling=true
+			if(c.falling==true)then
+				c.y+=c.y_move
+			else
+				c.y-=c.y_move
+			end
+	
+			if(c.y>c.y_die)then
+				make_twinkle(c.x,c.y,4,16,5)
+				del(coins,c)
+			end
+		end
+		
+		tick+=1
 		yield()
 	end
 end
